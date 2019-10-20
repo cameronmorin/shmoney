@@ -14,7 +14,7 @@ class SignUp extends Component {
 			[e.target.id]: e.target.value
 		})
 	}
-	handleSubmit = (e) => {
+	emailSignUp = (e) => {
 		e.preventDefault();
 		//Get user information
 		const email = this.state.email;
@@ -29,17 +29,40 @@ class SignUp extends Component {
 				lastName: lastName,
 				email: email,
 			})
-		}).catch(err => {
+		}).catch(error => {
 			//TODO Output the error message on screen for user to see
-			let errorCode = err.code;
-			let errorMessage = err.message;
+			let errorCode = error.code;
+			let errorMessage = error.message;
 			console.log(errorCode, errorMessage);
 		})
+	}
+	googleSignIn = () => {
+		//Get instance of google provider object
+		let provider = new firebase.auth.GoogleAuthProvider();
+
+		//Sign in using google popup
+		firebase.auth().signInWithPopup(provider).then((result) => {
+			// The signed-in user info.
+			let user = result.user;
+			
+			console.log(user)
+			//TODO Route to home page
+		}).catch(function(error) {
+			// TODO Handle errors
+			let errorCode = error.code;
+			let errorMessage = error.message;
+			// The email of the user's account used.
+			let email = error.email;
+			// The firebase.auth.AuthCredential type that was used.
+			let credential = error.credential;
+
+			console.log(errorCode, errorMessage, email, credential);
+		});
 	}
 	render() {
 		return (
 			<div className="container">
-				<form onSubmit={this.handleSubmit} className="white">
+				<form onSubmit={this.emailSignUp} className="white">
 					<h5 className="signUpH5">Sign Up</h5>
 					<div className="input-field">
 						<label htmlFor="email">Email</label>
@@ -61,6 +84,7 @@ class SignUp extends Component {
 						<button className="button">Sign Up</button>
 					</div>
 				</form>
+				<button onClick={this.googleSignIn} className="button">Google</button>
 			</div>
 		)
 	}

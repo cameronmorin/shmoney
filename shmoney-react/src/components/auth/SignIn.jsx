@@ -12,22 +12,45 @@ class SignIn extends Component {
 			[e.target.id]: e.target.value
 		})
 	}
-	handleSubmit = (e) => {
+	emailSignIn = (e) => {
 		e.preventDefault();
 		const email = this.state.email;
 		const password = this.state.password;
 
-		firebase.auth().signInWithEmailAndPassword(email, password).catch(err => {
+		firebase.auth().signInWithEmailAndPassword(email, password).catch(error => {
 			//Todo Output the error message on screen for user to see
-			let errorCode = err.code;
-			let errorMessage = err.message;
+			let errorCode = error.code;
+			let errorMessage = error.message;
 			console.log(errorCode, errorMessage);
 		})
+	}
+	googleSignIn = () => {
+		//Get instance of google provider object
+		let provider = new firebase.auth.GoogleAuthProvider();
+
+		//Sign in using google popup
+		firebase.auth().signInWithPopup(provider).then((result) => {
+			// The signed-in user info.
+			let user = result.user;
+
+			console.log(user)
+			//TODO Route to home page
+		}).catch(function(error) {
+			// TODO Handle errors
+			let errorCode = error.code;
+			let errorMessage = error.message;
+			// The email of the user's account used.
+			let email = error.email;
+			// The firebase.auth.AuthCredential type that was used.
+			let credential = error.credential;
+
+			console.log(errorCode, errorMessage, email, credential);
+		});
 	}
 	render() {
 		return (
 			<div className="container">
-				<form onSubmit={this.handleSubmit} className="white">
+				<form onSubmit={this.emailSignIn} className="white">
 					<h5 className="signInH5">Sign In</h5>
 					<div className="input-field">
 						<label htmlFor="email">Email</label>
@@ -41,7 +64,7 @@ class SignIn extends Component {
 						<button className="button">Login</button>
 					</div>
 				</form>
-				
+				<button onClick={this.googleSignIn} className="button">Google</button>
 			</div>
 		)
 	}
