@@ -15,4 +15,15 @@ var firebaseConfig = {
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 
+//Function listens for whenever the auth state changes
+//When user is not logged in user == null
+firebase.auth().onAuthStateChanged((user) => {
+	if(user != null) {
+		console.log("Logged In as:", user.displayName);
+		console.log("User Object:", user)
+	} else {
+		console.log("Logged Out");
+	}
+})
+
 export default firebase;

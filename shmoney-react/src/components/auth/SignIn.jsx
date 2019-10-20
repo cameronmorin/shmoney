@@ -17,8 +17,10 @@ class SignIn extends Component {
 		const email = this.state.email;
 		const password = this.state.password;
 
-		firebase.auth().signInWithEmailAndPassword(email, password).catch(error => {
-			//Todo Output the error message on screen for user to see
+		firebase.auth().signInWithEmailAndPassword(email, password).then(() => {
+			//TODO Route to home page
+		}).catch(error => {
+			//Todo Handle errors
 			let errorCode = error.code;
 			let errorMessage = error.message;
 			console.log(errorCode, errorMessage);
@@ -32,10 +34,14 @@ class SignIn extends Component {
 		firebase.auth().signInWithPopup(provider).then((result) => {
 			// The signed-in user info.
 			let user = result.user;
-
-			console.log(user)
+			//Create document with user info from google if the user is new, updates info otherwise
+			firebase.firestore().collection("users").doc(user.uid).set({
+				name: user.displayName,
+				email: user.email,
+				photoURL: user.photoURL,
+			})
 			//TODO Route to home page
-		}).catch(function(error) {
+		}).catch(error => {
 			// TODO Handle errors
 			let errorCode = error.code;
 			let errorMessage = error.message;

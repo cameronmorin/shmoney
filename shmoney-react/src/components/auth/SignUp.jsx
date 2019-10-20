@@ -22,15 +22,22 @@ class SignUp extends Component {
 		const firstName = this.state.firstName;
 		const lastName = this.state.lastName;
 		
-		//Create new user
+		//Sign up with email and password
 		firebase.auth().createUserWithEmailAndPassword(email, password).then(credential => {
-			firebase.firestore().collection("users").doc(credential.user.uid).set({
-				firstName: firstName,
-				lastName: lastName,
+			let user = credential.user;
+			let userName = firstName + ' ' + lastName;
+			//Todo Verify Email
+			//Update user display name to be first + last by default
+			user.updateProfile({displayName: userName})
+
+			//Create document with the new users info
+			firebase.firestore().collection("users").doc(user.uid).set({
+				name: userName,
 				email: email,
 			})
+			//TODO Route to home page
 		}).catch(error => {
-			//TODO Output the error message on screen for user to see
+			//TODO Handle errors
 			let errorCode = error.code;
 			let errorMessage = error.message;
 			console.log(errorCode, errorMessage);
@@ -44,8 +51,12 @@ class SignUp extends Component {
 		firebase.auth().signInWithPopup(provider).then((result) => {
 			// The signed-in user info.
 			let user = result.user;
-			
-			console.log(user)
+			//Create document with user info from google if the user is new, updates info otherwise
+			firebase.firestore().collection("users").doc(user.uid).set({
+				name: user.displayName,
+				email: user.email,
+				photoURL: user.photoURL,
+			})
 			//TODO Route to home page
 		}).catch(function(error) {
 			// TODO Handle errors
