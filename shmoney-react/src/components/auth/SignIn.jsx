@@ -20,7 +20,7 @@ class SignIn extends Component {
 		firebase.auth().signInWithEmailAndPassword(email, password).then(() => {
 			//TODO Route to home page
 		}).catch(error => {
-			//Todo Handle errors
+			//TODO Handle errors
 			let errorCode = error.code;
 			let errorMessage = error.message;
 			console.log(errorCode, errorMessage);
@@ -42,7 +42,7 @@ class SignIn extends Component {
 			})
 			//TODO Route to home page
 		}).catch(error => {
-			// TODO Handle errors
+			//TODO Handle errors
 			let errorCode = error.code;
 			let errorMessage = error.message;
 			// The email of the user's account used.

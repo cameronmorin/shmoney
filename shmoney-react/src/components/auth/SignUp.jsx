@@ -19,14 +19,21 @@ class SignUp extends Component {
 		//Get user information
 		const email = this.state.email;
 		const password = this.state.password;
-		const firstName = this.state.firstName;
-		const lastName = this.state.lastName;
+		const userName = this.state.firstName + ' ' + this.state.lastName;
 		
 		//Sign up with email and password
 		firebase.auth().createUserWithEmailAndPassword(email, password).then(credential => {
 			let user = credential.user;
-			let userName = firstName + ' ' + lastName;
-			//Todo Verify Email
+
+			//Send email verification
+			//Can user user.emailVerified to check if user is verified for things like $ transactions
+			user.sendEmailVerification().then(() => {
+				//TODO Display message to check email for verification
+				console.log('Verification Email Sent');
+			}).catch(error => {
+				//TODO Handle errors
+				console.log(error);
+			})
 			//Update user display name to be first + last by default
 			user.updateProfile({displayName: userName})
 
@@ -59,7 +66,7 @@ class SignUp extends Component {
 			})
 			//TODO Route to home page
 		}).catch(function(error) {
-			// TODO Handle errors
+			//TODO Handle errors
 			let errorCode = error.code;
 			let errorMessage = error.message;
 			// The email of the user's account used.
