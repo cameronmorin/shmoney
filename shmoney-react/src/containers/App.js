@@ -1,26 +1,21 @@
 import React from 'react';
-import logo from '../logo.svg';
 import Header from '../components/Header';
-import '../styles/App.css'
+import '../styles/App.css';
+import {BrowserRouter as Router, Route } from 'react-router-dom';
+
+import SignIn from '../components/auth/SignIn';
+import SignUp from '../components/auth/SignUp';
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      {/* Anything outside of Router is displayed on all pages */}
       <Header currPage='Home'/>
+      {/* Router used to display components based on the url */}
+      <Router>
+        <Route path='/signup' component={SignUp}/>
+        <Route path='/signin' component={SignIn}/>
+      </Router>
     </div>
   );
 }
