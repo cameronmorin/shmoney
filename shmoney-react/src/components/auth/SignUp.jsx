@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { Link, withRouter } from 'react-router-dom'
 import { compose } from 'recompose';
 
+import { SignInLink } from './SignIn'
 import { withFirebase } from '../firebase'
 
 const INITIAL_STATE = {
@@ -127,7 +128,8 @@ const SignUpPage = () => {
 	return(
 		<div>
 			<h1>Sign Up</h1>
-			<SignUpForm />
+			<SignUpForm/>
+			<SignInLink/>
 		</div>
 	);
 };

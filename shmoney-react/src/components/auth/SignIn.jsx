@@ -1,79 +1,98 @@
 import React, { Component } from 'react'
-import firebase from './firebase'
+import { Link, withRouter } from 'react-router-dom'
+import { compose } from 'recompose'
 
-class SignIn extends Component {
-	state = {
-		email: '',
-		password: '',
-	}
-	handleChange = (e) => {
-		this.setState({
-			//Using id from HTML, updates value of email/password
-			[e.target.id]: e.target.value
-		})
-	}
-	emailSignIn = (e) => {
-		e.preventDefault();
-		const email = this.state.email;
-		const password = this.state.password;
+import { SignUpLink } from './SignUp'
+import { withFirebase } from '../firebase'
 
-		firebase.auth().signInWithEmailAndPassword(email, password).then(() => {
-			//TODO Route to home page
+const INITIAL_STATE = {
+	email: '',
+	password: '',
+	error: null
+}
+
+class SignInFormBase extends Component {
+	constructor(props) {
+		super(props);
+
+		this.state = { ...INITIAL_STATE };
+	}
+	onChange = event => {
+		this.setState({ [event.target.name]: event.target.value });
+	}
+	onSubmit = event => {
+		event.preventDefault();
+
+		const { email, password } = this.state;
+
+		this.props.firebase.signInWithEmailAndPassword(email, password).then(() => {
+
 		}).catch(error => {
-			//TODO Handle errors
-			let errorCode = error.code;
-			let errorMessage = error.message;
-			console.log(errorCode, errorMessage);
-		})
-	}
-	googleSignIn = () => {
-		//Get instance of google provider object
-		let provider = new firebase.auth.GoogleAuthProvider();
-
-		//Sign in using google popup
-		firebase.auth().signInWithPopup(provider).then((result) => {
-			// The signed-in user info.
-			let user = result.user;
-			//Create document with user info from google if the user is new, updates info otherwise
-			firebase.firestore().collection("users").doc(user.uid).set({
-				name: user.displayName,
-				email: user.email,
-				photoURL: user.photoURL,
-			})
-			//TODO Route to home page
-		}).catch(error => {
-			//TODO Handle errors
-			let errorCode = error.code;
-			let errorMessage = error.message;
-			// The email of the user's account used.
-			let email = error.email;
-			// The firebase.auth.AuthCredential type that was used.
-			let credential = error.credential;
-
-			console.log(errorCode, errorMessage, email, credential);
+			this.setState({ error });
 		});
 	}
 	render() {
-		return (
-			<div className="container">
-				<form onSubmit={this.emailSignIn} className="white">
-					<h5 className="signInH5">Sign In</h5>
-					<div className="input-field">
-						<label htmlFor="email">Email</label>
-						<input type="email" id="email" onChange={this.handleChange}/>
-					</div>
-					<div className="input-field">
-						<label htmlFor="password">Password</label>
-						<input type="password" id="password" onChange={this.handleChange}/>
-					</div>
-					<div className="input-field">
-						<button className="button">Login</button>
-					</div>
-				</form>
-				<button onClick={this.googleSignIn} className="button">Google</button>
-			</div>
-		)
+		const { email, password, error } = this.state;
+
+		const isInvalid = email === '' || password === '';
+
+		return(
+			<form onSubmit={this.onSubmit}>
+				<div className="input-field">
+					<input 
+						type="email"
+						name="email"
+						value={email}
+						onChange={this.onChange}
+						placeholder="Email Address"
+					/>
+				</div>
+				<div className="input-field">
+					<input 
+						type="password"
+						name="password"
+						value={password}
+						onChange={this.onChange}
+						placeholder="Password"
+					/>
+				</div>
+				<div className="sign-up-buttons">
+					<button type="submit" disabled={isInvalid}>Sign In</button>
+					<button type="button" onClick={this.googleSignIn}>Google</button>
+				</div>
+
+				{/* Handle Errors */}
+				<div className="error-message">
+					{error && <p>{error.message}</p>}
+				</div>
+			</form>
+		);
 	}
 }
 
-export default SignIn
+const SignInPage = () => {
+	return(
+		<div>
+			<h1>Sign In</h1>
+			<SignInForm/>
+			<SignUpLink/>
+		</div>
+	);
+}
+
+const SignInLink = () => {
+	return(
+		<p>
+			Already have an account? <Link to='/signin'>Sign In</Link>
+		</p>
+	);
+}
+
+const SignInForm = compose(
+	withRouter,
+	withFirebase
+)(SignInFormBase);
+
+export default SignInPage
+
+export { SignInForm, SignInLink };
