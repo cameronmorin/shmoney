@@ -1,10 +1,8 @@
 import React from 'react';
-import Header from './components/Header';
 import './styles/App.css';
 import { withRouter } from 'react-router-dom';
-
-import SignIn from './components/auth/SignIn';
-import SignUp from './components/auth/SignUp';
+import { withAuthentication } from './components/session'
+import { compose } from 'recompose';
 import Routes from './Routes';
 
 class App extends React.Component {
@@ -20,4 +18,10 @@ class App extends React.Component {
   }
 }
 
-export default withRouter(App);
+//Allows our app to use router and track authentication
+const mainApp = compose(
+	withRouter,
+	withAuthentication
+)(App);
+
+export default mainApp;

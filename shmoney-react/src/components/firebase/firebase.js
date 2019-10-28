@@ -1,5 +1,6 @@
 import app from 'firebase/app'
 import 'firebase/auth'
+import 'firebase/firestore';
 
 const firebaseConfig = {
 	apiKey: "AIzaSyBmOBXj6X0pPNLnIZKBaV_RszLpmy5fXas",
@@ -16,13 +17,16 @@ class Firebase {
 	constructor() {
 		app.initializeApp(firebaseConfig);
 
+		/* Helper */
+		this.fieldValue = app.firestore.FieldValue;
+
 		this.auth = app.auth();
+		this.db = app.firestore();
 
 		this.googleProvider = new app.auth.GoogleAuthProvider();
 	}
 
 	/* AUTH API */
-
 	createUserWithEmailAndPassword = (email, password) => 
 		this.auth.createUserWithEmailAndPassword(email, password);
 
@@ -36,6 +40,40 @@ class Firebase {
 	signInWithGoogle = () => this.auth.signInWithPopup(this.googleProvider);
 
 	signOut = () => this.auth.signOut();
+
+	/* USER API */
+	user = uid => this.db.doc(`users/${uid}`);
+
+	users = () => this.db.collection('users');
+
+	/* MERGE AUTH AND FIRESTORE API */
+	onAuthUserListener = (next, fallback) => {
+		this.auth.onAuthStateChanged(authUser => {
+			if(authUser) {
+				this.user(authUser.uid).get().then(snapshot => {
+					const dbUser = snapshot.data();
+
+					//Default empty roles
+					if(!dbUser.roles) {
+						dbUser.roles = {}
+					}
+
+					//Merge auth and db user
+					authUser = {
+						uid: authUser.uid,
+						email: authUser.email,
+						emailVerified: authUser.emailVerified,
+						providerData: authUser.providerData,
+						...dbUser,
+					}
+
+					next(authUser);
+				});
+			} else {
+				fallback();
+			}
+		})
+	}
 }
 
 export default Firebase;
