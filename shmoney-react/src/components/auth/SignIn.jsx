@@ -26,9 +26,23 @@ class SignInFormBase extends Component {
 		const { email, password } = this.state;
 
 		this.props.firebase.signInWithEmailAndPassword(email, password).then(() => {
-
+			this.setState({ ...INITIAL_STATE });
 		}).catch(error => {
 			this.setState({ error });
+		});
+	}
+	googleSignIn = () => {
+		this.props.firebase.signInWithGoogle().then(result => {
+			let authUser = result.user;
+			let isNewUser = result.additionalUserInfo.isNewUser;
+			//Check if new user before creating firestore document
+			if(isNewUser) {
+				//TODO: Update database
+			}
+			this.setState({ ...INITIAL_STATE });
+			this.props.history.push('/home');
+		}).catch(error => {
+			this.setState({ error })
 		});
 	}
 	render() {
