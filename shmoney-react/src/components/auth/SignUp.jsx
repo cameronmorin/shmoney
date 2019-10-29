@@ -34,7 +34,7 @@ class SignUpFormBase extends Component {
 			let authUser = credential.user;
 			//Update authUser displayName with username
 			authUser.updateProfile({displayName: username});
-			//Send varification email
+			//Add firestore document for user with user info
 			return this.props.firebase.user(authUser.uid).set({
 				username,
 				email,

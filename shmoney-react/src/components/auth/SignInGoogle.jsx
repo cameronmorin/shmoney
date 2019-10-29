@@ -16,11 +16,16 @@ class SignInGoogleBase extends Component {
 			let authUser = result.user;
 			let isNewUser = result.additionalUserInfo.isNewUser;
 			//Check if new user before creating firestore document
-			return this.props.firebase.user(authUser.uid).set({
-				username: authUser.displayName,
-				email: authUser.email,
-				roles: {},
-			},{ merge:true })
+			if(isNewUser) {
+				return this.props.firebase.user(authUser.uid).set({
+					username: authUser.displayName,
+					email: authUser.email,
+					roles: {},
+				},{ merge:true })
+			} else {
+				return
+			}
+			
 		}).then(() => {
 			this.setState({ error: null });
 			this.props.history.push('/home');
