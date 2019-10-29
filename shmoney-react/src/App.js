@@ -9,7 +9,8 @@ class App extends React.Component {
   render() {
     this.childProps = {
       currPage: 'Home',
-      message: 'Hi'
+      message: 'Hi',
+      authUser: null,
     }
 
     return(

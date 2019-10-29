@@ -45,6 +45,9 @@ class SignInFormBase extends Component {
 			this.setState({ error })
 		});
 	}
+	signOut = () => {
+		this.props.firebase.signOut();
+	}
 	render() {
 		const { email, password, error } = this.state;
 
@@ -73,6 +76,7 @@ class SignInFormBase extends Component {
 				<div className="sign-up-buttons">
 					<button type="submit" disabled={isInvalid}>Sign In</button>
 					<button type="button" onClick={this.googleSignIn}>Google</button>
+					<button onClick={this.signOut}>Sign Out</button>
 				</div>
 
 				{/* Handle Errors */}
@@ -86,7 +90,7 @@ class SignInFormBase extends Component {
 
 const SignInPage = () => {
 	return(
-		<div>
+		<div className="sign-up">
 			<h1>Sign In</h1>
 			<SignInForm/>
 			<SignUpLink/>

@@ -5,7 +5,7 @@ import { withFirebase } from '../firebase'
 
 //Provider component that can keep track of authUser status across all components
 const withAuthentication = Component => {
-   class withAuthentication extends React.Component {
+   class WithAuthentication extends React.Component {
       constructor(props) {
          super(props)
 
@@ -15,10 +15,9 @@ const withAuthentication = Component => {
       }
       componentDidMount() {
          this.listener = this.props.firebase.auth.onAuthStateChanged(authUser => {
-               authUser ? this.setState({ authUser }) : this.setState({ authUser: null })
-               console.log(authUser)
-            }
-         )
+            authUser ? this.setState({ authUser }) : this.setState({ authUser: null })
+            console.log(authUser)
+         })
       }
       componentWillUnmount() {
          this.listener();
@@ -31,7 +30,7 @@ const withAuthentication = Component => {
          )
       }
    }
-   return withFirebase(withAuthentication);
+   return withFirebase(WithAuthentication);
 }
 
 export default withAuthentication
