@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { Link, withRouter } from 'react-router-dom'
 import { compose } from 'recompose'
 
+import SignInGoogle from './SignInGoogle'
 import { SignUpLink } from './SignUp'
 import { withFirebase } from '../firebase'
 
@@ -29,20 +30,6 @@ class SignInFormBase extends Component {
 			this.setState({ ...INITIAL_STATE });
 		}).catch(error => {
 			this.setState({ error });
-		});
-	}
-	googleSignIn = () => {
-		this.props.firebase.signInWithGoogle().then(result => {
-			let authUser = result.user;
-			let isNewUser = result.additionalUserInfo.isNewUser;
-			//Check if new user before creating firestore document
-			if(isNewUser) {
-				//TODO: Update database
-			}
-			this.setState({ ...INITIAL_STATE });
-			this.props.history.push('/home');
-		}).catch(error => {
-			this.setState({ error })
 		});
 	}
 	signOut = () => {
@@ -73,11 +60,8 @@ class SignInFormBase extends Component {
 						placeholder="Password"
 					/>
 				</div>
-				<div className="sign-up-buttons">
-					<button type="submit" disabled={isInvalid}>Sign In</button>
-					<button type="button" onClick={this.googleSignIn}>Google</button>
-					<button onClick={this.signOut}>Sign Out</button>
-				</div>
+				<button type="submit" disabled={isInvalid}>Sign In</button>
+				<button onClick={this.signOut}>Sign Out</button>
 
 				{/* Handle Errors */}
 				<div className="error-message">
@@ -92,8 +76,9 @@ const SignInPage = () => {
 	return(
 		<div className="sign-up">
 			<h1>Sign In</h1>
-			<SignInForm/>
-			<SignUpLink/>
+			<SignInForm />
+			<SignInGoogle />
+			<SignUpLink />
 		</div>
 	);
 }
