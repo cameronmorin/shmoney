@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { Link, withRouter } from 'react-router-dom'
 import { compose } from 'recompose';
 
+import SignInGoogle from './SignInGoogle'
 import { SignInLink } from './SignIn'
 import { withFirebase } from '../firebase'
 
@@ -26,37 +27,27 @@ class SignUpFormBase extends Component {
 		event.preventDefault();
 
 		const { username, email, passwordOne } = this.state;
+		const roles = {}
 
 		this.props.firebase.createUserWithEmailAndPassword(email, passwordOne).then(credential => {
 			//Get authUser from credential
 			let authUser = credential.user;
 			//Update authUser displayName with username
 			authUser.updateProfile({displayName: username});
-			//Send varification email
-			authUser.sendEmailVerification().then(() => {
-				//TODO: Display message that user needs to check email to verify
-				console.log('Verification Email Sent');
-			}).catch(error => {
-				this.setState({ error });
-			});
+			//Add firestore document for user with user info
+			return this.props.firebase.user(authUser.uid).set({
+				username,
+				email,
+				roles
+			},{ merge: true });
+		}).then(() => {
+			this.props.firebase.sendEmailVerification();
+			console.log("Email Verification Sent")
+		}).then(() => {
 			this.setState({ ...INITIAL_STATE });
 			this.props.history.push('/home');
 		}).catch(error => {
 			this.setState({ error });
-		});
-	}
-	googleSignIn = () => {
-		this.props.firebase.signInWithGoogle().then(result => {
-			let authUser = result.user;
-			let isNewUser = result.additionalUserInfo.isNewUser;
-			//Check if new user before creating firestore document
-			if(isNewUser) {
-				//TODO: Update database
-			}
-			this.setState({ ...INITIAL_STATE });
-			this.props.history.push('/home');
-		}).catch(error => {
-			this.setState({ error })
 		});
 	}
 	render() {
@@ -110,10 +101,7 @@ class SignUpFormBase extends Component {
 						placeholder="Confirm Password"
 					/>
 				</div>
-				<div className="sign-up-buttons">
-					<button type="submit" disabled={isInvalid}>Sign Up</button>
-					<button type="button" onClick={this.googleSignIn}>Google</button>
-				</div>
+				<button type="submit" disabled={isInvalid}>Sign Up</button>
 
 				{/* Handle Errors */}
 				<div className="error-message">
@@ -126,10 +114,11 @@ class SignUpFormBase extends Component {
 
 const SignUpPage = () => {
 	return(
-		<div>
+		<div className="sign-up">
 			<h1>Sign Up</h1>
-			<SignUpForm/>
-			<SignInLink/>
+			<SignUpForm />
+			<SignInGoogle />
+			<SignInLink />
 		</div>
 	);
 };
