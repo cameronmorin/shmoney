@@ -1,7 +1,8 @@
 import React from 'react';
 import './styles/App.css';
 import { withRouter } from 'react-router-dom';
-import { withAuthentication } from './components/session'
+import { withAuthentication } from './components/session';
+import { withFirebase } from './components/firebase';
 import { compose } from 'recompose';
 import Routes from './Routes';
 
@@ -17,7 +18,7 @@ class App extends React.Component {
   onClickLogout = async event => {
     event.preventDefault();
 
-    this.props.firebase.logout();
+    this.props.firebase.signOut();
   }
 
   onClickAvatar = async event => {
