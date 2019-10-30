@@ -6,6 +6,8 @@ import SignInGoogle from './SignInGoogle'
 import { SignInLink } from './SignIn'
 import { withFirebase } from '../firebase'
 
+import '../../styles/SignUpBox.css';
+
 const INITIAL_STATE = {
 	username: '',
 	email: '',
@@ -66,42 +68,61 @@ class SignUpFormBase extends Component {
 		return (
 			<form onSubmit={this.onSubmit}>
 				<div className="input-field">
+					<div className = "universal-padding-3">
+						Username:
+					</div>
 					<input 
 						type="text"
 						name="username"
 						value={username}
 						onChange={this.onChange}
-						placeholder="Username"
+						placeholder=""
+						id = "rounded-corner-input"
 					/>
 				</div>
 				<div className="input-field">
+					<div className = "universal-padding-3">
+						Email Address:
+					</div>
 					<input 
 						type="email"
 						name="email"
 						value={email}
 						onChange={this.onChange}
-						placeholder="Email Address"
+						placeholder=""
+						id = "rounded-corner-input"
 					/>
 				</div>
 				<div className="input-field">
+					<div className = "universal-padding-3">
+						Password:
+					</div>
 					<input 
 						type="password"
 						name="passwordOne"
 						value={passwordOne}
 						onChange={this.onChange}
-						placeholder="Password"
+						placeholder=""
+						id = "rounded-corner-input"
 					/>
 				</div>
 				<div className="input-field">
+					<div className = "universal-padding-3">
+						Confirm Password:
+					</div>
 					<input 
 						type="password"
 						name="passwordTwo"
 						value={passwordTwo}
 						onChange={this.onChange}
-						placeholder="Confirm Password"
+						placeholder=""
+						id = "rounded-corner-input"	
 					/>
+					<div className = "universal-padding-10">
+					</div>
 				</div>
 				<button type="submit" disabled={isInvalid}>Sign Up</button>
+				<div className = "universal-padding-10"></div>
 
 				{/* Handle Errors */}
 				<div className="error-message">
@@ -114,11 +135,13 @@ class SignUpFormBase extends Component {
 
 const SignUpPage = () => {
 	return(
-		<div className="sign-up">
-			<h1>Sign Up</h1>
+		<div className = "signup-box">
+		<div className = "background-test">
+			<h1>$ign Up</h1>
 			<SignUpForm />
 			<SignInGoogle />
 			<SignInLink />
+		</div>
 		</div>
 	);
 };
