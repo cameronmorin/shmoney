@@ -7,7 +7,7 @@ const WelcomeMessage = () => {
     return (
         <div>
             <AuthUserContext.Consumer>
-                {authUser => authUser ? <h1> Welcome, {authUser.displayName}</h1> : <h1>Welcome, [no user]</h1>}
+                {authUser => authUser ? <h1> Welcome, {authUser.displayName}</h1> : <h1></h1>}
             </AuthUserContext.Consumer>
         </div>
     )
@@ -17,7 +17,7 @@ const HouseName = () => {
     return (
         <div>
             <AuthUserContext.Consumer>
-                {authUser => authUser ? <p> {authUser.housename}</p> : <p>[no house]</p>}
+                {authUser => authUser ? <p> [House name] </p> : <p></p>}
             </AuthUserContext.Consumer>
         </div>
     )
@@ -26,7 +26,7 @@ const HouseName = () => {
 const BillsDue = () => {
     return (
         <AuthUserContext.Consumer>
-            {authUser => authUser ? <p> {authUser.userBills}</p> : <p>[no bills]</p>}
+            {authUser => authUser ? <p> [Bills Due]</p> : <p></p>}
         </AuthUserContext.Consumer>
     )
 }
@@ -34,7 +34,7 @@ const BillsDue = () => {
 const HouseMembers = () => {
     return (
         <AuthUserContext.Consumer>
-            {authUser => authUser ? <p> {authUser.houseMembers}</p> : <p>[no members]</p>}
+            {authUser => authUser ? <p> [House members]</p> : <p></p>}
         </AuthUserContext.Consumer>
     )
 }
@@ -42,7 +42,7 @@ const HouseMembers = () => {
 const RecentPayments = () => {
     return (
         <AuthUserContext.Consumer>
-            {authUser => authUser ? <p> {authUser.recPayments}</p> : <p>[no payments]</p>}
+            {authUser => authUser ? <p> [Recent payments] </p> : <p></p>}
         </AuthUserContext.Consumer>
     )
 }
