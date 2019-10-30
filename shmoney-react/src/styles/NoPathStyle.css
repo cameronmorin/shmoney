@@ -1,61 +1,45 @@
-body {
-    margin-top: 0;
-    background: white;
-
-}
-
-.PageWrap{
+.home-buttons {
     display: grid;
-    grid-template-rows: 10% 60% 30%;
-    background: #35B27F;
+    grid-template: 1fr / 1fr 1fr;
 }
 
-.TempNavBar{
-    grid-row: 1;
-    background: white;
+.sign-in-button {
+    grid-column: 1 span 1;
     display: flex;
-    justify-content: left;
-    align-content: center;
+    justify-content: flex-end;
+    padding: 0 20px;
 }
 
-.HomeBody{
-    grid-row: 2;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.HomeButtons{
-    grid-row: 3;
-    display: grid;
-    grid-template-columns: 45% 10% 45%;
-    place-items: center center;
-    
-}
-
-.SignInButton{
-    grid-column: 1;
-}
-.Button{
-    width: 220px;
-    height: 80px;
-    border-radius: 20px;
-    background: white;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 30px;
-}
-
-.OrDisplay{
+.sign-up-button {
     grid-column: 2;
+    display: flex;
+    justify-content: flex-start;
+    padding: 0 20px;
 }
 
-.SignUpButton{
-    grid-column: 3;
+.button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 110px;
+    height: 40px;
+    border-radius: 20px;
+    background-color: #084C61;
+    color: #ffffff;
+    font-size: 15px;
+    text-decoration: none;
+    cursor: pointer;
 }
 
-.Msg{
+.page {
+    margin: 20px;
+    color: #ffffff;
+}
+
+.title-text {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-bottom: 10px;
     font-size: 30px;
-    font-family: Jomolhari;
 }
