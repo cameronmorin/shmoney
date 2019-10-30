@@ -4,13 +4,13 @@ body {
 
 }
 
-.HomeWrap{
+.PageWrap{
     display: grid;
     grid-template-rows: 10% 60% 30%;
     background: #35B27F;
 }
 
-.NavBar{
+.TempNavBar{
     grid-row: 1;
     background: white;
     display: flex;
@@ -22,13 +22,13 @@ body {
     grid-row: 2;
     display: flex;
     justify-content: center;
-    /*align-items: center;*/
+    align-items: center;
 }
 
 .HomeButtons{
     grid-row: 3;
     display: grid;
-    grid-template-columns: 50% 50%;
+    grid-template-columns: 45% 10% 45%;
     place-items: center center;
     
 }
@@ -36,28 +36,26 @@ body {
 .SignInButton{
     grid-column: 1;
 }
-.Block{
+.Button{
     width: 220px;
     height: 80px;
     border-radius: 20px;
-    background: #084C61;
-    text-align: center;
+    background: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 30px;
 }
 
-.Logo{
-    width: 200px;
-    height: 60px;
-    border-radius: 20px;
-    background: #35B27F;
-    text-align: center;
-    text-justify: center;
-}
-
-.SignUpButton{
+.OrDisplay{
     grid-column: 2;
 }
 
+.SignUpButton{
+    grid-column: 3;
+}
+
 .Msg{
-    font-size: 25px;
+    font-size: 30px;
     font-family: Jomolhari;
 }
