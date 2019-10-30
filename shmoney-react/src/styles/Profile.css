@@ -1,0 +1,48 @@
+.fake-nav{
+    display: grid;
+    font-size: 14px;
+    grid-template: 50px / 20% 60% 20%;
+    background-color: #ffffff;
+}
+
+.wrapper{
+    position: absolute;
+    top: 10%;
+    height: 100%;
+    width: 100%;
+    display: flex;
+}
+
+.wrapper .left{
+    width: 20%;
+    background-color: #35B27F;
+    padding: 30px 25px;
+    text-align: center;
+    color: #fff;
+}
+
+.wrapper .left h1{
+    margin-bottom: 10px;
+    font-size: 35px;
+}
+
+
+.wrapper .left p{
+    font-size:20px;
+}
+
+.wrapper .right{
+    width: 80%;
+    background: linear-gradient(to right, #c5c5c5, #e4e4e4);
+    padding: 30px 25px;
+}
+
+.wrapper .right .house_info{
+    margin-bottom: 25px;
+}
+
+.wrapper .right .house_info h1{
+    border-bottom: 1px solid #a7a6a6;
+    text-transform: uppercase;
+}
+
