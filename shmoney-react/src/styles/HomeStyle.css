@@ -1,0 +1,45 @@
+body {
+    margin-top: 0;
+    background: white;
+
+}
+
+.HomeWrap{
+    display: grid;
+    grid-template-rows: 10% 60% 30%;
+    background: #35B27F;
+}
+
+.NavBar{
+    grid-row: 1;
+    background: white;
+}
+
+.HomeBody{
+    grid-row: 2;
+    text-align: center; 
+    text-justify: center;   
+}
+
+.HomeButtons{
+    grid-row: 3;
+    display: grid;
+    grid-template-columns: 50% 50%;
+    place-items: center center;
+    
+}
+
+.SignInButton{
+    grid-column: 1;
+}
+.Button{
+    width: 220px;
+    height: 80px;
+    border-radius: 20px;
+    background: #084C61;
+    text-align: center;
+}
+
+.SignUpButton{
+    grid-column: 2;
+}
