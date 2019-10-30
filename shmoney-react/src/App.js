@@ -30,6 +30,24 @@ class App extends React.Component {
     }
   }
 
+  onClickButton = async event => {
+    event.preventDefault();
+
+    const action = event.currentTarget.textContent;
+    
+    switch(action) {
+      case 'Sign In':
+        this.props.history.push('/signIn');
+        break;
+      case 'Sign Up':
+        this.props.history.push('/signUp');
+        break;
+      default:
+        console.log('Unexpected action ID');
+        break;
+    }
+  }
+
   render() {
     this.childProps = {
       currPage: 'Home',
@@ -37,7 +55,8 @@ class App extends React.Component {
       authUser: null,
       onClickHome: this.onClickHome,
       onClickLogout: this.onClickLogout,
-      onClickAvatar: this.onClickAvatar
+      onClickAvatar: this.onClickAvatar,
+      onClickButton: this.onClickButton
     }
 
     return(
