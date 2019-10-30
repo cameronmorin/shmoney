@@ -18,7 +18,7 @@ export default class NavBar extends React.Component {
             {/* display logo here */}
             <img className="logo" src={logo} alt="logo" onClick={this.props.onClickHome}/>
           </div>
-          {this.props.authUser != null &&
+          {/* {this.props.authUser != null && */}
           <>
             <div className="nav-pages">
               {/* insert page links here */}
@@ -37,7 +37,7 @@ export default class NavBar extends React.Component {
               <img className="avatar" src={avatar} alt="user" onClick={this.props.onClickAvatar} />
             </div>
           </>
-          }
+          {/* } */}
         </div>
       </>
     );
