@@ -1,4 +1,5 @@
 import React from 'react'
+import NavBar from '../components/NavBar';
 import "../styles/Profile.css"
 
 import { AuthUserContext } from '../components/session'
@@ -47,46 +48,45 @@ const RecentPayments = () => {
     )
 }
 
-const Profile = () => {
-    return (
-        <div>
-            <div className="fake-nav">
-                <h1> delete dis l8er</h1>
-            </div>
-
-            <div className="wrapper">
-                <div className="left">
-                    <WelcomeMessage />
-                    <HouseName />
-                </div>
-
-                <div className="right">
-                    <div class="house_info">
-                        <div class="data">
-                            <h1> Bills due</h1>
-                            <BillsDue />
-                        </div>
-                        <div class="data">
-                            <h1> House Members</h1>
-                            <HouseMembers/>
-                        </div>
-                        <div class="data">
-                            <h1> Recent payments</h1>
-                            <RecentPayments/>
+export default class Profile extends React.Component {
+    constructor(props) {
+        super(props);
+    }
+    
+    render() {
+        return (
+            <div>
+                <NavBar 
+                    onLoad={this.props.onLoad}
+                    onClickHome={this.props.onClickHome}
+                    onClickLogout={this.props.onClickLogout}
+                    onClickAvatar={this.props.onClickAvatar}
+                    displayName="toBeFixed"
+                />
+                <div className="wrapper">
+                    <div className="left">
+                        <WelcomeMessage />
+                        <HouseName />
+                    </div>
+    
+                    <div className="right">
+                        <div class="house_info">
+                            <div class="data">
+                                <h1> Bills due</h1>
+                                <BillsDue />
+                            </div>
+                            <div class="data">
+                                <h1> House Members</h1>
+                                <HouseMembers/>
+                            </div>
+                            <div class="data">
+                                <h1> Recent payments</h1>
+                                <RecentPayments/>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    );
+        );
+    }
 }
-
-const ProfilePage = () => {
-    return (
-        <div>
-            <Profile />
-        </div>
-    )
-}
-
-export default ProfilePage

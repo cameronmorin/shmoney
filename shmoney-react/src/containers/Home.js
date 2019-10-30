@@ -12,12 +12,12 @@ export default class Home extends React.Component {
       <>
         {/* {this.props.authUser == null && */}
           <NavBar 
-          authUser={this.props.authUser}
-          onLoad={this.props.onLoad}
-          onClickHome={this.props.onClickHome}
-          onClickLogout={this.props.onClickLogout}
-          onClickAvatar={this.props.onClickAvatar}
-          displayName="toBeFixed"
+            authUser={this.props.authUser}
+            onLoad={this.props.onLoad}
+            onClickHome={this.props.onClickHome}
+            onClickLogout={this.props.onClickLogout}
+            onClickAvatar={this.props.onClickAvatar}
+            displayName="toBeFixed"
           />
           {/* HomePage component for user */}
         {/* } */}
