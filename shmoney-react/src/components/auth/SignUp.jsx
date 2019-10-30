@@ -47,7 +47,7 @@ class SignUpFormBase extends Component {
 			console.log("Email Verification Sent")
 		}).then(() => {
 			this.setState({ ...INITIAL_STATE });
-			this.props.history.push('/home');
+			this.props.history.push('/');
 		}).catch(error => {
 			this.setState({ error });
 		});
