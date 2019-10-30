@@ -4,10 +4,10 @@ import { Route, Switch } from 'react-router-dom';
 import AppliedRoute from './components/util/AppliedRoute';
 import Header from './components/Header';
 import Home from './components/Home';
+import Profile from './containers/Profile';
 import NotFound from './containers/NotFound';
 import SignIn from './components/auth/SignIn';
 import SignUp from './components/auth/SignUp';
-import Profile from './containers/Profile';
 
 export default ({ childProps }) =>
   <Switch>
