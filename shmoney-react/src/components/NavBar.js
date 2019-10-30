@@ -18,22 +18,26 @@ export default class NavBar extends React.Component {
             {/* display logo here */}
             <img className="logo" src={logo} alt="logo" onClick={this.props.onClickHome}/>
           </div>
-          <div className="nav-pages">
-            {/* insert page links here */}
-            <NavLink to="/group" className="link" activeClassName="active-link">My Group</NavLink>
-            <NavLink to="/myrent" className="link" activeClassName="active-link">Pay Rent</NavLink>
-          </div>
-          <div className="nav-user">
-            {/* insert user info here if signed in, else signIn/Up links */}
-            <div className="user-msg">
-              <div className="welcome-msg">
-                {this.props.displayName}
-                {/* {this.props.authUser.displayName}  => should be correct when authUser is setup */}
-              </div>
-              <div className="logout-msg" onClick={this.props.onClickLogout}>Logout</div>
+          {this.props.authUser != null &&
+          <>
+            <div className="nav-pages">
+              {/* insert page links here */}
+              <NavLink to="/group" className="link" activeClassName="active-link">My Group</NavLink>
+              <NavLink to="/myrent" className="link" activeClassName="active-link">Pay Rent</NavLink>
             </div>
-            <img className="avatar" src={avatar} alt="user" onClick={this.props.onClickAvatar} />
-          </div>
+            <div className="nav-user">
+              {/* insert user info here if signed in, else signIn/Up links */}
+              <div className="user-msg">
+                <div className="welcome-msg">
+                  {this.props.displayName}
+                  {/* {this.props.authUser.displayName}  => should be correct when authUser is setup */}
+                </div>
+                <div className="logout-msg" onClick={this.props.onClickLogout}>Logout</div>
+              </div>
+              <img className="avatar" src={avatar} alt="user" onClick={this.props.onClickAvatar} />
+            </div>
+          </>
+          }
         </div>
       </>
     );
