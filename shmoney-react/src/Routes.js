@@ -2,10 +2,9 @@ import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 // import all routes here
 import AppliedRoute from './components/util/AppliedRoute';
-import Header from './components/Header';
 import Home from './containers/Home';
-import Profile from './containers/Profile';
 import NotFound from './containers/NotFound';
+import Profile from './containers/Profile';
 import SignIn from './components/auth/SignIn';
 import SignUp from './components/auth/SignUp';
 
