@@ -1,0 +1,36 @@
+.signup-box {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: #FFFFFF;
+    width: 20%;
+    height: 45%;
+    border-radius: 7px; 
+    box-shadow: 2px 2px 5px 1px #1d1c1c;
+    font-family: 'Inconsolata', monospace;
+}
+
+.background-test {
+    text-align: left;
+    padding: 10%;
+}
+
+.universal-padding-3 {
+    padding-bottom: 3px;
+}
+
+.universal-padding-10 {
+    padding-bottom: 10px;
+}
+
+#rounded-corner-input {
+    border-radius: 5px;
+    border-color: #e5e5e5;
+    border-width: 1px;
+    background-color: #d6d6d6;
+}
+
+body {
+    background: #35B27F;
+}
