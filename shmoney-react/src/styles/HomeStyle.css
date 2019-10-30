@@ -13,12 +13,16 @@ body {
 .NavBar{
     grid-row: 1;
     background: white;
+    display: flex;
+    justify-content: left;
+    align-content: center;
 }
 
 .HomeBody{
     grid-row: 2;
-    text-align: center; 
-    text-justify: center;   
+    display: flex;
+    justify-content: center;
+    /*align-items: center;*/
 }
 
 .HomeButtons{
@@ -32,7 +36,7 @@ body {
 .SignInButton{
     grid-column: 1;
 }
-.Button{
+.Block{
     width: 220px;
     height: 80px;
     border-radius: 20px;
@@ -40,6 +44,20 @@ body {
     text-align: center;
 }
 
+.Logo{
+    width: 200px;
+    height: 60px;
+    border-radius: 20px;
+    background: #35B27F;
+    text-align: center;
+    text-justify: center;
+}
+
 .SignUpButton{
     grid-column: 2;
+}
+
+.Msg{
+    font-size: 25px;
+    font-family: Jomolhari;
 }
