@@ -24,7 +24,7 @@ class App extends React.Component {
     event.preventDefault();
 
     // const userPath = '/' + authUser.displayName;
-    if (window.location.pathname != '/user') {
+    if (window.location.pathname != '/profile') {
       // this.props.history.push(userPath);
       this.props.history.push('/profile');
     }
