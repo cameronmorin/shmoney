@@ -1,5 +1,5 @@
 import React from 'react';
-import '../styles/NoPathStyle.css'
+import '../styles/RootStyle.css'
 import './Home.jsx';
 import { Link, withRouter } from 'react-router-dom'
 
