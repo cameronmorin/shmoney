@@ -1,0 +1,45 @@
+.home-buttons {
+    display: grid;
+    grid-template: 1fr / 1fr 1fr;
+}
+
+.sign-in-button {
+    grid-column: 1 span 1;
+    display: flex;
+    justify-content: flex-end;
+    padding: 0 20px;
+}
+
+.sign-up-button {
+    grid-column: 2;
+    display: flex;
+    justify-content: flex-start;
+    padding: 0 20px;
+}
+
+.button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 110px;
+    height: 40px;
+    border-radius: 20px;
+    background-color: #084C61;
+    color: #ffffff;
+    font-size: 15px;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.page {
+    margin: 20px;
+    color: #ffffff;
+}
+
+.title-text {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-bottom: 10px;
+    font-size: 30px;
+}
