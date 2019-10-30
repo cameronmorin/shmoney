@@ -6,6 +6,8 @@ import SignInGoogle from './SignInGoogle'
 import { SignUpLink } from './SignUp'
 import { withFirebase } from '../firebase'
 
+import '../../styles/SignInBox.css';
+
 const INITIAL_STATE = {
 	email: '',
 	password: '',
@@ -43,25 +45,35 @@ class SignInFormBase extends Component {
 		return(
 			<form onSubmit={this.onSubmit}>
 				<div className="input-field">
+					<div className = "universal-padding-3">
+						Email Address:
+					</div>
 					<input 
 						type="email"
 						name="email"
 						value={email}
 						onChange={this.onChange}
-						placeholder="Email Address"
+						placeholder=""
+						id = "modified-input-box"
 					/>
 				</div>
 				<div className="input-field">
+					<div className = "universal-padding-3">
+						Password:
+					</div>
 					<input 
 						type="password"
 						name="password"
 						value={password}
 						onChange={this.onChange}
-						placeholder="Password"
+						placeholder=""
+						id = "modified-input-box"
 					/>
 				</div>
+				<div className = "universal-padding-10"></div>
 				<button type="submit" disabled={isInvalid}>Sign In</button>
-				<button onClick={this.signOut}>Sign Out</button>
+				<button onClick	={this.signOut}>Sign Out</button>	
+				<div className = "universal-padding-10"></div>
 
 				{/* Handle Errors */}
 				<div className="error-message">
@@ -74,11 +86,13 @@ class SignInFormBase extends Component {
 
 const SignInPage = () => {
 	return(
-		<div className="sign-up">
-			<h1>Sign In</h1>
+		<div className = "signin-box">
+		<div className = "sign-in-background">
+			<h1>$ign In</h1>
 			<SignInForm />
 			<SignInGoogle />
 			<SignUpLink />
+		</div>
 		</div>
 	);
 }
