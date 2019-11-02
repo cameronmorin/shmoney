@@ -2,7 +2,7 @@ import React from 'react'
 import NavBar from '../components/NavBar';
 import "../styles/Profile.css"
 
-import { AuthUserContext } from '../components/session'
+import { AuthUserContext, withAuthorization } from '../components/session'
 
 const WelcomeMessage = () => {
     return (
@@ -48,11 +48,7 @@ const RecentPayments = () => {
     )
 }
 
-export default class Profile extends React.Component {
-    constructor(props) {
-        super(props);
-    }
-    
+class Profile extends React.Component {
     render() {
         return (
             <div>
@@ -70,16 +66,16 @@ export default class Profile extends React.Component {
                     </div>
     
                     <div className="right">
-                        <div class="house_info">
-                            <div class="data">
+                        <div className="house_info">
+                            <div className="data">
                                 <h1> Bills due</h1>
                                 <BillsDue />
                             </div>
-                            <div class="data">
+                            <div className="data">
                                 <h1> House Members</h1>
                                 <HouseMembers/>
                             </div>
-                            <div class="data">
+                            <div className="data">
                                 <h1> Recent payments</h1>
                                 <RecentPayments/>
                             </div>
@@ -90,3 +86,5 @@ export default class Profile extends React.Component {
         );
     }
 }
+
+export default withAuthorization(Profile)

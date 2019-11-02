@@ -3,14 +3,15 @@ import React from 'react'
 import { withRouter } from 'react-router-dom'
 import { compose } from 'recompose'
 
+import AuthUserContext from './context'
 import { withFirebase } from '../firebase'
 
-const withAuthorization = () => condition => Component => {
+const withAuthorization = Component => {
    class WithAuthorization extends React.Component {
       componentDidMount() {
          this.listener = this.props.firebase.auth.onAuthStateChanged(authUser => {
-            if(!condition(authUser)) {
-               this.props.history.push('/signin');
+            if(!authUser) {
+               this.props.history.push('/');
             }
          })
       }
@@ -18,7 +19,13 @@ const withAuthorization = () => condition => Component => {
          this.listener();
       }
       render() {
-         return <Component {...this.props} />
+         return (
+            <AuthUserContext.Consumer>
+               {authUser => 
+                  authUser ? <Component {...this.props} /> : null
+               }
+            </AuthUserContext.Consumer>
+         )
       }
    }
    return compose(
