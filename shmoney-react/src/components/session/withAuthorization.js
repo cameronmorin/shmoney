@@ -17,22 +17,13 @@ const withAuthorization = signedInRoute => Component => {
             } else {
                if(authUser) this.props.history.push('/');
             }
-            if(!authUser) {
-               this.props.history.push('/');
-            }
          })
       }
       componentWillUnmount() {
          this.listener();
       }
       render() {
-         return (
-            <AuthUserContext.Consumer>
-               {authUser => 
-                  authUser ? <Component {...this.props} /> : null
-               }
-            </AuthUserContext.Consumer>
-         )
+         return (<Component {...this.props} />)
       }
    }
    return compose(
