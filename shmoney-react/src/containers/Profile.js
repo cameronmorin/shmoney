@@ -87,4 +87,6 @@ class Profile extends React.Component {
     }
 }
 
-export default withAuthorization(Profile)
+const signedInRoute = true;
+
+export default withAuthorization(signedInRoute)(Profile)

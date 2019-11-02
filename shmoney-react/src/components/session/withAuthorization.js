@@ -6,10 +6,17 @@ import { compose } from 'recompose'
 import AuthUserContext from './context'
 import { withFirebase } from '../firebase'
 
-const withAuthorization = Component => {
+const withAuthorization = signedInRoute => Component => {
    class WithAuthorization extends React.Component {
       componentDidMount() {
          this.listener = this.props.firebase.auth.onAuthStateChanged(authUser => {
+            //If the component is a signedInRoute the user must be logged in to
+            //view it and is routed to home.
+            if(signedInRoute) {
+               if(!authUser) this.props.history.push('/');
+            } else {
+               if(authUser) this.props.history.push('/');
+            }
             if(!authUser) {
                this.props.history.push('/');
             }
