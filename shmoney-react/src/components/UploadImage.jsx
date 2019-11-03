@@ -13,7 +13,8 @@ class UploadImage extends Component {
 			imageSelectFailure: false,
 			errorMessage: '',
 			url: '',
-			authUser: null
+			authUser: null,
+			error: null
 		}
 		this.handleChange = this.handleChange.bind(this);
 		this.handleUpload = this.handleUpload.bind(this);
@@ -43,15 +44,20 @@ class UploadImage extends Component {
 	handleUpload = () => {
 		let authUser = this.state.authUser;
 		const {image} = this.state;
-		this.props.firebase.storageRef.child(`profilePictures/${authUser.uid}`).put(image).then(a => {
+
+		this.props.firebase.storageRef.child(`profilePictures/${authUser.uid}`).put(image).then(() => {
 			this.props.firebase.storageRef.child(`profilePictures/${authUser.uid}`).getDownloadURL().then(url => {
 				this.setState({url: url});
 				authUser.updateProfile({photoURL: url})
-			})
-		})
+			}).catch(error => {
+				this.setState({error});
+			});
+		}).catch(error => {
+			this.setState({error});
+		});
 	}
 	render() {
-		const {image, imageSelectFailure, errorMessage} = this.state;
+		const {image, imageSelectFailure, errorMessage, error} = this.state;
 		return (
 			<div className ="upload-image">
 				<input className="picture-select" onChange={this.handleChange} type="file" accept="image/x-png,image/jpeg" />
@@ -62,6 +68,9 @@ class UploadImage extends Component {
 					: null
 				}
 				<button className="upload-image-button" onClick={this.handleUpload} disabled={!image}>Upload Image</button>
+				<div className="error-message">
+					{error && <p>{error.message}</p>}
+				</div>
 			</div>
 		);
 	}
