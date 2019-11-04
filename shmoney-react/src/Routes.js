@@ -7,7 +7,6 @@ import NotFound from './containers/NotFound';
 import Profile from './containers/Profile';
 import SignIn from './components/auth/SignIn';
 import SignUp from './components/auth/SignUp';
-import UploadImage from './components/UploadImage';
 
 export default ({ childProps }) =>
   <Switch>
@@ -15,7 +14,6 @@ export default ({ childProps }) =>
     <AppliedRoute path="/signIn" exact component={SignIn} props={childProps} />
     <AppliedRoute path="/signUp" exact component={SignUp} props={childProps} />
     <AppliedRoute path="/profile" exact component={Profile} props={childProps} />
-    <AppliedRoute path="/updateProfilePicture" exact component={UploadImage} props={childProps} />
     {/* Finally, catch all unmounted routes */}
     <Route component={NotFound} props={childProps}/>
   </Switch>;
