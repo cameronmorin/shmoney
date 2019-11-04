@@ -1,10 +1,6 @@
 import React from 'react';
 
-class Header extends React.Component {
-  state = {
-    currPage: this.props.currPage
-  }
-  
+class Header extends React.Component {  
   render() {
     return (
       <h1>Hello World!</h1>
