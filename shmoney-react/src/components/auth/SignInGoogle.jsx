@@ -20,7 +20,7 @@ class SignInGoogleBase extends Component {
 				return this.props.firebase.user(authUser.uid).set({
 					username: authUser.displayName,
 					email: authUser.email,
-					roles: {},
+					uid: authUser.uid
 				},{ merge:true })
 			} else {
 				return
@@ -34,12 +34,15 @@ class SignInGoogleBase extends Component {
 		});
 	}
 	render() {
-		const { error } = this.state
+		const {error} = this.state
 		return (
 			<form onSubmit={this.onSubmit}>
-				<button type="submit">Sign In with Google</button>
-
-				{error && <p>{error.message}</p>}
+				<div className="google-sign-in-button">
+					<button type="submit">Sign In with Google</button>
+				</div>
+				<div className="error-message">
+					{error && <p>{error.message}</p>}
+				</div>
 			</form>
 		);
 	}
