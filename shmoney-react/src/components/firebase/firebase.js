@@ -1,5 +1,4 @@
 import app from 'firebase/app'
-import 'firebase'
 import 'firebase/auth'
 import 'firebase/firestore';
 
@@ -23,10 +22,6 @@ class Firebase {
 
 		this.auth = app.auth();
 		this.db = app.firestore();
-
-		/* Storage */
-		this.storage = app.storage();
-		this.storageRef = this.storage.ref();
 
 		this.googleProvider = new app.auth.GoogleAuthProvider();
 	}

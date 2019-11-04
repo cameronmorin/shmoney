@@ -1,5 +1,4 @@
-import AuthUserContext, { withAuthUserContext } from './context'
+import AuthUserContext from './context'
 import withAuthentication from './withAuthentication'
-import withAuthorization from './withAuthorization'
 
-export { AuthUserContext, withAuthentication, withAuthorization, withAuthUserContext }
+export { AuthUserContext, withAuthentication }
