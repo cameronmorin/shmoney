@@ -1,0 +1,39 @@
+.main-grp{
+    display:grid;
+    grid-template-columns:1fr 3fr;
+    min-height: 100vh;
+    background:#35B27F;
+    color: #fff;
+}
+
+.left-grp{
+    grid-column:1;
+    padding: 30px 25px;
+    text-align: center;
+}
+
+.left-grp h1{
+    font-size: 35px;
+}
+.left-grp .p{
+    font-size:15px;
+}
+
+.right-grp{
+    grid-column:2;
+    background: #c4c4c4;
+    padding: 30px 25px;
+}
+.btn{
+    width: 100%;
+    border: none;
+    background-color: inherit;
+    padding: 14px 28px;
+    font-size: 16px;
+    color:white;
+    margin-bottom: 10px;
+    cursor: pointer;
+    display: inline-block;
+}
+
+.btn:hover {background:rgb(41, 136, 98);}
