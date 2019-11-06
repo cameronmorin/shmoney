@@ -2,58 +2,11 @@ import React from 'react'
 import NavBar from '../components/NavBar';
 import "../styles/Profile.css"
 
-import { AuthUserContext } from '../components/session'
+import { withAuthorization, withAuthUserContext } from '../components/session'
 
-const WelcomeMessage = () => {
-    return (
-        <div>
-            <AuthUserContext.Consumer>
-                {authUser => authUser ? <h1> Welcome, {authUser.displayName}</h1> : <h1></h1>}
-            </AuthUserContext.Consumer>
-        </div>
-    )
-}
-
-const HouseName = () => {
-    return (
-        <div>
-            <AuthUserContext.Consumer>
-                {authUser => authUser ? <p> [House name] </p> : <p></p>}
-            </AuthUserContext.Consumer>
-        </div>
-    )
-}
-
-const BillsDue = () => {
-    return (
-        <AuthUserContext.Consumer>
-            {authUser => authUser ? <p> [Bills Due]</p> : <p></p>}
-        </AuthUserContext.Consumer>
-    )
-}
-
-const HouseMembers = () => {
-    return (
-        <AuthUserContext.Consumer>
-            {authUser => authUser ? <p> [House members]</p> : <p></p>}
-        </AuthUserContext.Consumer>
-    )
-}
-
-const RecentPayments = () => {
-    return (
-        <AuthUserContext.Consumer>
-            {authUser => authUser ? <p> [Recent payments] </p> : <p></p>}
-        </AuthUserContext.Consumer>
-    )
-}
-
-export default class Profile extends React.Component {
-    constructor(props) {
-        super(props);
-    }
-    
+class Profile extends React.Component {
     render() {
+        const authUser = this.props.authUser;
         return (
             <div>
                 <NavBar 
@@ -65,23 +18,24 @@ export default class Profile extends React.Component {
                 />
                 <div className="wrapper">
                     <div className="left">
-                        <WelcomeMessage />
-                        <HouseName />
+                        {/* <WelcomeMessage /> */}
+                        <h1>Welcome, {authUser.displayName}</h1>
+                        <p>[House Name]</p>
                     </div>
     
                     <div className="right">
-                        <div class="house_info">
-                            <div class="data">
+                        <div className="house_info">
+                            <div className="data">
                                 <h1> Bills due</h1>
-                                <BillsDue />
+                                <p>[Bills due]</p>
                             </div>
-                            <div class="data">
+                            <div className="data">
                                 <h1> House Members</h1>
-                                <HouseMembers/>
+                                <p>[House Members]</p>
                             </div>
-                            <div class="data">
+                            <div className="data">
                                 <h1> Recent payments</h1>
-                                <RecentPayments/>
+                                <p>[Recent Payments]</p>
                             </div>
                         </div>
                     </div>
@@ -90,3 +44,9 @@ export default class Profile extends React.Component {
         );
     }
 }
+
+const signedInRoute = true;
+
+const profilePage = withAuthUserContext(Profile);
+
+export default withAuthorization(signedInRoute)(profilePage)

@@ -7,6 +7,7 @@ import { SignUpLink } from './SignUp'
 import { withFirebase } from '../firebase'
 
 import '../../styles/SignInBox.css';
+import { withAuthorization } from '../session'
 
 const INITIAL_STATE = {
 	email: '',
@@ -111,6 +112,8 @@ const SignInForm = compose(
 	withFirebase
 )(SignInFormBase);
 
-export default SignInPage
+const signedInRoute = false;
+
+export default withAuthorization(signedInRoute)(SignInPage)
 
 export { SignInForm, SignInLink };
