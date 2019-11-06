@@ -1,6 +1,9 @@
 import React from 'react';
-import SadShmurda from '../images/sad.svg';
+import House from '../images/house.svg';
 import '../styles/NotFound.css'
+
+
+
 
 export default class Error404 extends React.Component {
     render(){
@@ -12,7 +15,13 @@ export default class Error404 extends React.Component {
                 <h2 align = "center">
                     The page you requested may be broken or it doesn't exist
                 </h2>
-                <img src= {SadShmurda} alt="GetShmoney" class = "center"/>
+                {/* <img src= {SadShmurda} alt="GetShmoney" class = "center"/> */}
+
+                <img src= {House} alt="ReturnHome" class = "center" onClick={this.props.onClickHome}/>
+
+                <h4 align = "center">
+                    Click icon to return home
+                </h4>              
             </div>
         )
     }
