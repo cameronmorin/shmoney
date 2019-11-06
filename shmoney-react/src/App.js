@@ -2,7 +2,6 @@ import React from 'react';
 import './styles/App.css';
 import { withRouter } from 'react-router-dom';
 import { withAuthentication } from './components/session';
-import { withFirebase } from './components/firebase';
 import { compose } from 'recompose';
 import Routes from './Routes';
 
