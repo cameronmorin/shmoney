@@ -9,35 +9,26 @@ class Profile extends React.Component {
         const authUser = this.props.authUser;
         return (
             <div>
-                <NavBar 
+                <NavBar
                     onLoad={this.props.onLoad}
                     onClickHome={this.props.onClickHome}
                     onClickLogout={this.props.onClickLogout}
                     onClickAvatar={this.props.onClickAvatar}
                     displayName="toBeFixed"
                 />
-                <div className="wrapper">
-                    <div className="left">
-                        {/* <WelcomeMessage /> */}
+                <div className="main-grid">
+                    <div className="left-grid">
                         <h1>Welcome, {authUser.displayName}</h1>
                         <p>[House Name]</p>
                     </div>
-    
-                    <div className="right">
-                        <div className="house_info">
-                            <div className="data">
-                                <h1> Bills due</h1>
-                                <p>[Bills due]</p>
-                            </div>
-                            <div className="data">
-                                <h1> House Members</h1>
-                                <p>[House Members]</p>
-                            </div>
-                            <div className="data">
-                                <h1> Recent payments</h1>
-                                <p>[Recent Payments]</p>
-                            </div>
-                        </div>
+
+                    <div className="right-grid">
+                        <h1> Bills due</h1>
+                        <p>[Bills due]</p>
+                        <h1> House Members</h1>
+                        <p>[House Members]</p>
+                        <h1> Recent payments</h1>
+                        <p>[Recent Payments]</p>
                     </div>
                 </div>
             </div>
@@ -50,3 +41,4 @@ const signedInRoute = true;
 const profilePage = withAuthUserContext(Profile);
 
 export default withAuthorization(signedInRoute)(profilePage)
+
