@@ -17,5 +17,5 @@ export default ({ childProps }) =>
     <AppliedRoute path="/profile" exact component={Profile} props={childProps} />
     <AppliedRoute path="/updateProfilePicture" exact component={UploadImage} props={childProps} />
     {/* Finally, catch all unmounted routes */}
-    <Route component={NotFound} props={childProps}/>
+    <AppliedRoute component={NotFound} props={childProps}/>
   </Switch>;
