@@ -28,6 +28,7 @@ class ResetPasswordBase extends Component {
 	onSubmit = event => {
 		event.preventDefault();
 		const email = this.state.email;
+		this.setState({error: null, successMessage: ''})
 
 		this.props.firebase.passwordReset(email).then(() => {
 			console.log(`Password Reset Sent To: ${email}`);
@@ -35,6 +36,9 @@ class ResetPasswordBase extends Component {
 		}).catch(error => {
 			this.setState({error})
 		});
+	}
+	submitHandler(e) {
+		e.preventDefault();
 	}
 	render() {
 		const {email, error, successMessage} = this.state;
@@ -45,15 +49,17 @@ class ResetPasswordBase extends Component {
 				<Modal show={this.state.visible}>
 					<Modal.Header>Send Password Reset Email</Modal.Header>
 					<ModalBody>
-						<div className="input-field">
-							<input
-								type="email"
-								className="email"
-								value={email}
-								onChange={this.onChange}
-								placeholder="email"
-							/>
-						</div>
+						<form onSubmit={this.onSubmit}>
+							<div className="input-field">
+								<input
+									type="email"
+									name="email"
+									value={email}
+									onChange={this.onChange}
+									placeholder="email"
+								/>
+							</div>
+						</form>
 					</ModalBody>
 					<ModalFooter>
 						<div className="error-message">
