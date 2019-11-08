@@ -20,7 +20,8 @@ class SignInGoogleBase extends Component {
 				return this.props.firebase.user(authUser.uid).set({
 					username: authUser.displayName,
 					email: authUser.email,
-					uid: authUser.uid
+					uid: authUser.uid,
+					photoURL: authUser.photoURL
 				},{ merge:true })
 			} else {
 				return

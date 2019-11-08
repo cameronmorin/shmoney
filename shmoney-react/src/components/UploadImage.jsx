@@ -49,6 +49,9 @@ class UploadImage extends Component {
 			this.props.firebase.storageRef.child(`profilePictures/${authUser.uid}`).getDownloadURL().then(url => {
 				this.setState({url: url});
 				authUser.updateProfile({photoURL: url})
+				return this.props.firebase.user(authUser.uid).set({
+					photoURL: url
+				},{merge:true});
 			}).catch(error => {
 				this.setState({error});
 			});
