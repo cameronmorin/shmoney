@@ -3,6 +3,7 @@ import { Link, withRouter } from 'react-router-dom'
 import { compose } from 'recompose'
 
 import SignInGoogle from './SignInGoogle'
+import ResetPassword from './ResetPassword'
 import { SignUpLink } from './SignUp'
 import { withFirebase } from '../firebase'
 
@@ -76,7 +77,7 @@ class SignInFormBase extends Component {
 				<button type="submit" disabled={isInvalid}>Sign In</button>
 				<button onClick	={this.signOut}>Sign Out</button>	
 				<div className = "universal-padding-10"></div>
-
+	
 				{/* Handle Errors */}
 				<div className="error-message">
 					{error && <p>{error.message}</p>}
@@ -94,6 +95,7 @@ const SignInPage = () => {
 			<SignInForm />
 			<SignInGoogle />
 			<SignUpLink />
+			<ResetPassword />
 		</div>
 		</div>
 	);

@@ -3,13 +3,24 @@ import { withRouter } from 'react-router-dom'
 import { compose } from 'recompose';
 import { withFirebase } from '../firebase';
 
+import Modal from 'react-bootstrap/Modal';
+import ModalBody from 'react-bootstrap/ModalBody';
+import ModalFooter from 'react-bootstrap/ModalFooter';
+import Button from 'react-bootstrap/Button';
+
 class ResetPasswordBase extends Component {
 	constructor(props) {
 		super(props)
 
 		this.state = {
-			email: ''
+			email: '',
+			visible: false,
+			error: null,
+			successMessage: ''
 		}
+	}
+	toggleModal = () => {
+		this.setState({email: '', visible: !this.state.visible, error: null});
 	}
 	onChange = event => {
 		this.setState({ [event.target.name]: event.target.value });
@@ -19,28 +30,44 @@ class ResetPasswordBase extends Component {
 		const email = this.state.email;
 
 		this.props.firebase.passwordReset(email).then(() => {
-			console.log(`Password reset sent to ${email}`);
-			this.props.history.push('/signIn');
+			console.log(`Password Reset Sent To: ${email}`);
+			this.setState({ successMessage: `Password Reset Sent To: ${email}`});
 		}).catch(error => {
-			console.log(error);
+			this.setState({error})
 		});
 	}
 	render() {
+		const {email, error, successMessage} = this.state;
+		
 		return (
-			<form onSubmit={this.onSubmit}>
-				<div className="input-field">
-					<input
-						type="email"
-						name="email"
-						value={email}
-						onChange={this.onChange}
-						placeholder="email"
-					/>
-				</div>
-				<div className="reset-password-button">
-					<button type="submit">Reset Password</button>
-				</div>
-			</form>
+			<div>
+				<Button variant="link" onClick={this.toggleModal}>Forgot Password</Button>
+				<Modal show={this.state.visible}>
+					<Modal.Header>Send Password Reset Email</Modal.Header>
+					<ModalBody>
+						<div className="input-field">
+							<input
+								type="email"
+								className="email"
+								value={email}
+								onChange={this.onChange}
+								placeholder="email"
+							/>
+						</div>
+					</ModalBody>
+					<ModalFooter>
+						<div className="error-message">
+							{error && <p>{error.message}</p>}
+						</div>
+						<div>
+							{successMessage && <p>{successMessage}</p>}
+						</div>
+						<Button className="cancel-button" variant="danger" onClick={this.toggleModal}>Cancel</Button>
+						<Button className="reset-password-button" variant="dark" onClick={this.onSubmit}>Reset Password</Button>
+					</ModalFooter>
+				</Modal>
+			</div>
+
 		);
 	}
 }
