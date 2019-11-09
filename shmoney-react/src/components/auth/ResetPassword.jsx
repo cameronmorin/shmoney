@@ -37,9 +37,6 @@ class ResetPasswordBase extends Component {
 			this.setState({error})
 		});
 	}
-	submitHandler(e) {
-		e.preventDefault();
-	}
 	render() {
 		const {email, error, successMessage} = this.state;
 		

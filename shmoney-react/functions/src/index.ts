@@ -30,7 +30,7 @@ exports.unindexUser = functions.firestore
 
 		//Delete ID from the index
 		return index.deleteObject(objectID);
-})
+});
 
 exports.updateUser = functions.firestore
 	.document('users/{uid}')
@@ -42,4 +42,4 @@ exports.updateUser = functions.firestore
 			objectID,
 			...newData
 		});
-	})
+});
