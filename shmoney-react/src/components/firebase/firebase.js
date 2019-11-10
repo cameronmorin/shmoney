@@ -81,20 +81,19 @@ class Firebase {
 				group_id: houseGroupId
 			},{merge:true})
 		});
-
-		isHouseGroupOwner = async (authUser) => {
-			this.user(authUser.uid).get().then(doc => {
-				let houseGroupId = doc.data.group_id;
-				this.house_groups().doc(houseGroupId).get().then(doc => {
-					let owner_uid = doc.data().owner_uid;
-					if(owner_uid === authUser.uid) {
-						return true;
-					} else {
-						return false;
-					}
-				});
+	}
+	isHouseGroupOwner = async (authUser) => {
+		this.user(authUser.uid).get().then(doc => {
+			let houseGroupId = doc.data.group_id;
+			this.house_groups().doc(houseGroupId).get().then(doc => {
+				let owner_uid = doc.data().owner_uid;
+				if(owner_uid === authUser.uid) {
+					return true;
+				} else {
+					return false;
+				}
 			});
-		}
+		});
 	}
 
 	/* MERGE AUTH AND FIRESTORE API */

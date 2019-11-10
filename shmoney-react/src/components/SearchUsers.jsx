@@ -11,7 +11,7 @@ const Hit = ({hit}) => {
 	//TODO Don't show current user in list and don't show users who are already in current group.
 	return(
 		<Media className="search-results">
-			<img src={hit.photoURL} height="45" width="45" />
+			<img src={hit.photoURL} height="45" width="45" alt="user"/>
 			<Media.Body>
 				<p>{hit.username}</p>
 				<button onClick={() => addUser(hit.uid)}>Add</button>
