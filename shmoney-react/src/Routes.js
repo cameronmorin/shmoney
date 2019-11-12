@@ -8,11 +8,8 @@ import Profile from './containers/Profile';
 import SignIn from './components/auth/SignIn';
 import SignUp from './components/auth/SignUp';
 import UploadImage from './components/UploadImage';
-<<<<<<< HEAD
 import MyGroup from './containers/MyGroup';
-=======
 import SearchUsers from './components/SearchUsers';
->>>>>>> 5e31d7666c7d7b7581b8c1d774f8646610acccd5
 
 export default ({ childProps }) =>
   <Switch>
