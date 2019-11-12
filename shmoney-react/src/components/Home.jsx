@@ -1,4 +1,4 @@
-import React, { Suspense, Fragment } from 'react';
+import React from 'react';
 
 import { AuthUserContext } from './session'
 
