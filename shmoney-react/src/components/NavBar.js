@@ -32,13 +32,13 @@ export default class CustomNavBar extends React.Component {
     const currPage = this.props.currPage;
     return(
       <>
-        <NavBar bg="light" expand="lg">
+        <nav bg="light" expand="lg">
           <NavBar.Brand className="brand"><img className="logo" src={logo} alt="logo" /></NavBar.Brand>
           <Nav className="mr-auto nav-links">
             <Nav.Item className={'on-hover ' + ((currPage === 'Group')? 'active-link' : 'link')}>Group</Nav.Item>
             <Nav.Item className={'on-hover ' + ((currPage === 'Rent')? 'active-link' : 'link')}>Rent</Nav.Item>
           </Nav>
-        </NavBar>
+        </nav>
       </>
     );
   }
