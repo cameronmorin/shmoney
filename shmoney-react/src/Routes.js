@@ -8,7 +8,11 @@ import Profile from './containers/Profile';
 import SignIn from './components/auth/SignIn';
 import SignUp from './components/auth/SignUp';
 import UploadImage from './components/UploadImage';
+<<<<<<< HEAD
 import MyGroup from './containers/MyGroup';
+=======
+import SearchUsers from './components/SearchUsers';
+>>>>>>> 5e31d7666c7d7b7581b8c1d774f8646610acccd5
 
 export default ({ childProps }) =>
   <Switch>
@@ -18,6 +22,7 @@ export default ({ childProps }) =>
     <AppliedRoute path="/profile" exact component={Profile} props={childProps} />
     <AppliedRoute path="/mygroup" exact component={MyGroup} props={childProps} />
     <AppliedRoute path="/updateProfilePicture" exact component={UploadImage} props={childProps} />
+    <AppliedRoute path="/search" exact component={SearchUsers} props={childProps} />
     {/* Finally, catch all unmounted routes */}
-    <Route component={NotFound} props={childProps}/>
+    <AppliedRoute component={NotFound} props={childProps}/>
   </Switch>;

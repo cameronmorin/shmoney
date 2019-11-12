@@ -30,7 +30,6 @@ class SignUpFormBase extends Component {
 		event.preventDefault();
 
 		const { username, email, passwordOne } = this.state;
-		const roles = {}
 
 		this.props.firebase.createUserWithEmailAndPassword(email, passwordOne).then(credential => {
 			//Get authUser from credential
@@ -41,7 +40,7 @@ class SignUpFormBase extends Component {
 			return this.props.firebase.user(authUser.uid).set({
 				username,
 				email,
-				roles
+				uid: authUser.uid
 			},{ merge: true });
 		}).then(() => {
 			this.props.firebase.sendEmailVerification();
