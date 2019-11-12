@@ -18,8 +18,8 @@ class MyGroup extends React.Component {
                     onClickAvatar={this.props.onClickAvatar}
                     displayName="toBeFixed"
                 />
-                <div className="main-grp">
-                    <div className="left-grp">
+                <div className="main-grid">
+                    <div className="left-grid">
                         <h1>House Name</h1>
                         <button className="btn bill">Add bill</button>
                         <button className="btn add">Add members</button>
@@ -27,7 +27,7 @@ class MyGroup extends React.Component {
                         <button className="btn ledger">View ledger</button>
                     </div>
 
-                    <div className="right-grp">
+                    <div className="right-grid">
                         <h1>Group members </h1>
                         <p>[list group] </p>
                         <h1>Bills due</h1>
