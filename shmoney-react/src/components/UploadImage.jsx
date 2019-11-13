@@ -36,7 +36,7 @@ class UploadImage extends Component {
 			const image = file;
 			this.setState({ image: image, imageSelectFailure: false });
 		}
-		if(file.size > maxAllowedSize) {
+		if(file && file.size > maxAllowedSize) {
 			const errorMessage = 'Picture too large. (Max 1024x1024)'
 			this.setState({ imageSelectFailure: true, errorMessage: errorMessage})
 		}
