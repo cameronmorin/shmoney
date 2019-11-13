@@ -69,12 +69,13 @@ class Firebase {
 		},{merge:true});
 	}
 
-	addUserToHouseGroup = (uid, authUser) => {
+	addUserToHouseGroup = (uid, username, authUser) => {
+		//Take in other user's uid and username, and group owner as authUser.
 		this.user(authUser.uid).get().then(doc => {
 			let houseGroupId = doc.data().group_id;
 			//Add user to house members list
 			this.house_groups().doc(houseGroupId).set({
-				house_members: this.fieldValue.arrayUnion(uid)
+				house_members: this.fieldValue.arrayUnion(username)
 			},{merge:true});
 			//Add group id to user's document
 			this.user(uid).set({
@@ -82,10 +83,11 @@ class Firebase {
 			},{merge:true})
 		});
 	}
+
 	isHouseGroupOwner = async (authUser) => {
-		this.user(authUser.uid).get().then(doc => {
-			let houseGroupId = doc.data.group_id;
-			this.house_groups().doc(houseGroupId).get().then(doc => {
+		return this.user(authUser.uid).get().then(doc => {
+			let houseGroupId = doc.data().group_id;
+			return this.house_groups().doc(houseGroupId).get().then(doc => {
 				let owner_uid = doc.data().owner_uid;
 				if(owner_uid === authUser.uid) {
 					return true;
@@ -93,6 +95,15 @@ class Firebase {
 					return false;
 				}
 			});
+		});
+	}
+
+	getHouseGroupData = async (authUser) => {
+		return this.user(authUser.uid).get().then(doc => {
+			let houseGroupId = doc.data().group_id;
+			return this.house_groups().doc(houseGroupId).get().then(doc => {
+				return doc.data();
+			})
 		});
 	}
 
