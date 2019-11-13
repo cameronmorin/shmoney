@@ -3,10 +3,30 @@ import NavBar from '../components/NavBar';
 import "../styles/Profile.css"
 
 import { withAuthorization, withAuthUserContext } from '../components/session'
+import { withFirebase } from '../components/firebase'
 
 class Profile extends React.Component {
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            houseName: '...',
+            houseMembers: []
+        }
+    }
     render() {
         const authUser = this.props.authUser;
+        // this.props.firebase.isHouseGroupOwner(authUser).then(result => {
+        //     console.log(result);
+        //     if(result) {
+
+        //     }
+        // });
+        this.props.firebase.getHouseGroupData(authUser).then(result => {
+            let houseName = result.group_name;
+            let houseMembers = result.house_members;
+            this.setState({houseName, houseMembers});
+        });
         return (
             <div>
                 <NavBar
@@ -19,14 +39,20 @@ class Profile extends React.Component {
                 <div className="main-grid">
                     <div className="left-grid">
                         <h1>Welcome, {authUser.displayName}</h1>
-                        <p>[House Name]</p>
+                        <p>{this.state.houseName}</p>
                     </div>
 
                     <div className="right-grid">
                         <h1> Bills due</h1>
                         <p>[Bills due]</p>
                         <h1> House Members</h1>
-                        <p>[House Members]</p>
+                        <div className="house-members-list">
+                            <ul>
+                                {this.state.houseMembers.map(item => (
+                                    <li key={item}>{item}</li>
+                                ))}
+                            </ul>
+                        </div>
                         <h1> Recent payments</h1>
                         <p>[Recent Payments]</p>
                     </div>
@@ -40,5 +66,5 @@ const signedInRoute = true;
 
 const profilePage = withAuthUserContext(Profile);
 
-export default withAuthorization(signedInRoute)(profilePage)
+export default withFirebase(withAuthorization(signedInRoute)(profilePage));
 
