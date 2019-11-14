@@ -4,8 +4,8 @@
     left: 50%;
     transform: translate(-50%, -50%);
     background: #FFFFFF;
-    width: 20%;
-    height: 45%;
+    min-width: 20%;
+    min-height: 45%;
     border-radius: 7px; 
     box-shadow: 2px 2px 5px 1px #1d1c1c;
     font-family: 'Inconsolata', monospace;
@@ -29,8 +29,13 @@
 }
 
 #modified-input-box {
+    width: 100%;
     border-radius: 5px; 
     border-color: #e5e5e5;
     border-width: 1px;
     background-color: #d6d6d6;
+}
+
+.signin-box h1{
+    color: black;
 }
