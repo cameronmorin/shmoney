@@ -10,22 +10,8 @@ import avatar from '../images/avatar.svg';
 import '../styles/NavBar.css';
 
 export default class CustomNavBar extends React.Component {
-  onClick = eventKey => {
-    switch(eventKey) {
-      case 'Home':
-        if (this.window.location.pathname != '/') this.props.history.push('/');
-        break;
-      case 'My Group':
-          if (this.window.location.pathname != '/group') this.props.history.push('/group');
-        break;
-      case 'Pay Rent':
-          if (this.window.location.pathname != '/myrent') this.props.history.push('/myrent');
-        break;
-      case 'Profile':
-          if (this.window.location.pathname != '/profile') this.props.history.push('/profile');
-      default:
-        break;
-    }
+  constructor(props) {
+    super(props);
   }
   
   render() {
@@ -35,7 +21,7 @@ export default class CustomNavBar extends React.Component {
         <nav bg="light" expand="lg">
           <NavBar.Brand className="brand"><img className="logo" src={logo} alt="logo" /></NavBar.Brand>
           <Nav className="mr-auto nav-links">
-            <Nav.Item className={'on-hover ' + ((currPage === 'Group')? 'active-link' : 'link')}>Group</Nav.Item>
+            <Nav.Item className={'on-hover ' + ((currPage === 'Group')? 'active-link' : 'link')} onClick={this.props.onClickMenu}>Group</Nav.Item>
             <Nav.Item className={'on-hover ' + ((currPage === 'Rent')? 'active-link' : 'link')}>Rent</Nav.Item>
           </Nav>
         </nav>

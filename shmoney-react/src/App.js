@@ -30,6 +30,27 @@ class App extends React.Component {
     }
   }
 
+  onClickMenu = async event => {
+    const currTarget = event.currentTarget.textContent;
+    console.log(currTarget);
+    
+    switch(currTarget) {
+      case 'Home':
+        if (window.location.pathname != '/') this.props.history.push('/');
+        break;
+      case 'Group':
+          if (window.location.pathname != '/group') this.props.history.push('/group');
+        break;
+      case 'Rent':
+          if (window.location.pathname != '/myrent') this.props.history.push('/myrent');
+        break;
+      case 'Profile':
+          if (window.location.pathname != '/profile') this.props.history.push('/profile');
+      default:
+        break;
+    }
+  }
+
   onClickButton = async event => {
     event.preventDefault();
 
@@ -54,6 +75,7 @@ class App extends React.Component {
       message: 'Hi',
       authUser: null,
       onClickHome: this.onClickHome,
+      onClickMenu: this.onClickMenu,
       onClickLogout: this.onClickLogout,
       onClickAvatar: this.onClickAvatar,
       onClickButton: this.onClickButton
