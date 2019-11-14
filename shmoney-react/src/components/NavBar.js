@@ -24,7 +24,7 @@ export default class NavBar extends React.Component {
               <>
                 <div className="nav-pages">
                   {/* insert page links here */}
-                  <NavLink to="/group" className="link" activeClassName="active-link">My Group</NavLink>
+                  <NavLink to="/mygroup" className="link" activeClassName="active-link">My Group</NavLink>
                   <NavLink to="/myrent" className="link" activeClassName="active-link">Pay Rent</NavLink>
                 </div>
                 <div className="nav-user">
