@@ -3,7 +3,7 @@ import React, { Component } from 'react'
 import { withFirebase } from './firebase'
 import { withAuthorization, withAuthUserContext } from './session'
 
-class CreateGroup extends Component {
+class CreateGroupBase extends Component {
    constructor(props) {
       super(props)
 
@@ -21,12 +21,9 @@ class CreateGroup extends Component {
       let houseName = this.state.houseName;
       let authUser = this.props.authUser;
 
-      this.props.firebase.createHouseGroup(houseName, authUser).then(() => {
-         //TODO push to group page
-         this.props.history.push('/');
-      }).catch(error => {
-         this.setState({error});
-      });
+      this.props.firebase.createHouseGroup(houseName, authUser).then();
+
+      this.props.history.push('/');
    }
    render() {
       const {houseName, error} = this.state;
@@ -53,6 +50,6 @@ class CreateGroup extends Component {
 
 const signedInRoute = true;
 
-const CreateGroupPage = withAuthUserContext(CreateGroup);
+const CreateGroup = withAuthUserContext(CreateGroupBase);
 
-export default withFirebase(withAuthorization(signedInRoute)(CreateGroupPage));
+export default withFirebase(withAuthorization(signedInRoute)(CreateGroup));

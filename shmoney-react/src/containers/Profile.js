@@ -11,7 +11,7 @@ class Profile extends React.Component {
 
         this.state = {
             houseName: '...',
-            houseMembers: []
+            houseMembers: null
         }
     }
     render() {
@@ -48,9 +48,9 @@ class Profile extends React.Component {
                         <h1> House Members</h1>
                         <div className="house-members-list">
                             <ul>
-                                {this.state.houseMembers.map(item => (
+                                {this.state.houseMembers ? this.state.houseMembers.map(item => (
                                     <li key={item}>{item}</li>
-                                ))}
+                                )) : <p>No House Members yet.</p>}
                             </ul>
                         </div>
                         <h1> Recent payments</h1>

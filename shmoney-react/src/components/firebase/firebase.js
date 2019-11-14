@@ -78,7 +78,7 @@ class Firebase {
 				house_members: this.fieldValue.arrayUnion(username)
 			},{merge:true});
 			//Add group id to user's document
-			this.user(uid).set({
+			return this.user(uid).set({
 				group_id: houseGroupId
 			},{merge:true})
 		});
