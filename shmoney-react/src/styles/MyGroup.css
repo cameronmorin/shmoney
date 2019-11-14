@@ -1,0 +1,13 @@
+.left-grid .btn{
+    width: 100%;
+    border: none;
+    background-color: inherit;
+    padding: 10px 28px;
+    font-size: 15px;
+    color:white;
+    margin-bottom: 10px;
+    cursor: pointer;
+    display: inline-block;
+}
+
+.btn:hover {background:rgb(41, 136, 98);}
