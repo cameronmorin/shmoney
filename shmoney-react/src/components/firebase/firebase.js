@@ -69,9 +69,9 @@ class Firebase {
 		},{merge:true});
 	}
 
-	addUserToHouseGroup = (uid, username, authUser) => {
+	addUserToHouseGroup = async (uid, username, authUser) => {
 		//Take in other user's uid and username, and group owner as authUser.
-		this.user(authUser.uid).get().then(doc => {
+		return this.user(authUser.uid).get().then(doc => {
 			let houseGroupId = doc.data().group_id;
 			//Add user to house members list
 			this.house_groups().doc(houseGroupId).set({
