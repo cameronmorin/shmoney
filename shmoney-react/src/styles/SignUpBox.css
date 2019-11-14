@@ -4,10 +4,11 @@
     left: 50%;
     transform: translate(-50%, -50%);
     background: #FFFFFF;
-    width: 20%;
-    height: 45%;
+    min-width: 20%;
+    min-height: 45%;
     border-radius: 7px; 
     box-shadow: 2px 2px 5px 1px #1d1c1c;
+    box-sizing: border-box;
     font-family: 'Inconsolata', monospace;
 }
 
@@ -33,4 +34,8 @@
 
 body {
     background: #35B27F;
+}
+
+.signup-box h1{
+    color:black;
 }
