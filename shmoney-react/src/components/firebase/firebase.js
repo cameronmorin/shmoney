@@ -57,21 +57,21 @@ class Firebase {
 	house_groups = () => this.db.collection('house_groups');
 
 	/* Firestore Functions */
-	createHouseGroup = (houseName, authUser) => {
+	createHouseGroup = (houseName) => {
 		let doc = this.house_groups().doc();
 		doc.set({
 			group_name: houseName,
 			owner_username: this.auth.currentUser.displayName,
 			owner_uid: this.auth.currentUser.uid
 		});
-		this.user(authUser.uid).set({
+		this.user(this.auth.currentUser.uid).set({
 			group_id: doc.id
 		},{merge:true});
 	}
 
-	addUserToHouseGroup = async (uid, username, authUser) => {
+	addUserToHouseGroup = async (uid, username) => {
 		//Take in other user's uid and username, and group owner as authUser.
-		return this.user(authUser.uid).get().then(doc => {
+		return this.user(this.auth.currentUser.uid).get().then(doc => {
 			let houseGroupId = doc.data().group_id;
 			//Add user to house members list
 			this.house_groups().doc(houseGroupId).set({
@@ -84,12 +84,12 @@ class Firebase {
 		});
 	}
 
-	isHouseGroupOwner = async (authUser) => {
-		return this.user(authUser.uid).get().then(doc => {
+	isHouseGroupOwner = async () => {
+		return this.user(this.auth.currentUser.uid).get().then(doc => {
 			let houseGroupId = doc.data().group_id;
 			return this.house_groups().doc(houseGroupId).get().then(doc => {
 				let owner_uid = doc.data().owner_uid;
-				if(owner_uid === authUser.uid) {
+				if(owner_uid === this.auth.currentUser.uid) {
 					return true;
 				} else {
 					return false;
@@ -98,8 +98,8 @@ class Firebase {
 		});
 	}
 
-	getHouseGroupData = async (authUser) => {
-		return this.user(authUser.uid).get().then(doc => {
+	getHouseGroupData = async () => {
+		return this.user(this.auth.currentUser.uid).get().then(doc => {
 			let houseGroupId = doc.data().group_id;
 			return this.house_groups().doc(houseGroupId).get().then(doc => {
 				return doc.data();
