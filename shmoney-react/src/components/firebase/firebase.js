@@ -62,7 +62,11 @@ class Firebase {
 		doc.set({
 			group_name: houseName,
 			owner_username: this.auth.currentUser.displayName,
-			owner_uid: this.auth.currentUser.uid
+			owner_uid: this.auth.currentUser.uid,
+			house_members: [{
+				uid: this.auth.currentUser.uid,
+				username: this.auth.currentUser.displayName
+			}]
 		});
 		this.user(this.auth.currentUser.uid).set({
 			group_id: doc.id
@@ -75,13 +79,44 @@ class Firebase {
 			let houseGroupId = doc.data().group_id;
 			//Add user to house members list
 			this.house_groups().doc(houseGroupId).set({
-				house_members: this.fieldValue.arrayUnion(username)
+				house_members: this.fieldValue.arrayUnion({
+					uid: uid,
+					username: username
+				})
 			},{merge:true});
 			//Add group id to user's document
 			return this.user(uid).set({
 				group_id: houseGroupId
 			},{merge:true})
 		});
+	}
+
+	removeUserFromGroup = async (uid) => {
+		return this.user(this.auth.currentUser.uid).get().then(doc => {
+			let houseGroupId = doc.data().group_id;
+			return this.house_groups().doc(houseGroupId).get().then(doc => {
+				//Get the array of house member objects
+				let houseMembers = doc.data.house_members;
+				let removed = false;
+				//Find user object by uid and remove them from the array
+				for(let i = 0; i < houseMembers.size; i++) {
+					if(houseMembers[i].uid === uid) {
+						houseMembers.splice(i, 1);
+						removed = true;
+					}
+				}
+				//Only need to update list if member was in the group
+				if(removed) {
+					doc.set({
+						house_members: houseMembers
+					},{merge: true})
+					//Remove group_id from user's document
+					this.user(uid).set({
+						group_id: null
+					},{merge: true})
+				}
+			})
+		})
 	}
 
 	isHouseGroupOwner = async () => {
