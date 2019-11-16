@@ -74,21 +74,31 @@ class Firebase {
 	}
 
 	addUserToHouseGroup = async (uid, username) => {
-		//Take in other user's uid and username, and group owner as authUser.
-		return this.user(this.auth.currentUser.uid).get().then(doc => {
-			let houseGroupId = doc.data().group_id;
-			//Add user to house members list
-			this.house_groups().doc(houseGroupId).set({
-				house_members: this.fieldValue.arrayUnion({
-					uid: uid,
-					username: username
-				})
-			},{merge:true});
-			//Add group id to user's document
-			return this.user(uid).set({
-				group_id: houseGroupId
-			},{merge:true})
-		});
+		console.log(`Adding User ${username} to House Group`);
+		//Two Reads and Two Writes per call
+		//Check if user is already in group so they are not added to multiple
+		return this.user(uid).get().then(doc => {
+			let groupId = doc.data().group_id;
+
+			if(!groupId) {
+				return this.user(this.auth.currentUser.uid).get().then(doc => {
+					let houseGroupId = doc.data().group_id;
+
+					//Add user to house members list
+					this.house_groups().doc(houseGroupId).set({
+						house_members: this.fieldValue.arrayUnion({
+							uid: uid,
+							username: username
+						})
+					},{merge:true});
+
+					//Add group id to user's document
+					return this.user(uid).set({
+						group_id: houseGroupId
+					},{merge:true})
+				});
+			}
+		})
 	}
 
 	removeUserFromGroup = async (uid) => {
@@ -113,7 +123,7 @@ class Firebase {
 					//Remove group_id from user's document
 					this.user(uid).set({
 						group_id: null
-					},{merge: true})
+					},{merge:true})
 				}
 			})
 		})

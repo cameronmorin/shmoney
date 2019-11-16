@@ -19,9 +19,8 @@ class CreateGroupBase extends Component {
       event.preventDefault();
 
       let houseName = this.state.houseName;
-      let authUser = this.props.authUser;
 
-      this.props.firebase.createHouseGroup(houseName, authUser).then();
+      this.props.firebase.createHouseGroup(houseName).then();
 
       this.props.history.push('/');
    }
