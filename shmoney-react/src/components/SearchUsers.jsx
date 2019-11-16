@@ -21,17 +21,14 @@ class SearchUserBase extends React.Component {
 		}
 	}
 	Hit = ({hit}) => {
-		//TODO Don't show current user in list and don't show users who are already in current group.
 		const {groupList, ownerUid} = this.state;
 		let isInGroup = false;
-		if(ownerUid == hit.uid) {
+		if(ownerUid === hit.uid) {
 			isInGroup = true;
 		}
-		groupList.map(index => {
-			if(hit.uid === index.uid) {
-				isInGroup = true;
-			}
-		})
+		
+		groupList.map(index => (hit.uid === index.uid) ? isInGroup = true : null);
+
 		return(
 			<Media className="search-results">
 				<img src={hit.photoURL} height="45" width="45" alt="user"/>
@@ -56,7 +53,6 @@ class SearchUserBase extends React.Component {
 			let ownerUid = result.owner_uid;
 			let groupId = result.group_id;
 			this.setState({groupList, ownerUid, groupId});
-			console.log(result);
 		})
 	}
 	render() {

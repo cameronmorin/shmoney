@@ -9,7 +9,7 @@ class App extends React.Component {
   onClickHome = async event => {
     event.preventDefault();
     
-    if (window.location.pathname != "/") {
+    if (window.location.pathname !== "/") {
       this.props.history.push("/");
     }
   }
@@ -24,7 +24,7 @@ class App extends React.Component {
     event.preventDefault();
 
     // const userPath = '/' + authUser.displayName;
-    if (window.location.pathname != '/profile') {
+    if (window.location.pathname !== '/profile') {
       // this.props.history.push(userPath);
       this.props.history.push('/profile');
     }
