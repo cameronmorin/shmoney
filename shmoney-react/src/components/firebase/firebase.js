@@ -65,7 +65,8 @@ class Firebase {
 			owner_uid: this.auth.currentUser.uid,
 			house_members: [{
 				uid: this.auth.currentUser.uid,
-				username: this.auth.currentUser.displayName
+				username: this.auth.currentUser.displayName,
+				group_id: doc.id
 			}]
 		});
 		this.user(this.auth.currentUser.uid).set({
@@ -73,30 +74,26 @@ class Firebase {
 		},{merge:true});
 	}
 
-	addUserToHouseGroup = async (uid, username) => {
+	addUserToHouseGroup = async (uid, username, houseGroupId) => {
 		console.log(`Adding User ${username} to House Group`);
 		//Two Reads and Two Writes per call
 		//Check if user is already in group so they are not added to multiple
 		return this.user(uid).get().then(doc => {
-			let groupId = doc.data().group_id;
+			let userGroupId = doc.data().group_id;
 
-			if(!groupId) {
-				return this.user(this.auth.currentUser.uid).get().then(doc => {
-					let houseGroupId = doc.data().group_id;
+			if(!userGroupId) {
+				//Add user to house members list
+				this.house_groups().doc(houseGroupId).set({
+					house_members: this.fieldValue.arrayUnion({
+						uid: uid,
+						username: username
+					})
+				},{merge:true});
 
-					//Add user to house members list
-					this.house_groups().doc(houseGroupId).set({
-						house_members: this.fieldValue.arrayUnion({
-							uid: uid,
-							username: username
-						})
-					},{merge:true});
-
-					//Add group id to user's document
-					return this.user(uid).set({
-						group_id: houseGroupId
-					},{merge:true})
-				});
+				//Add group id to user's document
+				return this.user(uid).set({
+					group_id: houseGroupId
+				},{merge:true})
 			}
 		})
 	}

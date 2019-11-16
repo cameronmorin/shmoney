@@ -16,7 +16,8 @@ class SearchUserBase extends React.Component {
 
 		this.state = {
 			groupList: null,
-			ownerUid: null
+			ownerUid: null,
+			groupId: null
 		}
 	}
 	Hit = ({hit}) => {
@@ -45,14 +46,16 @@ class SearchUserBase extends React.Component {
 		)
 	}
 	addUser = (uid, username) => {
-		this.props.firebase.addUserToHouseGroup(uid, username);
+		let {groupId} = this.state;
+		this.props.firebase.addUserToHouseGroup(uid, username, groupId);
 	}
 	componentDidMount() {
-		//Set groupList to the current user's group
+		//Populate state variables
 		this.props.firebase.getHouseGroupData().then(result => {
 			let groupList = result.house_members;
 			let ownerUid = result.owner_uid;
-			this.setState({groupList, ownerUid});
+			let groupId = result.group_id;
+			this.setState({groupList, ownerUid, groupId});
 			console.log(result);
 		})
 	}
