@@ -4,10 +4,10 @@ import { useState } from 'react';
 import NavBar from '../components/NavBar';
 import "../styles/MyGroup.css"
 
-import { Bootstrap, Button, Modal, InputGroup, FormControl, ListGroup } from 'react-bootstrap';
-
-
+import { Table, Accordion, Card, Button, Modal, InputGroup, FormControl, ListGroup } from 'react-bootstrap';
 import { withAuthorization, withAuthUserContext } from '../components/session'
+
+
 
 const AddMembers = () => {
     const [show, setShow] = useState(false);
@@ -157,6 +157,119 @@ const ViewLedger = () => {
     );
 }
 
+const CreateGroup = () => {
+    const [show, setShow] = useState(false);
+
+    const handleClose = () => setShow(false);
+    const handleShow = () => setShow(true);
+
+    return (
+        <>
+            <Button variant="secondary" onClick={handleShow}>
+                Create Group
+            </Button>
+
+            <Modal show={show} onHide={handleClose} animation={false}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Create Group</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <InputGroup className="mb-3">
+                        <FormControl
+                            inputRef = {ref => { this.houseName = ref; }}
+                            placeholder="Group Name"
+                            aria-label="Group Name"
+                            aria-describedby="basic-addon2"
+                        />
+                        <InputGroup.Append>
+                            <Button variant="outline-secondary">Create</Button>
+                        </InputGroup.Append>
+                    </InputGroup>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={handleClose}>Close</Button>
+                </Modal.Footer>
+            </Modal>
+        </>
+    );
+}
+const PaymentsTable = () => {
+    return(
+      <>
+    <Table striped bordered hover>
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>House Name</th>
+        <th>Payment Date</th>
+        <th>Payment Amount</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>1</td>
+        <td>Cool House</td>
+        <td>11/11/19</td>
+        <td>$1000</td>
+      </tr>
+      <tr>
+        <td>2</td>
+        <td>Cool House</td>
+        <td>12/11/19</td>
+        <td>$1000</td>
+      </tr>
+      <tr>
+        <td>3</td>
+        <td>Cool House</td>
+        <td>1/11/20</td>
+        <td>$1000</td>
+      </tr>
+    </tbody>
+  </Table>
+  </>
+    );
+  }
+
+const RightInfo = () => {
+    return(
+        <>
+        <Accordion defaultActiveKey="0">
+              <Card>
+                <Card.Header>
+                  <Accordion.Toggle as={Button} variant="link" eventKey="0">
+                    <h1>Group Members</h1>
+                  </Accordion.Toggle>
+                </Card.Header>
+                <Accordion.Collapse eventKey="0">
+                  <Card.Body> [TABLE] </Card.Body>
+                </Accordion.Collapse>
+              </Card>
+              <Card>
+                <Card.Header>
+
+                  <Accordion.Toggle as={Button} variant="link" eventKey="1">
+                    <h1>Bills Due</h1>
+                  </Accordion.Toggle>
+                </Card.Header>
+                <Accordion.Collapse eventKey="1">
+                  <Card.Body><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p></Card.Body>
+                </Accordion.Collapse>
+              </Card>
+              <Card>
+                <Card.Header>
+                  <Accordion.Toggle as={Button} variant="link" eventKey="2">
+                    <h1>Payment History</h1>
+                  </Accordion.Toggle>
+                </Card.Header>
+                <Accordion.Collapse eventKey="2">
+                  <Card.Body><PaymentsTable/></Card.Body>
+                </Accordion.Collapse>
+              </Card>
+            </Accordion>
+        </>
+    );
+}
+
 class MyGroup extends React.Component {
 
     render() {
@@ -177,15 +290,11 @@ class MyGroup extends React.Component {
                         <AddMembers />
                         <DeleteMembers />
                         <ViewLedger />
+                        <CreateGroup />
                     </div>
 
                     <div className="right-grid">
-                        <h1>Group members </h1>
-                        <p>[list group] </p>
-                        <h1>Bills due</h1>
-                        <p>[Bills due]</p>
-                        <h1>Payment History </h1>
-                        <p> [list payments] </p>
+                        <RightInfo/>
                     </div>
 
                 </div>
