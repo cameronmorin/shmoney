@@ -63,7 +63,7 @@ class Firebase {
 			group_name: houseName,
 			owner_username: this.auth.currentUser.displayName,
 			owner_uid: this.auth.currentUser.uid,
-			house_members: [{
+			group_members: [{
 				uid: this.auth.currentUser.uid,
 				username: this.auth.currentUser.displayName,
 				group_id: doc.id
@@ -84,7 +84,7 @@ class Firebase {
 			if(!userGroupId) {
 				//Add user to house members list
 				this.house_groups().doc(houseGroupId).set({
-					house_members: this.fieldValue.arrayUnion({
+					group_members: this.fieldValue.arrayUnion({
 						uid: uid,
 						username: username
 					})
@@ -103,7 +103,7 @@ class Firebase {
 			let houseGroupId = doc.data().group_id;
 			return this.house_groups().doc(houseGroupId).get().then(doc => {
 				//Get the array of house member objects
-				let houseMembers = doc.data.house_members;
+				let houseMembers = doc.data.group_members;
 				let removed = false;
 				//Find user object by uid and remove them from the array
 				for(let i = 0; i < houseMembers.size; i++) {
@@ -115,7 +115,7 @@ class Firebase {
 				//Only need to update list if member was in the group
 				if(removed) {
 					doc.set({
-						house_members: houseMembers
+						group_members: houseMembers
 					},{merge: true})
 					//Remove group_id from user's document
 					this.user(uid).set({

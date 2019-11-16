@@ -26,7 +26,7 @@ class SearchUserBase extends React.Component {
 		if(ownerUid === hit.uid) {
 			isInGroup = true;
 		}
-		
+
 		groupList.map(index => (hit.uid === index.uid) ? isInGroup = true : null);
 
 		return(
@@ -49,7 +49,7 @@ class SearchUserBase extends React.Component {
 	componentDidMount() {
 		//Populate state variables
 		this.props.firebase.getHouseGroupData().then(result => {
-			let groupList = result.house_members;
+			let groupList = result.group_members;
 			let ownerUid = result.owner_uid;
 			let groupId = result.group_id;
 			this.setState({groupList, ownerUid, groupId});

@@ -1,12 +1,30 @@
-import React from 'react'
+import React from 'react';
 import NavBar from '../components/NavBar';
-import "../styles/MyGroup.css"
+import "../styles/MyGroup.css";
 
-import { withAuthorization, withAuthUserContext } from '../components/session'
+import { withFirebase } from '../components/firebase';
 
-
+import { withAuthorization, withAuthUserContext } from '../components/session';
 
 class MyGroup extends React.Component {
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            groupMembers: null,
+            groupName: null,
+        }
+    }
+    componentDidMount() {
+        this.props.firebase.getHouseGroupData().then(result => {
+            this.setState({
+                groupMembers: result.group_members,
+                groupName: result.group_name
+            });
+        }).catch(error => {
+            console.log(error);
+        });
+    }
     render() {
         const authUser = this.props.authUser;
         return (
@@ -20,7 +38,7 @@ class MyGroup extends React.Component {
                 />
                 <div className="main-grid">
                     <div className="left-grid">
-                        <h1>House Name</h1>
+                        <h1>{this.state.groupName}</h1>
                         <button className="btn bill">Add bill</button>
                         <button className="btn add">Add members</button>
                         <button className="btn del">Delete members</button>
@@ -29,7 +47,11 @@ class MyGroup extends React.Component {
 
                     <div className="right-grid">
                         <h1>Group members </h1>
-                        <p>[list group] </p>
+                        <ul>
+                            {this.state.groupMembers && this.state.groupMembers.map((item, key) => (
+                                <li key={key}>{item.username}</li>
+                            ))}
+                        </ul>
                         <h1>Bills due</h1>
                         <p>[Bills due]</p>
                         <h1>Payment History </h1>
@@ -40,7 +62,8 @@ class MyGroup extends React.Component {
         );
     }
 }
+
 const signedInRoute = true;
 const myGroup = withAuthUserContext(MyGroup);
 
-export default withAuthorization(signedInRoute)(myGroup)
+export default withFirebase(withAuthorization(signedInRoute)(myGroup));

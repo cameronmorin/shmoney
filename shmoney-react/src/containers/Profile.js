@@ -15,34 +15,15 @@ class Profile extends React.Component {
         }
     }
     componentDidMount() {
-        const authUser = this.props.authUser;
-
-        this.props.firebase.getHouseGroupData(authUser).then(result => {
+        this.props.firebase.getHouseGroupData().then(result => {
             let houseName = result.group_name;
-            let houseMembers = result.house_members;
-            console.log(houseMembers);
+            let houseMembers = result.group_members;
             this.setState({houseName, houseMembers});
         });
     }
     render() {
         const authUser = this.props.authUser;
-        // this.props.firebase.isHouseGroupOwner(authUser).then(result => {
-        //     console.log(result);
-        //     if(result) {
-
-        //     }
-        // });
-        // this.props.firebase.getHouseGroupData(authUser).then(result => {
-        //     let houseName = result.group_name;
-        //     let houseMembers = result.house_members;
-        //     console.log(houseMembers);
-        //     this.setState({houseName, houseMembers});
-        // });
-        // let displayHouseMembers = this.state.houseMembers.map(member => (
-        //     <div key={member.id}>
-        //         <p>{member}</p>
-        //     </div>
-        // ))
+        
         return (
             <div>
                 <NavBar
@@ -63,18 +44,14 @@ class Profile extends React.Component {
                         <p>[Bills due]</p>
                         <h1> House Members</h1>
                         <div className="house-members-list">
-                            {this.state.houseMembers && this.state.houseMembers.keys}
-                            {/* <ul>
-                                {this.state.houseMembers ? this.state.houseMembers.map(item => (
-                                    <li key={item}>{item}</li>
-                                )) : <p>No House Members yet.</p>}
-                            </ul> */}
+                            <ul>
+                            {this.state.houseMembers && this.state.houseMembers.map((item, key) => (
+                                <li key={key}>{item.username}</li>
+                            ))}
+                            </ul>
                         </div>
                         <h1> Recent payments</h1>
                         <p>[Recent Payments]</p>
-                        {/* <button 
-                        onClick={() => this.props.firebase.addUserToHouseGroup('xxxxxx', 'Nick', authUser)}>
-                            Test</button> */}
                     </div>
                 </div>
             </div>
