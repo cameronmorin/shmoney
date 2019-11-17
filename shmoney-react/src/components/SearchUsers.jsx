@@ -16,26 +16,16 @@ class SearchUsersBase extends React.Component {
 		super(props);
 
 		this.state = {
-			groupList: null,
-			ownerUid: null,
 			groupId: null
 		}
 	}
 	Hit = ({hit}) => {
-		const {groupList, ownerUid} = this.state;
-		let isInGroup = false;
-		if(ownerUid === hit.uid) {
-			isInGroup = true;
-		}
-
-		groupList.map(index => (hit.uid === index.uid) ? isInGroup = true : null);
-
 		return(
 			<Media className="search-results">
 				<img src={hit.photoURL} height="45" width="45" alt="user"/>
 				<Media.Body>
 					<p>{hit.username}</p>
-					{!isInGroup ? 
+					{!hit.group_id ? 
 						<button onClick={() => this.addUser(hit.uid, hit.username)}>Add</button>
 						: null
 					}
@@ -45,15 +35,20 @@ class SearchUsersBase extends React.Component {
 	}
 	addUser = (uid, username) => {
 		let {groupId} = this.state;
-		this.props.firebase.addUserToHouseGroup(uid, username, groupId);
+		console.log(`Adding User ${uid}`);
+		this.props.firebase.addUserToHouseGroup(uid, username, groupId).then(result => {
+			//TODO Find a way to refresh search so add button no longer appears after adding them
+			//to the group. Also good place to implement group reqest.
+		}).catch(error => {
+			console.log(error);
+		});
 	}
 	componentDidMount() {
 		//Populate state variables
 		this.props.firebase.getHouseGroupData().then(result => {
-			let groupList = result.group_members;
-			let ownerUid = result.owner_uid;
 			let groupId = result.group_id;
-			this.setState({groupList, ownerUid, groupId});
+			console.log(groupId);
+			this.setState({groupId});
 		})
 	}
 	render() {

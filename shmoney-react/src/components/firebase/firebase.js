@@ -60,13 +60,14 @@ class Firebase {
 	createHouseGroup = async (houseName) => {
 		let doc = this.house_groups().doc();
 		doc.set({
+			group_id: doc.id,
 			group_name: houseName,
 			owner_username: this.auth.currentUser.displayName,
 			owner_uid: this.auth.currentUser.uid,
 			group_members: [{
 				uid: this.auth.currentUser.uid,
 				username: this.auth.currentUser.displayName,
-				group_id: doc.id
+				
 			}]
 		});
 		return this.user(this.auth.currentUser.uid).set({
