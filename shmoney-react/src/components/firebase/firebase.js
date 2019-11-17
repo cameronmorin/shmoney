@@ -74,6 +74,22 @@ class Firebase {
 		},{merge:true});
 	}
 
+	deleteHouseGroup = async (groupId) => {
+		const groupDoc = this.house_groups().doc(groupId); 
+		return groupDoc.get().then(doc => {
+			let groupMembers = doc.data().group_members;
+
+			//Remove group_id from all member's document's
+			groupMembers.map(item => {
+				this.user(item.uid).set({
+					group_id: null,
+				})
+			})
+
+			return groupDoc.delete();
+		})
+	}
+
 	addUserToHouseGroup = async (uid, username, houseGroupId) => {
 		console.log(`Adding User ${username} to House Group`);
 		//Two Reads and Two Writes per call

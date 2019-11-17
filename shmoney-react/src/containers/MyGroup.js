@@ -296,7 +296,7 @@ class MyGroup extends React.Component {
             console.log(error.message);
             //If there is an error then they aren't part of a group
             //So they should see the Create Group button.
-            this.setState({show:true})
+            this.setState({show:true});
         });
 	}
 	render() {

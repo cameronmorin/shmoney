@@ -21,7 +21,7 @@ class UploadImageBase extends Component {
 	}
 	componentDidUpdate() {
 		const {url} = this.state;
-		if(url) this.props.history.push('/');
+		if(url) window.location.reload();
 		console.log(url);
 	}
 	componentDidMount() {
