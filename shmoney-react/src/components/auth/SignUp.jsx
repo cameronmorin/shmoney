@@ -40,7 +40,8 @@ class SignUpFormBase extends Component {
 			return this.props.firebase.user(authUser.uid).set({
 				username,
 				email,
-				uid: authUser.uid
+				uid: authUser.uid,
+				group_id: null
 			},{ merge: true });
 		}).then(() => {
 			this.props.firebase.sendEmailVerification();
