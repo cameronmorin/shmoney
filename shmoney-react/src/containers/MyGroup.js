@@ -9,6 +9,9 @@ import { withAuthorization, withAuthUserContext } from '../components/session';
 
 import { withFirebase } from '../components/firebase';
 
+import CreateGroup from '../components/CreateGroup';
+import SearchUsers from '../components/SearchUsers';
+
 const AddMembers = () => {
 	const [show, setShow] = useState(false);
 
@@ -26,16 +29,7 @@ const AddMembers = () => {
 					<Modal.Title>Add Members</Modal.Title>
 				</Modal.Header>
 				<Modal.Body>
-					<InputGroup className="mb-3">
-						<FormControl
-							placeholder="Recipient's username"
-							aria-label="Recipient's username"
-							aria-describedby="basic-addon2"
-						/>
-						<InputGroup.Append>
-							<Button variant="outline-secondary">Add</Button>
-						</InputGroup.Append>
-					</InputGroup>
+					<SearchUsers />
 				</Modal.Body>
 				<Modal.Footer>
 					<Button variant="secondary" onClick={handleClose}>
@@ -159,7 +153,7 @@ const ViewLedger = () => {
 	);
 };
 
-const CreateGroup = () => {
+const CreateGroupModal = () => {
 	const [show, setShow] = useState(false);
 
 	const handleClose = () => setShow(false);
@@ -177,17 +171,7 @@ const CreateGroup = () => {
 				</Modal.Header>
 				<Modal.Body>
 					<InputGroup className="mb-3">
-						<FormControl
-							inputRef={ref => {
-								this.houseName = ref;
-							}}
-							placeholder="Group Name"
-							aria-label="Group Name"
-							aria-describedby="basic-addon2"
-						/>
-						<InputGroup.Append>
-							<Button variant="outline-secondary">Create</Button>
-						</InputGroup.Append>
+						<CreateGroup />
 					</InputGroup>
 				</Modal.Body>
 				<Modal.Footer>
@@ -296,21 +280,24 @@ class MyGroup extends React.Component {
 
 		this.state = {
 			groupMembers: null,
-			groupName: null,
+            groupName: null,
+            show: false,
 		};
 	}
 	componentDidMount() {
-		this.props.firebase
-			.getHouseGroupData()
-			.then(result => {
-				this.setState({
-					groupMembers: result.group_members,
-					groupName: result.group_name,
-				});
-			})
-			.catch(error => {
-				console.log(error);
-			});
+		this.props.firebase.getHouseGroupData().then(result => {
+            console.log("Result:", result);
+            this.setState({
+                groupMembers: result.group_members,
+                groupName: result.group_name,
+            });
+        })
+        .catch(error => {
+            console.log(error.message);
+            //If there is an error then they aren't part of a group
+            //So they should see the Create Group button.
+            this.setState({show:true})
+        });
 	}
 	render() {
 		return (
@@ -329,7 +316,7 @@ class MyGroup extends React.Component {
 						<AddMembers />
 						<DeleteMembers />
 						<ViewLedger />
-						<CreateGroup />
+                        {this.state.show && <CreateGroupModal />}
 					</div>
 
 					<div className="right-grid">

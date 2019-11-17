@@ -4,7 +4,7 @@ import { withFirebase } from './firebase'
 import { compose } from 'recompose';
 import { withAuthorization, withAuthUserContext } from './session';
 
-class UploadImage extends Component {
+class UploadImageBase extends Component {
 	constructor(props) {
 		super(props);
 
@@ -81,12 +81,12 @@ class UploadImage extends Component {
 	}
 }
 
-const UploadImagePage = compose(
+const UploadImage = compose(
 	withFirebase,
 	withAuthUserContext,
 	withRouter
-)(UploadImage)
+)(UploadImageBase)
 
 const signInRoute = true;
 
-export default withAuthorization(signInRoute)(UploadImagePage);
+export default withAuthorization(signInRoute)(UploadImage);

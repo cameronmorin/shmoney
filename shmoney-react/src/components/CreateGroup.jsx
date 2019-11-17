@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { compose } from 'recompose'
 
 import { withFirebase } from './firebase'
 import { withAuthorization, withAuthUserContext } from './session'
@@ -49,6 +50,9 @@ class CreateGroupBase extends Component {
 
 const signedInRoute = true;
 
-const CreateGroup = withAuthUserContext(CreateGroupBase);
+const CreateGroup = compose(
+   withFirebase,
+   withAuthUserContext
+)(CreateGroupBase)
 
-export default withFirebase(withAuthorization(signedInRoute)(CreateGroup));
+export default withAuthorization(signedInRoute)(CreateGroup);

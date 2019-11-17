@@ -1,4 +1,5 @@
 import React from 'react';
+import { compose } from 'recompose'
 
 import Media from 'react-bootstrap/Media'
 
@@ -10,7 +11,7 @@ import { withAuthorization, withAuthUserContext } from './session'
 
 const searchClient = algoliasearch('UUDUIR4SFL', '563f2cebc4afdf50db5e7f84b044a623');
 
-class SearchUserBase extends React.Component {
+class SearchUsersBase extends React.Component {
 	constructor(props) {
 		super(props);
 
@@ -75,6 +76,9 @@ class SearchUserBase extends React.Component {
 
 const signedInRoute = true;
 
-const SearchUser = withAuthUserContext(SearchUserBase);
+const SearchUsers = compose(
+	withFirebase,
+	withAuthUserContext
+)(SearchUsersBase);
 
-export default withFirebase(withAuthorization(signedInRoute)(SearchUser));
+export default withAuthorization(signedInRoute)(SearchUsers);
