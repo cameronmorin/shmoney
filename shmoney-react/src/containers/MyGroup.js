@@ -281,7 +281,8 @@ class MyGroupBase extends React.Component {
 		this.state = {
 			groupMembers: null,
             groupName: null,
-            show: false,
+						isNotGroupMember: false,
+						isGroupMember: false,
             isGroupOwner: false
 		};
 	}
@@ -292,7 +293,8 @@ class MyGroupBase extends React.Component {
             let groupOwnerUid = result.owner_uid
             this.setState({
                 groupMembers: result.group_members,
-                groupName: result.group_name,
+								groupName: result.group_name,
+								isGroupMember: true
             });
 
             if(groupOwnerUid === authUser.uid) {
@@ -304,7 +306,7 @@ class MyGroupBase extends React.Component {
             console.log(error.message);
             //If there is an error then they aren't part of a group
             //So they should see the Create Group button.
-            this.setState({show:true});
+            this.setState({isNotGroupMember:true});
         });
 	}
 	render() {
@@ -320,11 +322,11 @@ class MyGroupBase extends React.Component {
 				<div className="main-grid">
 					<div className="left-grid">
 						<h1>{this.state.groupName}</h1>
-						<AddBill />
-						{this.state.isGroupOwner && <AddMembers />}
-						{this.state.isGroupOwner && <DeleteMembers />}
-						<ViewLedger />
-                        {this.state.show && <CreateGroupModal />}
+						{this.state.isGroupMember && <AddBill />}
+						{this.state.isGroupMember && this.state.isGroupOwner && <AddMembers />}
+						{this.state.isGroupMember && this.state.isGroupOwner && <DeleteMembers />}
+						{this.state.isGroupMember && <ViewLedger />}
+						{this.state.isNotGroupMember && <CreateGroupModal />}
 					</div>
 
 					<div className="right-grid">

@@ -57,7 +57,7 @@ class Firebase {
 	house_groups = () => this.db.collection('house_groups');
 
 	/* Firestore Functions */
-	createHouseGroup = (houseName) => {
+	createHouseGroup = async (houseName) => {
 		let doc = this.house_groups().doc();
 		doc.set({
 			group_name: houseName,
@@ -69,7 +69,7 @@ class Firebase {
 				group_id: doc.id
 			}]
 		});
-		this.user(this.auth.currentUser.uid).set({
+		return this.user(this.auth.currentUser.uid).set({
 			group_id: doc.id
 		},{merge:true});
 	}

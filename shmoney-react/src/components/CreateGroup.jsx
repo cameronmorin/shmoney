@@ -21,9 +21,12 @@ class CreateGroupBase extends Component {
 
       let houseName = this.state.houseName;
 
-      this.props.firebase.createHouseGroup(houseName).then();
+      this.props.firebase.createHouseGroup(houseName).then(() => {
+         console.log("Done");
+         window.location.reload();
+      });
 
-      this.props.history.push('/');
+      
    }
    render() {
       const {houseName, error} = this.state;
