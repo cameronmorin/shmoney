@@ -1,5 +1,5 @@
-import React from 'react';
-import { useState } from 'react';
+import React, { useState } from 'react';
+import { compose } from 'recompose';
 
 import NavBar from '../components/NavBar';
 import '../styles/MyGroup.css';
@@ -274,7 +274,7 @@ const RightInfo = ({ onChangeGroupMembers }) => {
 	);
 };
 
-class MyGroup extends React.Component {
+class MyGroupBase extends React.Component {
 	constructor(props) {
 		super(props);
 
@@ -282,15 +282,23 @@ class MyGroup extends React.Component {
 			groupMembers: null,
             groupName: null,
             show: false,
+            isGroupOwner: false
 		};
 	}
 	componentDidMount() {
+        const authUser = this.props.authUser;
 		this.props.firebase.getHouseGroupData().then(result => {
             console.log("Result:", result);
+            let groupOwnerUid = result.owner_uid
             this.setState({
                 groupMembers: result.group_members,
                 groupName: result.group_name,
             });
+
+            if(groupOwnerUid === authUser.uid) {
+                console.log("Owner")
+                this.setState({isGroupOwner:true});
+            }
         })
         .catch(error => {
             console.log(error.message);
@@ -313,8 +321,8 @@ class MyGroup extends React.Component {
 					<div className="left-grid">
 						<h1>{this.state.groupName}</h1>
 						<AddBill />
-						<AddMembers />
-						<DeleteMembers />
+						{this.state.isGroupOwner && <AddMembers />}
+						{this.state.isGroupOwner && <DeleteMembers />}
 						<ViewLedger />
                         {this.state.show && <CreateGroupModal />}
 					</div>
@@ -329,6 +337,10 @@ class MyGroup extends React.Component {
 }
 
 const signedInRoute = true;
-const myGroup = withAuthUserContext(MyGroup);
 
-export default withFirebase(withAuthorization(signedInRoute)(myGroup));
+const MyGroup = compose(
+    withFirebase,
+    withAuthUserContext
+)(MyGroupBase)
+
+export default withAuthorization(signedInRoute)(MyGroup);
