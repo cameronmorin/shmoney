@@ -7,8 +7,12 @@ import { withAuthorization, withAuthUserContext } from '../components/session'
 
 
 class MyGroup extends React.Component {
+    constructor(props) {
+        super(props);
+    }
     render() {
         const authUser = this.props.authUser;
+        console.log('Group');
         return (
             <div>
                 <NavBar
@@ -16,7 +20,7 @@ class MyGroup extends React.Component {
                     onClickHome={this.props.onClickHome}
                     onClickLogout={this.props.onClickLogout}
                     onClickAvatar={this.props.onClickAvatar}
-                    displayName="toBeFixed"
+                    currPage="Group"
                 />
                 <div className="main-grid">
                     <div className="left-grid">
