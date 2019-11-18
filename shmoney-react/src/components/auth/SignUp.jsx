@@ -36,12 +36,14 @@ class SignUpFormBase extends Component {
 			let authUser = credential.user;
 			//Update authUser displayName with username
 			authUser.updateProfile({displayName: username});
+			let defaultPhotoUrl = 'https://firebasestorage.googleapis.com/v0/b/shmoney-617ec.appspot.com/o/profilePictures%2Favatar.svg?alt=media&token=4927ff35-161f-4adf-996d-7faeb2a7c5a3';
 			//Add firestore document for user with user info
 			return this.props.firebase.user(authUser.uid).set({
 				username,
 				email,
 				uid: authUser.uid,
-				group_id: null
+				group_id: null,
+				photoURL: defaultPhotoUrl
 			},{ merge: true });
 		}).then(() => {
 			this.props.firebase.sendEmailVerification();

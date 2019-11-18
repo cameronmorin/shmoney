@@ -81,11 +81,11 @@ class Firebase {
 			let groupMembers = doc.data().group_members;
 
 			//Remove group_id from all member's document's
-			groupMembers.map(item => {
+			groupMembers.map(item => (
 				this.user(item.uid).set({
 					group_id: null,
 				})
-			})
+			));
 
 			return groupDoc.delete();
 		})
