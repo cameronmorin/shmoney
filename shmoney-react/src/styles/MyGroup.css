@@ -10,4 +10,4 @@
     display: inline-block;
 }
 
-.btn:hover {background:rgb(41, 136, 98);}
+.left-grid .btn:hover {background:rgb(41, 136, 98);}
