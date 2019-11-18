@@ -32,14 +32,13 @@ class App extends React.Component {
 
   onClickMenu = async event => {
     const currTarget = event.currentTarget.textContent;
-    console.log(currTarget);
     
     switch(currTarget) {
       case 'Home':
         if (window.location.pathname != '/') this.props.history.push('/');
         break;
       case 'Group':
-          if (window.location.pathname != '/group') this.props.history.push('/group');
+          if (window.location.pathname != '/mygroup') this.props.history.push('/mygroup');
         break;
       case 'Rent':
           if (window.location.pathname != '/myrent') this.props.history.push('/myrent');
@@ -71,8 +70,6 @@ class App extends React.Component {
 
   render() {
     this.childProps = {
-      currPage: 'Home',
-      message: 'Hi',
       authUser: null,
       onClickHome: this.onClickHome,
       onClickMenu: this.onClickMenu,

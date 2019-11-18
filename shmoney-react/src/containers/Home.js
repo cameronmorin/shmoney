@@ -16,6 +16,7 @@ export default class Home extends React.Component {
           onClickMenu={this.props.onClickMenu}
           onClickLogout={this.props.onClickLogout}
           onClickAvatar={this.props.onClickAvatar}
+          currPage="Home"
         />
         <HomeComponent 
           onClickButton={this.props.onClickButton}
