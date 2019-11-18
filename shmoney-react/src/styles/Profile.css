@@ -8,12 +8,13 @@
 
 .left-grid{
     grid-column:1;
-    padding: 30px 25px;
+    padding: 25px 25px;
     text-align: center;
 }
 
 .left-grid h1{
-    font-size: 35px;
+    font-size: 30px;
+    padding-bottom: 5%;
 }
 .left-grid .p{
     font-size:15px;
@@ -22,5 +23,27 @@
 .right-grid{
     grid-column:2;
     background: #c4c4c4;
-    padding: 30px 25px;
+    padding: 25px 25px;
 }
+.right-grid h1{
+    font-size: 40px;
+    color: black;
+}
+
+.right-grid p{
+    color: black;
+}
+
+.right-grid .btn{
+    width: 100%;
+    border: none;
+    background-color: inherit;
+    padding: 10px 28px;
+    font-size: 15px;
+    color:white;
+    margin-bottom: 10px;
+    cursor: pointer;
+    display: inline-block;
+}
+
+.btn:hover {background:#35B27F;}
