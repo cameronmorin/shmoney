@@ -17,7 +17,7 @@ export default class Error404 extends React.Component {
                 </h2>
                 {/* <img src= {SadShmurda} alt="GetShmoney" class = "center"/> */}
 
-                <img src= {House} alt="ReturnHome" class = "center" onClick={this.props.onClickHome}/>
+                <img src= {House} alt="ReturnHome" className= "center" onClick={this.props.onClickHome}/>
 
                 <h4 align = "center">
                     Click icon to return home

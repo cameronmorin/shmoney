@@ -4,7 +4,7 @@ import { withFirebase } from './firebase'
 import { compose } from 'recompose';
 import { withAuthorization, withAuthUserContext } from './session';
 
-class UploadImage extends Component {
+class UploadImageBase extends Component {
 	constructor(props) {
 		super(props);
 
@@ -21,7 +21,7 @@ class UploadImage extends Component {
 	}
 	componentDidUpdate() {
 		const {url} = this.state;
-		if(url) this.props.history.push('/');
+		if(url) window.location.reload();
 		console.log(url);
 	}
 	componentDidMount() {
@@ -36,7 +36,7 @@ class UploadImage extends Component {
 			const image = file;
 			this.setState({ image: image, imageSelectFailure: false });
 		}
-		if(file.size > maxAllowedSize) {
+		if(file && file.size > maxAllowedSize) {
 			const errorMessage = 'Picture too large. (Max 1024x1024)'
 			this.setState({ imageSelectFailure: true, errorMessage: errorMessage})
 		}
@@ -81,12 +81,12 @@ class UploadImage extends Component {
 	}
 }
 
-const UploadImagePage = compose(
+const UploadImage = compose(
 	withFirebase,
 	withAuthUserContext,
 	withRouter
-)(UploadImage)
+)(UploadImageBase)
 
 const signInRoute = true;
 
-export default withAuthorization(signInRoute)(UploadImagePage);
+export default withAuthorization(signInRoute)(UploadImage);
