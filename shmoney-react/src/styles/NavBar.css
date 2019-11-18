@@ -1,51 +1,13 @@
-.nav-grid {
-  display: grid;
-  grid-template: 50px / 10% 75% 15%;
-  background-color: #ffffff;
-  padding: 0.5em;
-}
-
-.nav-logo {
-  grid-column: 1 / span 1;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
 .logo {
-  border-radius: 10px;
+  border-radius: 50%;
   height: 45px;
 }
 .logo:hover {
   cursor: pointer;
 }
 
-.nav-pages {
-  grid-column: 2 / span 1;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: flex-start;
-  align-items: center;
-}
-
-.link {
-  margin: 1em;
-  text-decoration: none;
-  color: #4F6D7A;
-  font-size: 1.25em;
-}
-.link:hover {
-  color: #000000;
-}
-
 .active-link {
-  margin: 1em;
-  text-decoration: none;
-  color: #E3B505;
-  font-size: 1.25em;
-}
-.active-link:hover {
-  color: #E3B505;
+  color: #E3B505 !important;
 }
 
 .nav-user {
@@ -82,15 +44,6 @@
   justify-content: flex-end;
 }
 
-.green-name {
-  color: #35B27F;
-  text-decoration: underline;
-  margin: 0 5px 0 0;
-}
-.green-name:hover {
-  cursor: pointer;
-}
-
 .logout-msg {
   grid-row: 2 span 1;
   display: flex;
@@ -98,15 +51,4 @@
   color: #DB504A;
   text-decoration: underline;
   cursor: pointer;
-}
-
-.on-hover {
-  cursor: pointer;
-}
-
-.nav-links {
-  display: flex;
-  height: 50px;
-  justify-content: flex-start;
-  align-items: center;
 }
