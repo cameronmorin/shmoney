@@ -21,7 +21,8 @@ class SignInGoogleBase extends Component {
 					username: authUser.displayName,
 					email: authUser.email,
 					uid: authUser.uid,
-					photoURL: authUser.photoURL
+					photoURL: authUser.photoURL,
+					group_id: null
 				},{ merge:true })
 			} else {
 				return
