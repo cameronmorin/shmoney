@@ -118,6 +118,41 @@ const DeleteMembers = () => {
 	);
 };
 
+const DeleteGroup = ({firebase, groupId}) => {
+	const [show, setShow] = useState(false);
+
+	const handleClose = () => setShow(false);
+	const handleShow = () => setShow(true);
+
+	const deleteGroup = () => {
+		firebase.deleteHouseGroup(groupId).then(() => {
+			window.location.reload();
+		});
+	}
+
+	return (
+		<>
+			<Button variant="secondary" onClick={handleShow}>
+				Delete Group
+			</Button>
+
+			<Modal show={show} onHide={handleClose} animation={false}>
+				<Modal.Header closeButton>
+					<Modal.Title>Are you sure?</Modal.Title>
+				</Modal.Header>
+				<Modal.Body>
+					<Button variant="secondary" onClick={deleteGroup}>Confirm</Button>
+				</Modal.Body>
+				<Modal.Footer>
+					<Button variant="secondary" onClick={handleClose}>
+						Close
+					</Button>
+				</Modal.Footer>
+			</Modal>
+		</>
+	);
+};
+
 const ViewLedger = () => {
 	const [show, setShow] = useState(false);
 
@@ -283,22 +318,22 @@ class MyGroupBase extends React.Component {
             groupName: null,
 						isNotGroupMember: false,
 						isGroupMember: false,
-            isGroupOwner: false
+						isGroupOwner: false,
+						groupId: null
 		};
 	}
 	componentDidMount() {
         const authUser = this.props.authUser;
 		this.props.firebase.getHouseGroupData().then(result => {
-            console.log("Result:", result);
-            let groupOwnerUid = result.owner_uid
             this.setState({
                 groupMembers: result.group_members,
 								groupName: result.group_name,
-								isGroupMember: true
-            });
-
+								isGroupMember: true,
+								groupId: result.group_id
+						});
+						
+						let groupOwnerUid = result.owner_uid
             if(groupOwnerUid === authUser.uid) {
-                console.log("Owner")
                 this.setState({isGroupOwner:true});
             }
         })
@@ -327,6 +362,8 @@ class MyGroupBase extends React.Component {
 						{this.state.isGroupMember && this.state.isGroupOwner && <DeleteMembers />}
 						{this.state.isGroupMember && <ViewLedger />}
 						{this.state.isNotGroupMember && <CreateGroupModal />}
+						{this.state.isGroupMember && this.state.isGroupOwner && 
+							<DeleteGroup firebase={this.props.firebase} groupId={this.state.groupId} />}
 					</div>
 
 					<div className="right-grid">
