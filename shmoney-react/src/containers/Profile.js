@@ -1,10 +1,13 @@
-import React from 'react'
+import React from 'react';
 import { useState } from 'react';
 import NavBar from '../components/NavBar';
 import { Card, Table, Accordion, Figure, Button, Modal, InputGroup, FormControl } from 'react-bootstrap';
 import avatar from '../images/avatar.svg';
-import "../styles/Profile.css"
-import { withAuthorization, withAuthUserContext } from '../components/session'
+import "../styles/Profile.css";
+import { withAuthorization, withAuthUserContext } from '../components/session';
+import { withFirebase } from '../components/firebase';
+
+import UploadImage from '../components/UploadImage';
 
 const EditName = () => {
   const [show, setShow] = useState(false);
@@ -52,7 +55,25 @@ const UpdatePhoto = () => {
 
   return (
     <>
-      <Button variant="seconday" href="/updateprofilepicture">Update Profile Image</Button>
+      <Button variant="secondary" onClick={handleShow}>
+			Update Profile Image
+		</Button>
+
+        <Modal show={show} onHide={handleClose} animation={false}>
+            <Modal.Header closeButton>
+                <Modal.Title>Update Profile Image</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+                <InputGroup className="mb-3">
+                    <UploadImage />
+                </InputGroup>
+            </Modal.Body>
+            <Modal.Footer>
+                <Button variant="secondary" onClick={handleClose}>
+                    Close
+                </Button>
+            </Modal.Footer>
+        </Modal>
     </>
   );
 }
@@ -175,5 +196,4 @@ const signedInRoute = true;
 
 const profilePage = withAuthUserContext(Profile);
 
-export default withAuthorization(signedInRoute)(profilePage)
-
+export default withFirebase(withAuthorization(signedInRoute)(profilePage));

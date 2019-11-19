@@ -15,8 +15,14 @@ export default class Error404 extends React.Component {
                 <h2 align = "center">
                     The page you requested may be broken or it doesn't exist
                 </h2>
+<<<<<<< HEAD
                 
                 <img src={House} alt="ReturnHome" className="center" onClick={this.props.onClickHome}/>
+=======
+                {/* <img src= {SadShmurda} alt="GetShmoney" class = "center"/> */}
+
+                <img src= {House} alt="ReturnHome" className= "center" onClick={this.props.onClickHome}/>
+>>>>>>> master
 
                 <h4 align = "center">
                     Click icon to return home
