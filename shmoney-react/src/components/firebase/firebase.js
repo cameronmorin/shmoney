@@ -92,7 +92,6 @@ class Firebase {
 	}
 
 	addUserToHouseGroup = async (uid, username, houseGroupId) => {
-		console.log(`Adding User ${username} to House Group`);
 		//Two Reads and Two Writes per call
 		//Check if user is already in group so they are not added to multiple
 		return this.user(uid).get().then(doc => {
@@ -120,7 +119,7 @@ class Firebase {
 			let houseGroupId = doc.data().group_id;
 			return this.house_groups().doc(houseGroupId).get().then(doc => {
 				//Get the array of house member objects
-				let houseMembers = doc.data.group_members;
+				let houseMembers = doc.data().group_members;
 				let removed = false;
 				//Find user object by uid and remove them from the array
 				for(let i = 0; i < houseMembers.size; i++) {
