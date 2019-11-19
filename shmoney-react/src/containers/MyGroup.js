@@ -345,6 +345,8 @@ class MyGroupBase extends React.Component {
         });
 	}
 	render() {
+		const authUser = this.props.authUser;
+
 		return (
 			<div>
 				<NavBar
@@ -352,18 +354,17 @@ class MyGroupBase extends React.Component {
 					onClickHome={this.props.onClickHome}
 					onClickLogout={this.props.onClickLogout}
 					onClickAvatar={this.props.onClickAvatar}
-					displayName="toBeFixed"
+					displayName={authUser.displayName}
 				/>
 				<div className="main-grid">
 					<div className="left-grid">
 						<h1>{this.state.groupName}</h1>
 						{this.state.isGroupMember && <AddBill />}
-						{this.state.isGroupMember && this.state.isGroupOwner && <AddMembers />}
-						{this.state.isGroupMember && this.state.isGroupOwner && <DeleteMembers />}
+						{this.state.isGroupOwner && <AddMembers />}
+						{this.state.isGroupOwner && <DeleteMembers />}
 						{this.state.isGroupMember && <ViewLedger />}
 						{this.state.isNotGroupMember && <CreateGroupModal />}
-						{this.state.isGroupMember && this.state.isGroupOwner && 
-							<DeleteGroup firebase={this.props.firebase} groupId={this.state.groupId} />}
+						{this.state.isGroupOwner && <DeleteGroup firebase={this.props.firebase} groupId={this.state.groupId} />}
 					</div>
 
 					<div className="right-grid">
