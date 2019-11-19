@@ -69,7 +69,7 @@ class Firebase {
 				username: this.auth.currentUser.displayName,
 				
 			}]
-		});
+		},{merge:true});
 		return this.user(this.auth.currentUser.uid).set({
 			group_id: doc.id
 		},{merge:true});
@@ -84,7 +84,7 @@ class Firebase {
 			groupMembers.map(item => (
 				this.user(item.uid).set({
 					group_id: null,
-				})
+				},{merge:true})
 			));
 
 			return groupDoc.delete();
@@ -132,7 +132,7 @@ class Firebase {
 				if(removed) {
 					doc.set({
 						group_members: houseMembers
-					},{merge: true})
+					},{merge:true})
 					//Remove group_id from user's document
 					this.user(uid).set({
 						group_id: null
