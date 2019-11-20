@@ -12,7 +12,7 @@ import { withFirebase } from '../components/firebase';
 import CreateGroup from '../components/CreateGroup';
 import SearchUsers from '../components/SearchUsers';
 
-const AddMembers = () => {
+const AddMembers = ({firebase}) => {
 	const [show, setShow] = useState(false);
 
 	const handleClose = () => setShow(false);
@@ -376,7 +376,7 @@ class MyGroupBase extends React.Component {
 					<div className="left-grid">
 						<h1>{this.state.groupName}</h1>
 						{this.state.isGroupMember && <AddBill />}
-						{this.state.isGroupOwner && <AddMembers />}
+						{this.state.isGroupOwner && <AddMembers firebase={this.props.firebase} />}
 						{this.state.isGroupOwner && 
 						<DeleteMembers 
 						onChangeGroupId={this.state.groupId} 

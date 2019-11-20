@@ -91,6 +91,10 @@ class Firebase {
 		})
 	}
 
+	searchUser = async (searchName) => {
+		return this.users().where('username', '==', searchName).get();
+	}
+
 	addUserToHouseGroup = async (uid, username, houseGroupId) => {
 		//Two Reads and Two Writes per call
 		//Check if user is already in group so they are not added to multiple
@@ -121,7 +125,8 @@ class Firebase {
 			let houseMembers = doc.data().group_members;
 			let removed = false;
 			//Find user object by uid and remove them from the array
-			for(let i = 0; i < houseMembers.length; i++) {
+			const houseMembersSize = houseMembers.length;
+			for(let i = 0; i < houseMembersSize; i++) {
 				if(houseMembers[i].uid === uid) {
 					houseMembers.splice(i, 1);
 					removed = true;
