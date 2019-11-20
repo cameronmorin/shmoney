@@ -18,6 +18,7 @@ class App extends React.Component {
     event.preventDefault();
 
     this.props.firebase.signOut();
+    this.props.history.push("/");
   }
 
   onClickAvatar = async event => {
