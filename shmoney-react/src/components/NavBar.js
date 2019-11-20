@@ -1,45 +1,44 @@
 import React from 'react';
-import { NavLink } from 'react-router-dom';
+import { AuthUserContext } from './session'
 
-import logo from '../images/logo.png';
+import { Navbar, Nav, NavDropdown } from 'react-bootstrap';
+
+import logo from '../images/box_logo.png';
 import avatar from '../images/avatar.svg';
 import '../styles/NavBar.css';
 
-import { AuthUserContext } from './session'
-
-export default class NavBar extends React.Component {
+export default class CustomNavBar extends React.Component {
   render() {
     return(
       <>
-        <div className="nav-grid">
-          <div className="nav-logo">
-            {/* display logo here */}
-            <img className="logo" src={logo} alt="logo" onClick={this.props.onClickHome}/>
-          </div>
-          <>
-            {/* Check authUser status and render nav-pages and nav-user if they are logged in
-            Can change null to whatever needs to be rendered when authUser is logged out */}
-            <AuthUserContext.Consumer>
-            {authUser => authUser ? 
+        <Navbar collapseOnSelect expand="lg" bg="light" variant="light">
+          <Navbar.Brand>
+            <img className="logo" src={logo} alt="logo" onClick={this.props.onClickHome} />
+          </Navbar.Brand>
+          <AuthUserContext.Consumer>
+            {authUser => authUser ?
               <>
-                <div className="nav-pages">
-                  {/* insert page links here */}
-                  <NavLink to="/mygroup" className="link" activeClassName="active-link">My Group</NavLink>
-                  <NavLink to="/myrent" className="link" activeClassName="active-link">Pay Rent</NavLink>
-                </div>
-                <div className="nav-user">
-                  {/* insert user info here if signed in, else signIn/Up links */}
-                  <div className="user-msg">
-                    <div className="welcome-msg">{authUser.displayName}</div>
-                    <div className="logout-msg" onClick={this.props.onClickLogout}>Logout</div>
+                <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+                <Navbar.Collapse id="responsive-navbar-nav">
+                  <Nav className="mr-auto">
+                    <Nav.Link onClick={this.props.onClickMenu}>Group</Nav.Link>
+                    {/* <Nav.Link className={((this.props.currPage === 'Rent')? 'active-link' : '')} href="/rent">Rent</Nav.Link> */}
+                  </Nav>
+                  <Nav>
+                  <div className="nav-user">
+                    {/* insert user info here if signed in, else signIn/Up links */}
+                    <div className="user-msg">
+                      <div className="welcome-msg">{authUser.displayName}</div>
+                      <div className="logout-msg" onClick={this.props.onClickLogout}>Logout</div>
+                    </div>
+                    <img className="avatar" src={authUser.photoURL ? authUser.photoURL : avatar} alt="user" onClick={this.props.onClickAvatar} />
                   </div>
-                  <img className="avatar" src={authUser.photoURL ? authUser.photoURL : avatar} alt="user" onClick={this.props.onClickAvatar} />
-                </div>
-              </> : null
+                  </Nav>
+                </Navbar.Collapse>
+              </> : null //REPLACE NULL WITH SIGNIN/SIGNUP BUTTONS
             }
-            </AuthUserContext.Consumer>
-          </>
-        </div>
+          </AuthUserContext.Consumer>
+        </Navbar>
       </>
     );
   }

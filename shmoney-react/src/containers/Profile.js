@@ -201,11 +201,11 @@ class Profile extends React.Component {
     return (
       <div>
         <NavBar
-          onLoad={this.props.onLoad}
           onClickHome={this.props.onClickHome}
+          onClickMenu={this.props.onClickMenu}
           onClickLogout={this.props.onClickLogout}
           onClickAvatar={this.props.onClickAvatar}
-          displayName="toBeFixed"
+          currPage="Profile"
         />
         <div className="main-grid">
           <div className="left-grid">

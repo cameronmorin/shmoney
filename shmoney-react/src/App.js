@@ -18,6 +18,7 @@ class App extends React.Component {
     event.preventDefault();
 
     this.props.firebase.signOut();
+    this.props.history.push("/");
   }
 
   onClickAvatar = async event => {
@@ -27,6 +28,26 @@ class App extends React.Component {
     if (window.location.pathname !== '/profile') {
       // this.props.history.push(userPath);
       this.props.history.push('/profile');
+    }
+  }
+
+  onClickMenu = async event => {
+    const currTarget = event.currentTarget.textContent;
+    
+    switch(currTarget) {
+      case 'Home':
+        if (window.location.pathname != '/') this.props.history.push('/');
+        break;
+      case 'Group':
+          if (window.location.pathname != '/mygroup') this.props.history.push('/mygroup');
+        break;
+      case 'Rent':
+          if (window.location.pathname != '/myrent') this.props.history.push('/myrent');
+        break;
+      case 'Profile':
+          if (window.location.pathname != '/profile') this.props.history.push('/profile');
+      default:
+        break;
     }
   }
 
@@ -50,10 +71,9 @@ class App extends React.Component {
 
   render() {
     this.childProps = {
-      currPage: 'Home',
-      message: 'Hi',
       authUser: null,
       onClickHome: this.onClickHome,
+      onClickMenu: this.onClickMenu,
       onClickLogout: this.onClickLogout,
       onClickAvatar: this.onClickAvatar,
       onClickButton: this.onClickButton
