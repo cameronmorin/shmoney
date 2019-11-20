@@ -8,10 +8,6 @@ import avatar from '../images/avatar.svg';
 import '../styles/NavBar.css';
 
 export default class CustomNavBar extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-  
   render() {
     return(
       <>
@@ -39,7 +35,7 @@ export default class CustomNavBar extends React.Component {
                   </div>
                   </Nav>
                 </Navbar.Collapse>
-              </> : null
+              </> : null //REPLACE NULL WITH SIGNIN/SIGNUP BUTTONS
             }
           </AuthUserContext.Consumer>
         </Navbar>
