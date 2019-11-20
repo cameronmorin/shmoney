@@ -1,8 +1,25 @@
-body {
-    margin-top: 0;
-    background: rgb(126, 67, 67);
+.DashGrid {
+    display: grid;
+    grid-template-columns: 1fr 3fr;
+    min-height: 100vh;
+    background:#35B27F;
+    justify-items: center;
+}
 
+.DashLeft{
+    grid-column: 1;
+    padding: 25px 25px;
+    text-align: center;
 }
-p {
-    color: purple
+.DashRight{
+    grid-column: 2;
+    background: #c4c4c4;
+    padding: 25px 25px;
+    width: 100%;
 }
+
+.bg-dark{
+    text-align: center;
+}
+
+.Card.Header:hover {background:#35B27F;}
