@@ -1,44 +1,59 @@
 import React from 'react';
-import { compose } from 'recompose'
+import { compose } from 'recompose';
 
-import Media from 'react-bootstrap/Media'
-
-import algoliasearch from 'algoliasearch/lite';
-import { InstantSearch, SearchBox, Hits, connectStateResults, Configure } from 'react-instantsearch-dom';
+import Media from 'react-bootstrap/Media';
+import Button from 'react-bootstrap/Button';
+import avatar from '../images/avatar.svg';
 
 import { withFirebase } from './firebase';
 import { withAuthorization, withAuthUserContext } from './session'
-
-const searchClient = algoliasearch('UUDUIR4SFL', '563f2cebc4afdf50db5e7f84b044a623');
 
 class SearchUsersBase extends React.Component {
 	constructor(props) {
 		super(props);
 
 		this.state = {
-			groupId: null
+			groupId: null,
+			searchName: '',
+			userResults: null,
+			searched: false
 		}
 	}
-	Hit = ({hit}) => {
-		return(
-			<Media className="search-results">
-				<img src={hit.photoURL} height="45" width="45" alt="user"/>
-				<Media.Body>
-					<p>{hit.username}</p>
-					{!hit.group_id ? 
-						<button onClick={() => this.addUser(hit.uid, hit.username)}>Add</button>
-						: null
-					}
-				</Media.Body>
-			</Media>
-		)
+	onChange = event => {
+		this.setState({ [event.target.name]: event.target.value });
 	}
-	addUser = (uid, username) => {
+	onSubmit = event => {
+		event.preventDefault();
+
+		const {searchName} = this.state;
+		const authUser = this.props.authUser;
+
+		this.props.firebase.searchUser(searchName).then(querySnapshot => {
+			let userResults = [];
+			querySnapshot.forEach(doc => {
+				userResults.push(doc.data());
+			})
+
+			//Remove users who are already in a group from the results list
+			const length = userResults.length
+			for(let i = 0; i < length; i++) {
+				if(userResults[i].group_id !== null || userResults[i].uid === authUser.uid) {
+					userResults.splice(i, 1);
+				}
+			}
+
+			this.setState({userResults});
+		}).catch(error => {
+			console.log(error);
+		})
+	}
+	addUser = (username, uid) => {
 		let {groupId} = this.state;
 		console.log(`Adding User ${uid}`);
-		this.props.firebase.addUserToHouseGroup(uid, username, groupId).then(result => {
+		this.props.firebase.addUserToHouseGroup(uid, username, groupId).then(() => {
 			//TODO Find a way to refresh search so add button no longer appears after adding them
 			//to the group. Also good place to implement group reqest.
+			window.location.reload();
 		}).catch(error => {
 			console.log(error);
 		});
@@ -47,24 +62,52 @@ class SearchUsersBase extends React.Component {
 		//Populate state variables
 		this.props.firebase.getHouseGroupData().then(result => {
 			let groupId = result.group_id;
-			console.log(groupId);
 			this.setState({groupId});
 		})
 	}
 	render() {
-		const Content = connectStateResults(
-			({searchState}) =>
-				searchState && searchState.query ?
-				<div className="content">
-					<Hits hitComponent={this.Hit} />
-				</div> : null
-		);
+		const {searchName, userResults, searched} = this.state;
+		let isInvalid = searchName === '';
 		return (
-			<InstantSearch searchClient={searchClient} indexName="users_search">
-				<SearchBox translations={{placeholder: 'Search Box'}} />
-				<Configure hitsPerPage={10} />
-				<Content />
-			</InstantSearch>
+			<div>
+				<form onSubmit={this.onSubmit}>
+					<div className="universal-padding-3">
+						Username:
+					</div>
+					<input
+						type="text"
+						name="searchName"
+						value={searchName}
+						onChange={this.onChange}
+						placeholder=""
+						id="rounded-corner-input"
+					/>
+
+					<button type="submit" disabled={isInvalid}>Search</button>
+				</form>
+				<div className="search-results">
+					{userResults && <ul>{userResults.map((item, key) => (
+						<li key={key}>
+						<Media>
+							<img 
+								width={64}
+								height={64}
+								className="mr-3"
+								src={item.photoURL ? item.photoURL : avatar}
+								alt="No Image"
+							/>
+							<Media.Body>
+								<h5>{item.username}</h5>
+								<Button variant="secondary" onClick={() => this.addUser(item.username, item.uid)}>Add</Button>
+							</Media.Body>
+						</Media>
+						</li>
+					))
+					}
+					</ul>}
+					{searched && !userResults && <p>No Results</p>}
+				</div>
+			</div>
 		)
 	}
 }

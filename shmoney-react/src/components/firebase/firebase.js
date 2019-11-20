@@ -69,7 +69,7 @@ class Firebase {
 				username: this.auth.currentUser.displayName,
 				
 			}]
-		});
+		},{merge:true});
 		return this.user(this.auth.currentUser.uid).set({
 			group_id: doc.id
 		},{merge:true});
@@ -84,15 +84,18 @@ class Firebase {
 			groupMembers.map(item => (
 				this.user(item.uid).set({
 					group_id: null,
-				})
+				},{merge:true})
 			));
 
 			return groupDoc.delete();
 		})
 	}
 
+	searchUser = async (searchName) => {
+		return this.users().where('username', '==', searchName).get();
+	}
+
 	addUserToHouseGroup = async (uid, username, houseGroupId) => {
-		console.log(`Adding User ${username} to House Group`);
 		//Two Reads and Two Writes per call
 		//Check if user is already in group so they are not added to multiple
 		return this.user(uid).get().then(doc => {
@@ -115,31 +118,31 @@ class Firebase {
 		})
 	}
 
-	removeUserFromGroup = async (uid) => {
-		return this.user(this.auth.currentUser.uid).get().then(doc => {
-			let houseGroupId = doc.data().group_id;
-			return this.house_groups().doc(houseGroupId).get().then(doc => {
-				//Get the array of house member objects
-				let houseMembers = doc.data.group_members;
-				let removed = false;
-				//Find user object by uid and remove them from the array
-				for(let i = 0; i < houseMembers.size; i++) {
-					if(houseMembers[i].uid === uid) {
-						houseMembers.splice(i, 1);
-						removed = true;
-					}
+	removeUserFromGroup = async (uid, houseGroupId) => {
+		let houseGroupDoc = this.house_groups().doc(houseGroupId);
+		return houseGroupDoc.get().then(doc => {
+			//Get the array of house member objects
+			let houseMembers = doc.data().group_members;
+			let removed = false;
+			//Find user object by uid and remove them from the array
+			const houseMembersSize = houseMembers.length;
+			for(let i = 0; i < houseMembersSize; i++) {
+				if(houseMembers[i].uid === uid) {
+					houseMembers.splice(i, 1);
+					removed = true;
 				}
-				//Only need to update list if member was in the group
-				if(removed) {
-					doc.set({
-						group_members: houseMembers
-					},{merge: true})
-					//Remove group_id from user's document
-					this.user(uid).set({
-						group_id: null
-					},{merge:true})
-				}
-			})
+			}
+
+			//Only need to update list if member was in the group
+			if(removed) {
+				houseGroupDoc.set({
+					group_members: houseMembers
+				},{merge:true})
+				//Remove group_id from user's document
+				this.user(uid).set({
+					group_id: null
+				},{merge:true})
+			}
 		})
 	}
 
