@@ -1,25 +1,63 @@
-.DashGrid {
-    display: grid;
-    grid-template-columns: 1fr 3fr;
-    min-height: 100vh;
-    background:#35B27F;
-    justify-items: center;
-}
 
-.DashLeft{
-    grid-column: 1;
-    padding: 25px 25px;
-    text-align: center;
+h1{
+    font-size: 40px;
+    color: black;
+    text-align:center;
+    font-family:Bungee;
 }
-.DashRight{
-    grid-column: 2;
-    background: #c4c4c4;
-    padding: 25px 25px;
-    width: 100%;
-}
-
 .bg-dark{
     text-align: center;
 }
 
 .Card.Header:hover {background:#35B27F;}
+
+.main-grid{
+    display:grid;
+    grid-template-columns:1fr 3fr;
+    min-height: 100vh;
+    background:#35B27F;
+    color: #fff;
+}
+
+.left-grid{
+    grid-column:1;
+    padding: 25px 25px;
+    text-align: center;
+    justify-content: center;
+}
+
+/* .left-grid h1{
+    font-size: 30px;
+    padding-bottom: 5%;
+} */
+.left-grid .p{
+    font-size:15px;
+}
+
+.right-grid{
+    grid-column:2;
+    background: #c4c4c4;
+    padding: 25px 25px;
+}
+/* .right-grid h1{
+    font-size: 40px;
+    color: black;
+} */
+
+.right-grid p{
+    color: black;
+}
+
+/* .right-grid .btn{
+    width: 100%;
+    border: none;
+    background-color: inherit;
+    padding: 10px 28px;
+    font-size: 15px;
+    color:white;
+    margin-bottom: 10px;
+    cursor: pointer;
+    display: inline-block;
+} */
+
+.btn:hover {background:#35B27F;}

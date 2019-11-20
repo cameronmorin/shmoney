@@ -1,23 +1,23 @@
 import React from 'react';
 import '../styles/RootStyle.css'
 import './Home.jsx';
-import { Table, Accordion, Card, Button, Modal, InputGroup, FormControl, ListGroup, Alert, AccordionCollapse } from 'react-bootstrap';
-import { CardBody } from 'react-bootstrap/Card';
+import { Table, Accordion, Card, Alert, AccordionCollapse } from 'react-bootstrap';
 import PieChart from './PieChart.js';
 
 export default class NoPath extends React.Component {  
   render() {
     return (
-        <div className = "container" >
-          <div className = "row ">
-            <div className = "col-6">
-              <MyAccord/>
-            </div>
-            <div className = "col-6 ">
+        <div className = "main-grid" >
+          <div className = "left-grid" >
+              
               <BillCard/>
               <Pie/>
-            </div>
           </div>
+          <div className = "right-grid">
+            <h1> Your Group: KACCC</h1>
+            <MyAccord/>
+          </div>
+
         </div>
     );
   };
@@ -39,17 +39,6 @@ const MyAccord = () => {
                 </Card.Body>
             </Accordion.Collapse>
         </Card>
-
-        {/* <Card text="dark">
-            <Card.Header>
-              <Accordion.Toggle as={Card.Header} eventKey="1">
-                Bills Due
-              </Accordion.Toggle>
-            </Card.Header>
-            <Accordion.Collapse eventKey="1">
-              <Card.Body><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p></Card.Body>
-            </Accordion.Collapse>
-          </Card> */}
       </Accordion>
       <br />
     </>
@@ -59,7 +48,7 @@ const MyAccord = () => {
 const BillCard = () => {
   return (
     <>
-      <Card bg="light" style={{ width: '18rem' }} text="dark">
+      <Card bg="light"  text="dark">
         <Card.Header >
             Current Bill
         </Card.Header>
