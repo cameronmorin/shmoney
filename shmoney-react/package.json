@@ -5,9 +5,11 @@
   "dependencies": {
     "algoliasearch": "^3.35.1",
     "bootstrap": "^4.3.1",
+    "chart.js": "^2.9.3",
     "firebase": "^5.8.4",
     "react": "^16.10.2",
     "react-bootstrap": "^1.0.0-beta.14",
+    "react-chartjs-2": "^2.8.0",
     "react-dom": "^16.10.2",
     "react-instantsearch-dom": "^6.0.0",
     "react-router-dom": "^5.1.2",
