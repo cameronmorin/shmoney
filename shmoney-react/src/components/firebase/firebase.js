@@ -114,31 +114,30 @@ class Firebase {
 		})
 	}
 
-	removeUserFromGroup = async (uid) => {
-		return this.user(this.auth.currentUser.uid).get().then(doc => {
-			let houseGroupId = doc.data().group_id;
-			return this.house_groups().doc(houseGroupId).get().then(doc => {
-				//Get the array of house member objects
-				let houseMembers = doc.data().group_members;
-				let removed = false;
-				//Find user object by uid and remove them from the array
-				for(let i = 0; i < houseMembers.size; i++) {
-					if(houseMembers[i].uid === uid) {
-						houseMembers.splice(i, 1);
-						removed = true;
-					}
+	removeUserFromGroup = async (uid, houseGroupId) => {
+		let houseGroupDoc = this.house_groups().doc(houseGroupId);
+		return houseGroupDoc.get().then(doc => {
+			//Get the array of house member objects
+			let houseMembers = doc.data().group_members;
+			let removed = false;
+			//Find user object by uid and remove them from the array
+			for(let i = 0; i < houseMembers.length; i++) {
+				if(houseMembers[i].uid === uid) {
+					houseMembers.splice(i, 1);
+					removed = true;
 				}
-				//Only need to update list if member was in the group
-				if(removed) {
-					doc.set({
-						group_members: houseMembers
-					},{merge:true})
-					//Remove group_id from user's document
-					this.user(uid).set({
-						group_id: null
-					},{merge:true})
-				}
-			})
+			}
+
+			//Only need to update list if member was in the group
+			if(removed) {
+				houseGroupDoc.set({
+					group_members: houseMembers
+				},{merge:true})
+				//Remove group_id from user's document
+				this.user(uid).set({
+					group_id: null
+				},{merge:true})
+			}
 		})
 	}
 

@@ -80,11 +80,20 @@ const AddBill = () => {
 	);
 };
 
-const DeleteMembers = () => {
+const DeleteMembers = ({onChangeGroupId, onChangeGroupMembers, onChangeOwnerId, firebase}) => {
 	const [show, setShow] = useState(false);
 
 	const handleClose = () => setShow(false);
 	const handleShow = () => setShow(true);
+
+	const removeUser = uid => {
+		console.log(uid);
+		firebase.removeUserFromGroup(uid, onChangeGroupId).then(() => {
+			window.location.reload();
+		}).catch(error => {
+			console.log(error);
+		})
+	}
 
 	return (
 		<>
@@ -98,14 +107,19 @@ const DeleteMembers = () => {
 				</Modal.Header>
 				<Modal.Body>
 					<InputGroup className="mb-3">
-						<FormControl
-							placeholder="Recipient's username"
-							aria-label="Recipient's username"
-							aria-describedby="basic-addon2"
-						/>
-						<InputGroup.Append>
+						<ul>
+							{onChangeGroupMembers.map((index, key) => (
+								<div key={key}>
+								{index.uid !== onChangeOwnerId && <li key={key}>
+									{index.username}
+									<Button variant="outline-secondary" onClick={() => removeUser(index.uid)}>Delete</Button>
+								</li>}
+								</div>
+							))}
+						</ul>
+						{/* <InputGroup.Append>
 							<Button variant="outline-secondary">Delete</Button>
-						</InputGroup.Append>
+						</InputGroup.Append> */}
 					</InputGroup>
 				</Modal.Body>
 				<Modal.Footer>
@@ -118,14 +132,14 @@ const DeleteMembers = () => {
 	);
 };
 
-const DeleteGroup = ({firebase, groupId}) => {
+const DeleteGroup = ({firebase, onChangeGroupId}) => {
 	const [show, setShow] = useState(false);
 
 	const handleClose = () => setShow(false);
 	const handleShow = () => setShow(true);
 
 	const deleteGroup = () => {
-		firebase.deleteHouseGroup(groupId).then(() => {
+		firebase.deleteHouseGroup(onChangeGroupId).then(() => {
 			window.location.reload();
 		});
 	}
@@ -315,24 +329,26 @@ class MyGroupBase extends React.Component {
 
 		this.state = {
 			groupMembers: null,
-            groupName: null,
-						isNotGroupMember: false,
-						isGroupMember: false,
-						isGroupOwner: false,
-						groupId: null
+			groupName: null,
+			isNotGroupMember: false,
+			isGroupMember: false,
+			isGroupOwner: false,
+			groupId: null,
+			ownerId: null
 		};
 	}
 	componentDidMount() {
         const authUser = this.props.authUser;
 		this.props.firebase.getHouseGroupData().then(result => {
+						let groupOwnerUid = result.owner_uid
             this.setState({
                 groupMembers: result.group_members,
 								groupName: result.group_name,
 								isGroupMember: true,
-								groupId: result.group_id
+								groupId: result.group_id,
+								ownerId: groupOwnerUid
 						});
 						
-						let groupOwnerUid = result.owner_uid
             if(groupOwnerUid === authUser.uid) {
                 this.setState({isGroupOwner:true});
             }
@@ -361,10 +377,18 @@ class MyGroupBase extends React.Component {
 						<h1>{this.state.groupName}</h1>
 						{this.state.isGroupMember && <AddBill />}
 						{this.state.isGroupOwner && <AddMembers />}
-						{this.state.isGroupOwner && <DeleteMembers />}
+						{this.state.isGroupOwner && 
+						<DeleteMembers 
+						onChangeGroupId={this.state.groupId} 
+						onChangeGroupMembers={this.state.groupMembers} 
+						onChangeOwnerId={this.state.ownerId} 
+						firebase={this.props.firebase} />}
 						{this.state.isGroupMember && <ViewLedger />}
 						{this.state.isNotGroupMember && <CreateGroupModal />}
-						{this.state.isGroupOwner && <DeleteGroup firebase={this.props.firebase} groupId={this.state.groupId} />}
+						{this.state.isGroupOwner && 
+						<DeleteGroup 
+						firebase={this.props.firebase}
+						onChangeGroupId={this.state.groupId} />}
 					</div>
 
 					<div className="right-grid">
