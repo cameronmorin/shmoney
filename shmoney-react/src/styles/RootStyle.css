@@ -1,61 +1,63 @@
-body {
-    margin-top: 0;
-    background: white;
 
+h1{
+    font-size: 40px;
+    color: black;
+    text-align:center;
+    font-family:Bungee;
+}
+.bg-dark{
+    text-align: center;
 }
 
-.PageWrap{
-    display: grid;
-    grid-template-rows: 10% 60% 30%;
-    background: #35B27F;
+.Card.Header:hover {background:#35B27F;}
+
+.main-grid{
+    display:grid;
+    grid-template-columns:1fr 3fr;
+    min-height: 100vh;
+    background:#35B27F;
+    color: #fff;
 }
 
-.TempNavBar{
-    grid-row: 1;
-    background: white;
-    display: flex;
-    justify-content: left;
-    align-content: center;
-}
-
-.HomeBody{
-    grid-row: 2;
-    display: flex;
+.left-grid{
+    grid-column:1;
+    padding: 25px 25px;
+    text-align: center;
     justify-content: center;
-    align-items: center;
 }
 
-.HomeButtons{
-    grid-row: 3;
-    display: grid;
-    grid-template-columns: 45% 10% 45%;
-    place-items: center center;
-    
-}
-
-.SignInButton{
-    grid-column: 1;
-}
-.Button{
-    width: 220px;
-    height: 80px;
-    border-radius: 20px;
-    background: white;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+/* .left-grid h1{
     font-size: 30px;
+    padding-bottom: 5%;
+} */
+.left-grid .p{
+    font-size:15px;
 }
 
-.OrDisplay{
-    grid-column: 2;
+.right-grid{
+    grid-column:2;
+    background: #c4c4c4;
+    padding: 25px 25px;
+}
+/* .right-grid h1{
+    font-size: 40px;
+    color: black;
+} */
+
+.right-grid p{
+    color: black;
 }
 
-.SignUpButton{
-    grid-column: 3;
-}
+/* .right-grid .btn{
+    width: 100%;
+    border: none;
+    background-color: inherit;
+    padding: 10px 28px;
+    font-size: 15px;
+    color:white;
+    margin-bottom: 10px;
+    cursor: pointer;
+    display: inline-block;
+} */
 
-.Msg{
-    font-size: 30px;
-    font-family: Jomolhari;
-}
+.btn:hover {background:#35B27F;}
