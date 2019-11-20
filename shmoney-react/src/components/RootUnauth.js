@@ -2,7 +2,7 @@ import React from 'react';
 import '../styles/RootUnauth.css'
 import './Home.jsx';
 import { AuthUserContext } from './session'
-import Dashboard from '../components/Root';
+import Dashboard from '../components/Dashboard';
 
 export default class NoPath extends React.Component {  
   render() {
