@@ -26,23 +26,23 @@ class SearchUsersBase extends React.Component {
 		event.preventDefault();
 
 		const {searchName} = this.state;
-		const authUser = this.props.authUser;
 
 		this.props.firebase.searchUser(searchName).then(querySnapshot => {
+			let queryResults = [];
 			let userResults = [];
 			querySnapshot.forEach(doc => {
-				userResults.push(doc.data());
-			})
+				queryResults.push(doc.data());
+			});
 
 			//Remove users who are already in a group from the results list
-			const length = userResults.length
+			const length = queryResults.length
 			for(let i = 0; i < length; i++) {
-				if(userResults[i].group_id !== null || userResults[i].uid === authUser.uid) {
-					userResults.splice(i, 1);
+				if(queryResults[i].group_id === null) {
+					userResults.push(queryResults[i]);
 				}
 			}
 
-			this.setState({userResults});
+			return this.setState({userResults});
 		}).catch(error => {
 			console.log(error);
 		})
@@ -98,7 +98,9 @@ class SearchUsersBase extends React.Component {
 							/>
 							<Media.Body>
 								<h5>{item.username}</h5>
-								<Button variant="secondary" onClick={() => this.addUser(item.username, item.uid)}>Add</Button>
+								<p>{item.email}</p>
+								{/* TODO Style button placement/spacing */}
+								<Button variant="success" onClick={() => this.addUser(item.username, item.uid)}>Add</Button>
 							</Media.Body>
 						</Media>
 						</li>
