@@ -11,7 +11,7 @@
 }
 
 .nav-user {
-  grid-column: 3 / span 1;
+  /* grid-column: 3 / span 1; */
   display: grid;
   grid-template: 1fr / 1fr 50px;
   justify-content: flex-end;
