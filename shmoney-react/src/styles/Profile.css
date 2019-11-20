@@ -14,6 +14,7 @@
 
 .left-grid h1{
     font-size: 30px;
+    font-family: 'Righteous', cursive;
     padding-bottom: 5%;
 }
 .left-grid .p{
@@ -26,24 +27,35 @@
     padding: 25px 25px;
 }
 .right-grid h1{
-    font-size: 40px;
+    font-size: 30px;
     color: black;
 }
 
 .right-grid p{
     color: black;
+    font-size: 20px;
+    font-family: 'Sulphur Point', sans-serif;
+    text-align: center;
 }
 
 .right-grid .btn{
     width: 100%;
     border: none;
     background-color: inherit;
-    padding: 10px 28px;
-    font-size: 15px;
+    padding: 1px 28px;
     color:white;
     margin-bottom: 10px;
     cursor: pointer;
     display: inline-block;
+    text-decoration: none;
+    font-family: 'Bungee Shade', cursive;
 }
 
-.btn:hover {background:#35B27F;}
+.btn:hover {
+    background:#35B27F;
+    text-decoration: none;
+}
+
+.right-grid .btn:hover{
+    text-decoration: none;
+}

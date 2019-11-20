@@ -4,7 +4,7 @@ import { compose } from 'recompose';
 import NavBar from '../components/NavBar';
 import '../styles/MyGroup.css';
 
-import { Table, Accordion, Card, Button, Modal, InputGroup, FormControl, ListGroup } from 'react-bootstrap';
+import { Figure, Table, Accordion, Card, Button, Modal, InputGroup, FormControl, ListGroup } from 'react-bootstrap';
 import { withAuthorization, withAuthUserContext } from '../components/session';
 
 import { withFirebase } from '../components/firebase';
@@ -280,34 +280,34 @@ class MyGroupBase extends React.Component {
 
 		this.state = {
 			groupMembers: null,
-            groupName: null,
-						isNotGroupMember: false,
-						isGroupMember: false,
-            isGroupOwner: false
+			groupName: null,
+			isNotGroupMember: false,
+			isGroupMember: false,
+			isGroupOwner: false
 		};
 	}
 	componentDidMount() {
-        const authUser = this.props.authUser;
+		const authUser = this.props.authUser;
 		this.props.firebase.getHouseGroupData().then(result => {
-            console.log("Result:", result);
-            let groupOwnerUid = result.owner_uid
-            this.setState({
-                groupMembers: result.group_members,
-								groupName: result.group_name,
-								isGroupMember: true
-            });
+			console.log("Result:", result);
+			let groupOwnerUid = result.owner_uid
+			this.setState({
+				groupMembers: result.group_members,
+				groupName: result.group_name,
+				isGroupMember: true
+			});
 
-            if(groupOwnerUid === authUser.uid) {
-                console.log("Owner")
-                this.setState({isGroupOwner:true});
-            }
-        })
-        .catch(error => {
-            console.log(error.message);
-            //If there is an error then they aren't part of a group
-            //So they should see the Create Group button.
-            this.setState({isNotGroupMember:true});
-        });
+			if (groupOwnerUid === authUser.uid) {
+				console.log("Owner")
+				this.setState({ isGroupOwner: true });
+			}
+		})
+			.catch(error => {
+				console.log(error.message);
+				//If there is an error then they aren't part of a group
+				//So they should see the Create Group button.
+				this.setState({ isNotGroupMember: true });
+			});
 	}
 	render() {
 		return (
@@ -322,6 +322,15 @@ class MyGroupBase extends React.Component {
 				<div className="main-grid">
 					<div className="left-grid">
 						<h1>{this.state.groupName}</h1>
+						<Figure>
+							<Figure.Image
+								rounded
+								width={180}
+								height={1}
+								alt="user"
+								src="https://img.icons8.com/bubbles/2x/home.png"
+							/>
+						</Figure>
 						{this.state.isGroupMember && <AddBill />}
 						{this.state.isGroupMember && this.state.isGroupOwner && <AddMembers />}
 						{this.state.isGroupMember && this.state.isGroupOwner && <DeleteMembers />}
@@ -341,8 +350,8 @@ class MyGroupBase extends React.Component {
 const signedInRoute = true;
 
 const MyGroup = compose(
-    withFirebase,
-    withAuthUserContext
+	withFirebase,
+	withAuthUserContext
 )(MyGroupBase)
 
 export default withAuthorization(signedInRoute)(MyGroup);
