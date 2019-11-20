@@ -53,7 +53,7 @@ class SearchUsersBase extends React.Component {
 		this.props.firebase.addUserToHouseGroup(uid, username, groupId).then(() => {
 			//TODO Find a way to refresh search so add button no longer appears after adding them
 			//to the group. Also good place to implement group reqest.
-			//window.location.reload();
+			window.location.reload();
 		}).catch(error => {
 			console.log(error);
 		});
