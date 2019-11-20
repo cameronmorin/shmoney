@@ -44,7 +44,7 @@ class SignUpFormBase extends Component {
 				uid: authUser.uid,
 				group_id: null,
 				photoURL: defaultPhotoUrl
-			},{ merge: true });
+			},{merge:true});
 		}).then(() => {
 			this.props.firebase.sendEmailVerification();
 			console.log("Email Verification Sent")
