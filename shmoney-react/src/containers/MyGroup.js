@@ -88,6 +88,7 @@ const DeleteMembers = ({onChangeGroupId, onChangeGroupMembers, onChangeOwnerId, 
 
 	const removeUser = uid => {
 		console.log(uid);
+		console.log(onChangeGroupId);
 		firebase.removeUserFromGroup(uid, onChangeGroupId).then(() => {
 			window.location.reload();
 		}).catch(error => {

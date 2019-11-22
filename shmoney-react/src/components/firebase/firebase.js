@@ -119,14 +119,13 @@ class Firebase {
 	}
 
 	removeUserFromGroup = async (uid, houseGroupId) => {
-		let houseGroupDoc = this.house_groups().doc(houseGroupId);
-		return houseGroupDoc.get().then(doc => {
+		//let houseGroupDoc = this.house_groups().doc(houseGroupId);
+		return this.house_groups().doc(houseGroupId).get().then(doc => {
 			//Get the array of house member objects
 			let houseMembers = doc.data().group_members;
 			let removed = false;
 			//Find user object by uid and remove them from the array
-			const houseMembersSize = houseMembers.length;
-			for(let i = 0; i < houseMembersSize; i++) {
+			for(let i = 0; i < houseMembers.length; i++) {
 				if(houseMembers[i].uid === uid) {
 					houseMembers.splice(i, 1);
 					removed = true;
@@ -135,11 +134,11 @@ class Firebase {
 
 			//Only need to update list if member was in the group
 			if(removed) {
-				houseGroupDoc.set({
+				this.house_groups().doc(houseGroupId).set({
 					group_members: houseMembers
 				},{merge:true})
 				//Remove group_id from user's document
-				this.user(uid).set({
+				return this.user(uid).set({
 					group_id: null
 				},{merge:true})
 			}

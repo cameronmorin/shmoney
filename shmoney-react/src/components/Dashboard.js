@@ -3,8 +3,27 @@ import '../styles/RootStyle.css'
 import './Home.jsx';
 import { Table, Accordion, Card, Alert, AccordionCollapse } from 'react-bootstrap';
 import PieChart from './PieChart.js';
+import { compose } from 'recompose';
+import { withFirebase } from './firebase';
+import { withAuthUserContext } from './session';
 
-export default class NoPath extends React.Component {  
+class DashboardBase extends React.Component {  
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      groupName: null
+    }
+  }
+  componentDidMount() {
+    this.props.firebase.getHouseGroupData().then(result => {
+      this.setState({
+        groupName: result.group_name
+      });
+    }).catch(error => {
+      console.log(error);
+    });
+  }
   render() {
     return (
         <div className = "main-grid" >
@@ -14,7 +33,7 @@ export default class NoPath extends React.Component {
               <Pie/>
           </div>
           <div className = "right-grid">
-            <h1> Your Group: KACCC</h1>
+            <h1> Your Group: {this.state.groupName && this.state.groupName}</h1>
             <MyAccord/>
           </div>
 
@@ -141,3 +160,10 @@ const MemberTable = () => {
     </Table>
   );
 };
+
+const Dashboard = compose(
+  withFirebase,
+  withAuthUserContext
+)(DashboardBase);
+
+export default Dashboard;
