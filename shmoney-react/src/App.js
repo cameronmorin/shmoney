@@ -36,16 +36,17 @@ class App extends React.Component {
     
     switch(currTarget) {
       case 'Home':
-        if (window.location.pathname != '/') this.props.history.push('/');
+        if (window.location.pathname !== '/') this.props.history.push('/');
         break;
       case 'Group':
-          if (window.location.pathname != '/mygroup') this.props.history.push('/mygroup');
+        if (window.location.pathname !== '/mygroup') this.props.history.push('/mygroup');
         break;
       case 'Rent':
-          if (window.location.pathname != '/myrent') this.props.history.push('/myrent');
+        if (window.location.pathname !== '/myrent') this.props.history.push('/myrent');
         break;
       case 'Profile':
-          if (window.location.pathname != '/profile') this.props.history.push('/profile');
+        if (window.location.pathname !== '/profile') this.props.history.push('/profile');
+        break;
       default:
         break;
     }

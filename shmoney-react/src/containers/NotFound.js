@@ -6,10 +6,6 @@ import Error404 from '../components/Error404';
 
 
 export default class NotFound extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-
   render() {
     return (
       <>
