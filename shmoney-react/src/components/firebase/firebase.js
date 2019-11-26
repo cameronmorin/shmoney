@@ -2,18 +2,7 @@ import app from 'firebase/app'
 import 'firebase'
 import 'firebase/auth'
 import 'firebase/firestore';
-import config from '../../config'
-
-const firebaseConfig = {
-	apiKey: config.apiKey,
-	authDomain: config.authDomain,
-	databaseURL: config.databaseURL,
-	projectId: config.projectId,
-	storageBucket: config.storageBucket,
-	messagingSenderId: config.measurementId,
-	appId: config.appId,
-	measurementId: config.measurementId,
-};
+import firebaseConfig from './api';
 
 class Firebase {
 	constructor() {
