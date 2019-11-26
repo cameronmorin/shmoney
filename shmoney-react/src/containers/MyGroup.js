@@ -12,10 +12,10 @@ import { withFirebase } from '../components/firebase';
 import CreateGroup from '../components/CreateGroup';
 import SearchUsers from '../components/SearchUsers';
 
-const AddMembers = ({firebase}) => {
+const AddMembers = () => {
 	const [show, setShow] = useState(false);
 
-	const handleClose = () => setShow(false);
+	const handleClose = () => window.location.reload();
 	const handleShow = () => setShow(true);
 
 	return (
@@ -87,8 +87,6 @@ const DeleteMembers = ({onChangeGroupId, onChangeGroupMembers, onChangeOwnerId, 
 	const handleShow = () => setShow(true);
 
 	const removeUser = uid => {
-		console.log(uid);
-		console.log(onChangeGroupId);
 		firebase.removeUserFromGroup(uid, onChangeGroupId).then(() => {
 			window.location.reload();
 		}).catch(error => {

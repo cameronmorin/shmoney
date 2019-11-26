@@ -87,9 +87,9 @@ class App extends React.Component {
 }
 
 //Allows our app to use router and track authentication
-const mainApp = compose(
+const MainApp = compose(
 	withRouter,
 	withAuthentication
 )(App);
 
-export default mainApp;
+export default MainApp;

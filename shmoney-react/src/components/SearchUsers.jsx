@@ -39,6 +39,7 @@ class SearchUsersBase extends React.Component {
 			for(let i = 0; i < length; i++) {
 				if(queryResults[i].group_id === null) {
 					userResults.push(queryResults[i]);
+					userResults[i].added = false;
 				}
 			}
 
@@ -48,12 +49,19 @@ class SearchUsersBase extends React.Component {
 		})
 	}
 	addUser = (username, uid) => {
-		let {groupId} = this.state;
+		let {groupId, userResults} = this.state;
 		console.log(`Adding User ${uid}`);
 		this.props.firebase.addUserToHouseGroup(uid, username, groupId).then(() => {
 			//TODO Find a way to refresh search so add button no longer appears after adding them
 			//to the group. Also good place to implement group reqest.
-			window.location.reload();
+			for(let i = 0; i < userResults.length; i++) {
+				if(userResults[i].uid === uid) {
+					userResults[i].added = true;
+					this.setState({userResults});
+					return;
+				}
+			}
+			//window.location.reload();
 		}).catch(error => {
 			console.log(error);
 		});
@@ -94,13 +102,15 @@ class SearchUsersBase extends React.Component {
 								height={64}
 								className="mr-3"
 								src={item.photoURL ? item.photoURL : avatar}
-								alt="No Image"
+								alt="None"
 							/>
 							<Media.Body>
 								<h5>{item.username}</h5>
 								<p>{item.email}</p>
 								{/* TODO Style button placement/spacing */}
-								<Button variant="success" onClick={() => this.addUser(item.username, item.uid)}>Add</Button>
+								<Button variant="success" disabled={item.added} onClick={() => this.addUser(item.username, item.uid)}>
+									{item.added ? <>Added</> : <>Add</>}
+								</Button>
 							</Media.Body>
 						</Media>
 						</li>

@@ -3,17 +3,19 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@testing-library/react": "^9.3.2",
     "algoliasearch": "^3.35.1",
     "bootstrap": "^4.3.1",
     "chart.js": "^2.9.3",
     "firebase": "^5.8.4",
-    "react": "^16.10.2",
-    "react-bootstrap": "^1.0.0-beta.14",
+    "react": "^16.12.0",
+    "react-bootstrap": "^1.0.0-beta.16",
     "react-chartjs-2": "^2.8.0",
-    "react-dom": "^16.10.2",
+    "react-dom": "^16.12.0",
     "react-instantsearch-dom": "^6.0.0",
     "react-router-dom": "^5.1.2",
     "react-scripts": "3.2.0",
+    "react-test-renderer": "^16.12.0",
     "recompose": "^0.30.0",
     "typescript": "^3.7.2"
   },
@@ -37,5 +39,9 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "enzyme": "^3.10.0",
+    "enzyme-adapter-react-16": "^1.15.1"
   }
 }
