@@ -15,9 +15,8 @@ const withAuthentication = Component => {
 				groupName: null,
 				isNotGroupMember: false,
 				isGroupMember: false,
-				isGroupOwner: false,
 				groupId: null,
-				ownerId: null,
+				ownerUid: null,
 			};
       }
       componentDidMount() {
@@ -31,12 +30,8 @@ const withAuthentication = Component => {
 								groupName: result.group_name,
 								isGroupMember: true,
 								groupId: result.group_id,
-								ownerId: groupOwnerUid,
+								ownerUid: groupOwnerUid,
 							});
-
-							if (groupOwnerUid === authUser.uid) {
-								this.setState({ isGroupOwner: true });
-							}
 						}).catch(error => {
 							console.log(error.message);
 							//If there is an error then they aren't part of a group

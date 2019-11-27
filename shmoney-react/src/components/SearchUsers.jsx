@@ -61,17 +61,17 @@ class SearchUsersBase extends React.Component {
 					return;
 				}
 			}
-			//window.location.reload();
+			window.location.reload();
 		}).catch(error => {
 			console.log(error);
 		});
 	}
 	componentDidMount() {
-		//Populate state variables
-		this.props.firebase.getHouseGroupData().then(result => {
-			let groupId = result.group_id;
-			this.setState({groupId});
-		})
+		const groupState = this.props.groupState;
+
+		this.setState({
+			groupId: groupState.groupId
+		});
 	}
 	render() {
 		const {searchName, userResults, searched} = this.state;
