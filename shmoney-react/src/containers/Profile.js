@@ -173,13 +173,17 @@ class Profile extends React.Component {
     };
   }
   componentDidMount() {
+    const authUser = this.props.authUser;
     const groupState = this.props.groupState;
+    let isGroupOwner = false;
+    if(authUser.uid === groupState.ownerUid) isGroupOwner = true;
+
     this.setState({
       groupMembers: groupState.groupMembers,
       groupName: groupState.groupName,
       isNotGroupMember: groupState.isNotGroupMember,
       isGroupMember: groupState.isGroupMember,
-      isGroupOwner: groupState.isGroupOwner
+      isGroupOwner
     });
   }
   render() {
