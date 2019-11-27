@@ -114,6 +114,7 @@ const Paid = () => {
     </Alert>
   );
 };
+
 const MemberTable = () => {
   return (
     <Table striped bordered hover responsive>

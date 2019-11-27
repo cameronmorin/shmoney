@@ -166,6 +166,43 @@ const DeleteGroup = ({firebase, onChangeGroupId}) => {
 	);
 };
 
+const LeaveGroup = ({ firebase, onChangeGroupId, currentUser }) => {
+	const [show, setShow] = useState(false);
+
+	const handleClose = () => setShow(false);
+	const handleShow = () => setShow(true);
+
+	const leaveGroup = () => {
+		firebase.removeUserFromGroup(currentUser.uid, onChangeGroupId).then(() => {
+			window.location.reload();
+		});
+	};
+
+	return (
+		<>
+			<Button variant="secondary" onClick={handleShow}>
+				Leave Group
+			</Button>
+
+			<Modal show={show} onHide={handleClose} animation={false}>
+				<Modal.Header closeButton>
+					<Modal.Title>Are you sure?</Modal.Title>
+				</Modal.Header>
+				<Modal.Body>
+					<Button variant="secondary" onClick={leaveGroup}>
+						Confirm
+					</Button>
+				</Modal.Body>
+				<Modal.Footer>
+					<Button variant="secondary" onClick={handleClose}>
+						Close
+					</Button>
+				</Modal.Footer>
+			</Modal>
+		</>
+	);
+};
+
 const ViewLedger = () => {
 	const [show, setShow] = useState(false);
 
@@ -337,25 +374,16 @@ class MyGroupBase extends React.Component {
 		};
 	}
 	componentDidMount() {
-		const authUser = this.props.authUser;
-		this.props.firebase.getHouseGroupData().then(result => {
-				let groupOwnerUid = result.owner_uid
-				this.setState({
-						groupMembers: result.group_members,
-						groupName: result.group_name,
-						isGroupMember: true,
-						groupId: result.group_id,
-						ownerId: groupOwnerUid
-				});
-				
-				if(groupOwnerUid === authUser.uid) {
-						this.setState({isGroupOwner:true});
-				}
-		}).catch(error => {
-			console.log(error.message);
-			//If there is an error then they aren't part of a group
-			//So they should see the Create Group button.
-			this.setState({isNotGroupMember:true});
+		const groupState = this.props.groupState;
+
+		this.setState({
+			groupMembers: groupState.groupMembers,
+			groupName: groupState.groupName,
+			isNotGroupMember: groupState.isNotGroupMember,
+			isGroupMember: groupState.isGroupMember,
+			isGroupOwner: groupState.isGroupOwner,
+			groupId: groupState.groupId,
+			ownerId: groupState.ownerId,
 		});
 	}
 	render() {
@@ -383,19 +411,22 @@ class MyGroupBase extends React.Component {
 							/>
 						</Figure>
 						{this.state.isGroupMember && <AddBill />}
-						{this.state.isGroupOwner && <AddMembers firebase={this.props.firebase} />}
-						{this.state.isGroupOwner && 
-						<DeleteMembers 
-						onChangeGroupId={this.state.groupId} 
-						onChangeGroupMembers={this.state.groupMembers} 
-						onChangeOwnerId={this.state.ownerId} 
-						firebase={this.props.firebase} />}
+						{this.state.isGroupOwner && <AddMembers 
+							firebase={this.props.firebase} />}
+						{this.state.isGroupOwner && <DeleteMembers 
+							onChangeGroupId={this.state.groupId} 
+							onChangeGroupMembers={this.state.groupMembers} 
+							onChangeOwnerId={this.state.ownerId} 
+							firebase={this.props.firebase} />}
 						{this.state.isGroupMember && <ViewLedger />}
 						{this.state.isNotGroupMember && <CreateGroupModal />}
-						{this.state.isGroupOwner && 
-						<DeleteGroup 
-						firebase={this.props.firebase}
-						onChangeGroupId={this.state.groupId} />}
+						{this.state.isGroupOwner && <DeleteGroup 
+							firebase={this.props.firebase}
+							onChangeGroupId={this.state.groupId} />}
+						{this.state.isGroupMember && !this.state.isGroupOwner && <LeaveGroup 
+							firebase={this.props.firebase}
+							onChangeGroupId={this.state.groupId}
+							currentUser={this.props.authUser} />}
 					</div>
 
 					<div className="right-grid">
