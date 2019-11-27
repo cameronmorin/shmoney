@@ -1,5 +1,4 @@
-import React from 'react';
-import { useState } from 'react';
+import React, { useState, useInput } from 'react';
 import NavBar from '../components/NavBar';
 import { Card, Table, Accordion, Figure, Button, Modal, InputGroup, FormControl } from 'react-bootstrap';
 import avatar from '../images/avatar.svg';
@@ -11,38 +10,42 @@ import UploadImage from '../components/UploadImage';
 
 
 
-const EditName = () => {
+const EditName = ({firebase, onChangeGroupId, onChangeGroupMembers, onChangeIsGroupOwner}) => {
   const [show, setShow] = useState(false);
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
+  const [name, setName] = useState('');
+
+  const onSubmit = event => {
+    event.preventDefault();
+
+    firebase.updateUsername(name, onChangeGroupId, onChangeGroupMembers, onChangeIsGroupOwner).then(() => {
+      window.location.reload();
+    });
+  }
+
   return (
     <>
       <Button variant="secondary" onClick={handleShow}>
-        Edit Name
-            </Button>
+        Update Username
+      </Button>
 
       <Modal show={show} onHide={handleClose} animation={false}>
         <Modal.Header closeButton>
-          <Modal.Title>Edit Name</Modal.Title>
+          <Modal.Title>Update Username</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <InputGroup className="mb-3">
-            <FormControl
-              placeholder="Name"
-              aria-label="Edit Name"
-              aria-describedby="basic-addon2"
-            />
-            <InputGroup.Append>
-              <Button variant="outline-secondary">Submit</Button>
-            </InputGroup.Append>
-          </InputGroup>
+          <form onSubmit={onSubmit}>
+            <input type="text" value={name} onChange={e => setName(e.target.value)} />
+            <Button type="submit" variant="secondary">Update</Button>
+          </form>
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleClose}>
             Close
-                     </Button>
+          </Button>
         </Modal.Footer>
       </Modal>
     </>
@@ -167,6 +170,7 @@ class Profile extends React.Component {
     this.state = {
       groupMembers: null,
       groupName: null,
+      groupId: null,
       isNotGroupMember: false,
       isGroupMember: false,
       isGroupOwner: false
@@ -181,6 +185,7 @@ class Profile extends React.Component {
     this.setState({
       groupMembers: groupState.groupMembers,
       groupName: groupState.groupName,
+      groupId: groupState.groupId,
       isNotGroupMember: groupState.isNotGroupMember,
       isGroupMember: groupState.isGroupMember,
       isGroupOwner
@@ -211,7 +216,11 @@ class Profile extends React.Component {
               />
             </Figure>
             <UpdatePhoto />
-            <EditName />
+            <EditName 
+              firebase={this.props.firebase} 
+              onChangeGroupId={this.state.groupId} 
+              onChangeGroupMembers={this.state.groupMembers}
+              onChangeIsGroupOwner={this.state.isGroupOwner} />
           </div>
 
           <div className="right-grid">

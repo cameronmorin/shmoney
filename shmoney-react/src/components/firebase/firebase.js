@@ -35,6 +35,35 @@ class Firebase {
 
 	passwordUpdate = password => this.auth.currentUser.updatePassword(password);
 
+	updateUsername = async (newUsername, groupId, groupMembers, isGroupOwner) => {
+		//Update user's username authUser then database
+		this.auth.currentUser.updateProfile({displayName: newUsername});
+		return this.user(this.auth.currentUser.uid).set({
+			username: newUsername
+		},{merge:true}).then(() => {
+			if(groupId) {
+				//Update group username
+				for(let item in groupMembers) {
+					if(groupMembers[item].uid === this.auth.currentUser.uid) {
+						groupMembers[item].username = newUsername;
+					}
+				}
+				if(isGroupOwner) {
+					return this.house_groups().doc(groupId).set({
+						group_members: groupMembers,
+						owner_username: newUsername
+					},{merge:true});
+				} else {
+					return this.house_groups().doc(groupId).set({
+						group_members: groupMembers
+					},{merge:true});
+				}
+			}
+		}).catch(error => {
+			console.log(error.message);
+		});
+	}
+
 	signInWithGoogle = () => this.auth.signInWithPopup(this.googleProvider);
 
 	signOut = () => this.auth.signOut();
