@@ -16,12 +16,10 @@ class DashboardBase extends React.Component {
     }
   }
   componentDidMount() {
-    this.props.firebase.getHouseGroupData().then(result => {
-      this.setState({
-        groupName: result.group_name
-      });
-    }).catch(error => {
-      console.log(error);
+    const groupState = this.props.groupState;
+
+    this.setState({
+      groupName: groupState.groupName
     });
   }
   render() {

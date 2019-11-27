@@ -173,27 +173,14 @@ class Profile extends React.Component {
     };
   }
   componentDidMount() {
-    const authUser = this.props.authUser;
-    this.props.firebase.getHouseGroupData().then(result => {
-      console.log("Result:", result);
-      let groupOwnerUid = result.owner_uid
-      this.setState({
-        groupMembers: result.group_members,
-        groupName: result.group_name,
-        isGroupMember: true
-      });
-
-      if (groupOwnerUid === authUser.uid) {
-        console.log("Owner")
-        this.setState({ isGroupOwner: true });
-      }
-    })
-      .catch(error => {
-        console.log(error.message);
-        //If there is an error then they aren't part of a group
-        //So they should see the Create Group button.
-        this.setState({ isNotGroupMember: true });
-      });
+    const groupState = this.props.groupState;
+    this.setState({
+      groupMembers: groupState.groupMembers,
+      groupName: groupState.groupName,
+      isNotGroupMember: groupState.isNotGroupMember,
+      isGroupMember: groupState.isGroupMember,
+      isGroupOwner: groupState.isGroupOwner
+    });
   }
   render() {
     const authUser = this.props.authUser;
