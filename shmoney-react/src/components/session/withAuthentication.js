@@ -17,6 +17,7 @@ const withAuthentication = Component => {
 				isGroupMember: false,
 				groupId: null,
 				ownerUid: null,
+				onGroupListUpdate: null,
 			};
       }
       componentDidMount() {
@@ -25,12 +26,13 @@ const withAuthentication = Component => {
 					this.props.firebase.getHouseGroupData().then(result => {
 							let groupOwnerUid = result.owner_uid;
 							this.setState({
-                        authUser,
+								authUser,
 								groupMembers: result.group_members,
 								groupName: result.group_name,
 								isGroupMember: true,
 								groupId: result.group_id,
 								ownerUid: groupOwnerUid,
+								onGroupListUpdate: this.updateGroupMembers,
 							});
 						}).catch(error => {
 							console.log(error.message);
@@ -54,6 +56,13 @@ const withAuthentication = Component => {
       }
       componentWillUnmount() {
          this.listener();
+      }
+      updateGroupMembers = groupMembers => {
+         console.log(groupMembers);
+         this.setState({groupMembers});
+      }
+      componentDidUpdate = () => {
+         console.log(this.state);
       }
       render() {
          return(

@@ -61,7 +61,8 @@ class SearchUsersBase extends React.Component {
 					
 					this.props.firebase.getHouseGroupData().then(result => {
 						const groupMembers = result.group_members;
-						this.props.onAddUser(groupMembers);
+						this.props.onGroupListUpdate(groupMembers);
+						this.props.onLocalGroupListUpdate(groupMembers);
 					});
 				}
 			}
