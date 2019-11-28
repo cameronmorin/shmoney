@@ -22,7 +22,6 @@ const withAuthentication = Component => {
       }
       componentDidMount() {
          this.listener = this.props.firebase.auth.onAuthStateChanged(authUser => {
-            console.log(authUser);
             if(authUser) {
                this.setState({authUser});
 					this.props.firebase.getHouseGroupData().then(result => {
