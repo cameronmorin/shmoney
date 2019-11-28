@@ -397,7 +397,7 @@ class MyGroupBase extends React.Component {
 				groupId: groupState.groupId,
 				ownerUid: groupState.ownerUid,
 			});
-		}, 500);
+		}, 700);
 
 		//Ensures that data shows up instantly if the groupState is
 		//already updated
