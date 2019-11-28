@@ -108,7 +108,7 @@ class Firebase {
 				uid: this.auth.currentUser.uid,
 				username: this.auth.currentUser.displayName,
 			}],
-			group_members_uids: this.auth.currentUser.uid
+			group_members_uids: []
 		},{merge:true});
 		return this.user(this.auth.currentUser.uid).set({
 			group_id: doc.id,
