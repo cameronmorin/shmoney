@@ -12,7 +12,7 @@ import { withFirebase } from '../components/firebase';
 import CreateGroup from '../components/CreateGroup';
 import SearchUsers from '../components/SearchUsers';
 
-const AddMembers = () => {
+const AddMembers = ({onAddUser}) => {
 	const [show, setShow] = useState(false);
 
 	const handleClose = () => setShow(false);
@@ -29,7 +29,7 @@ const AddMembers = () => {
 					<Modal.Title>Add Members</Modal.Title>
 				</Modal.Header>
 				<Modal.Body>
-					<SearchUsers />
+					<SearchUsers onAddUser={onAddUser} />
 				</Modal.Body>
 				<Modal.Footer>
 					<Button variant="secondary" onClick={handleClose}>
@@ -80,7 +80,7 @@ const AddBill = () => {
 	);
 };
 
-const DeleteMembers = ({onChangeGroupId, onChangeGroupMembers, onChangeOwnerUid, firebase}) => {
+const DeleteMembers = ({onChangeGroupId, onChangeGroupMembers, onChangeOwnerUid, firebase, onAddUser}) => {
 	const [show, setShow] = useState(false);
 
 	const handleClose = () => setShow(false);
@@ -88,7 +88,10 @@ const DeleteMembers = ({onChangeGroupId, onChangeGroupMembers, onChangeOwnerUid,
 
 	const removeUser = uid => {
 		firebase.removeUserFromGroup(uid, onChangeGroupId).then(() => {
-			window.location.reload();
+			firebase.getHouseGroupData().then(result => {
+				const groupMembers = result.group_members;
+				onAddUser(groupMembers);
+			});
 		}).catch(error => {
 			console.log(error);
 		})
@@ -389,6 +392,10 @@ class MyGroupBase extends React.Component {
 			ownerUid: groupState.ownerUid,
 		});
 	}
+	updateMembersList = groupMembers => {
+		//Update the group members list with updated list
+		this.setState({groupMembers});
+	}
 	render() {
 		const authUser = this.props.authUser;
 
@@ -415,12 +422,13 @@ class MyGroupBase extends React.Component {
 						</Figure>
 						{this.state.isGroupMember && <AddBill />}
 						{this.state.isGroupOwner && <AddMembers 
-							firebase={this.props.firebase} />}
+							onAddUser={this.updateMembersList} />}
 						{this.state.isGroupOwner && <DeleteMembers 
 							onChangeGroupId={this.state.groupId} 
 							onChangeGroupMembers={this.state.groupMembers} 
 							onChangeOwnerUid={this.state.ownerUid} 
-							firebase={this.props.firebase} />}
+							firebase={this.props.firebase}
+							onAddUser={this.updateMembersList} />}
 						{this.state.isGroupMember && <ViewLedger />}
 						{this.state.isNotGroupMember && <CreateGroupModal />}
 						{this.state.isGroupOwner && <DeleteGroup 

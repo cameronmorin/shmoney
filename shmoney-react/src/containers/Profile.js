@@ -8,8 +8,6 @@ import { withFirebase } from '../components/firebase';
 
 import UploadImage from '../components/UploadImage';
 
-
-
 const EditName = ({firebase, onChangeGroupId, onChangeGroupMembers, onChangeIsGroupOwner}) => {
   const [show, setShow] = useState(false);
 
