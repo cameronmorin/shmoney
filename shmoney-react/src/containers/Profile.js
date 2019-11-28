@@ -175,6 +175,25 @@ class Profile extends React.Component {
     };
   }
   componentDidMount() {
+    //Ensures that if the groupState is delayed in being updated 
+		//then it will be updated properly
+		setTimeout(() => { //Start Timer
+			const authUser = this.props.authUser;
+			const groupState = this.props.groupState;
+			let isGroupOwner = false;
+			if(authUser.uid === groupState.ownerUid) isGroupOwner = true; 
+
+			this.setState({
+				groupMembers: groupState.groupMembers,
+				groupName: groupState.groupName,
+				isNotGroupMember: groupState.isNotGroupMember,
+				isGroupMember: groupState.isGroupMember,
+				isGroupOwner,
+				groupId: groupState.groupId,
+				ownerUid: groupState.ownerUid,
+			});
+    }, 700);
+    
     const authUser = this.props.authUser;
     const groupState = this.props.groupState;
     let isGroupOwner = false;
