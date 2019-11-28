@@ -58,11 +58,7 @@ const withAuthentication = Component => {
          this.listener();
       }
       updateGroupMembers = groupMembers => {
-         console.log(groupMembers);
          this.setState({groupMembers});
-      }
-      componentDidUpdate = () => {
-         console.log(this.state);
       }
       render() {
          return(
