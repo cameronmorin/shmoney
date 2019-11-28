@@ -24,11 +24,10 @@ const withAuthentication = Component => {
          this.listener = this.props.firebase.auth.onAuthStateChanged(authUser => {
             console.log(authUser);
             if(authUser) {
-               console.log(authUser);
+               this.setState({authUser});
 					this.props.firebase.getHouseGroupData().then(result => {
 							let groupOwnerUid = result.owner_uid;
 							this.setState({
-								authUser,
 								groupMembers: result.group_members,
 								groupName: result.group_name,
 								isGroupMember: true,
@@ -40,10 +39,7 @@ const withAuthentication = Component => {
 							console.log(error.message);
 							//If there is an error then they aren't part of a group
 							//So they should see the Create Group button.
-							this.setState({ 
-                        authUser, 
-                        isNotGroupMember: true 
-                     });
+							this.setState({isNotGroupMember: true });
 						});
 				} else {
                this.setState({
@@ -64,9 +60,6 @@ const withAuthentication = Component => {
       }
       updateGroupMembers = groupMembers => {
          this.setState({groupMembers});
-      }
-      componentDidUpdate() {
-         console.log(this.state);
       }
       render() {
          return(
