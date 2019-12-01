@@ -91,7 +91,7 @@ class DashboardBase extends React.Component {
           </div>
           <div className = "right-grid">
             <h1> Your Group: {this.state.groupName && this.state.groupName}</h1>
-            <MyAccord/>
+            <MyAccord onChangeCurrentBill={this.state.currentBill}/>
           </div>
 
         </div>
@@ -99,7 +99,9 @@ class DashboardBase extends React.Component {
   };
 };
 
-const MyAccord = () => {
+const MyAccord = ({onChangeCurrentBill}) => {
+  if(!onChangeCurrentBill) return <></>;
+
   return (
     <>
       <Accordion defaultActiveKey = "0">
@@ -111,7 +113,7 @@ const MyAccord = () => {
             </Card.Header>
             <Accordion.Collapse eventKey="0">
                 <Card.Body >
-                    <MemberTable/>
+                    <MemberTable onChangeCurrentBill={onChangeCurrentBill}/>
                 </Card.Body>
             </Accordion.Collapse>
         </Card>
@@ -189,7 +191,10 @@ const Paid = () => {
   );
 };
 
-const MemberTable = () => {
+const MemberTable = ({onChangeCurrentBill}) => {
+  console.log(onChangeCurrentBill);
+  const billMembers = onChangeCurrentBill.group_members;
+
   return (
     <Table striped bordered hover responsive>
       <thead>
@@ -200,38 +205,15 @@ const MemberTable = () => {
           <th>Payment Status</th>
         </tr>
       </thead>
-      <tbody>
-        <tr>
-          <td>1</td>
-          <td>Cameron</td>
-          <td>800</td>
-          <td><Paid/></td>
+      {billMembers && <tbody>{billMembers.map((item, key) => (
+        <tr key={key}>
+          <td>{key + 1}</td>
+          <td>{item.username}</td>
+          <td>{item.amount_owed}</td>
+          <td>{item.paid_status ? <Paid /> : <NotPaid />}</td>
         </tr>
-        <tr>
-          <td>2</td>
-          <td>Chris</td>
-          <td>800</td>
-          <td><NotPaid/></td>
-        </tr>
-        <tr>
-          <td>3</td>
-          <td>Cole</td>
-          <td>400</td>
-          <td><NotPaid/></td>
-        </tr>
-        <tr>
-          <td>3</td>
-          <td>Alex</td>
-          <td>400</td>
-          <td><NotPaid/></td>
-        </tr>
-        <tr>
-          <td>4</td>
-          <td>Kelton</td>
-          <td>650</td>
-          <td><Paid/></td>
-        </tr>
-      </tbody>
+      ))
+      }</tbody>}
     </Table>
   );
 };
