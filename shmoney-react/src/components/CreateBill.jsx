@@ -50,7 +50,7 @@ class CreateBillBase extends Component {
 
 		//Set split for each group member and default paid status to false
 		for(let item in groupMembers) {
-			groupMembers[item].rent_amount = split;
+			groupMembers[item].amount_owed = split;
 			groupMembers[item].paid_status = false;
 		}
 
