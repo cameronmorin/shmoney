@@ -11,6 +11,7 @@ import { withFirebase } from '../components/firebase';
 
 import CreateGroup from '../components/CreateGroup';
 import SearchUsers from '../components/SearchUsers';
+import CreateBill from '../components/CreateBill';
 
 const AddMembers = ({onGroupListUpdate, onLocalGroupListUpdate}) => {
 	const [show, setShow] = useState(false);
@@ -59,7 +60,8 @@ const AddBill = () => {
 					<Modal.Title>Add Bills</Modal.Title>
 				</Modal.Header>
 				<Modal.Body>
-					<InputGroup className="mb-3">
+					<CreateBill />
+					{/* <InputGroup className="mb-3">
 						<InputGroup.Prepend>
 							<InputGroup.Text>$</InputGroup.Text>
 						</InputGroup.Prepend>
@@ -67,7 +69,7 @@ const AddBill = () => {
 						<InputGroup.Append>
 							<InputGroup.Text>.00</InputGroup.Text>
 						</InputGroup.Append>
-					</InputGroup>
+					</InputGroup> */}
 				</Modal.Body>
 				<Modal.Footer>
 					<Button variant="secondary" onClick={handleClose}>
