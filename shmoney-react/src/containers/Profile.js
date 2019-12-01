@@ -1,5 +1,4 @@
-import React from 'react';
-import { useState } from 'react';
+import React, { useState, useInput } from 'react';
 import NavBar from '../components/NavBar';
 import { Card, Table, Accordion, Figure, Button, Modal, InputGroup, FormControl } from 'react-bootstrap';
 import avatar from '../images/avatar.svg';
@@ -8,39 +7,44 @@ import { withAuthorization, withAuthUserContext } from '../components/session';
 import { withFirebase } from '../components/firebase';
 
 import UploadImage from '../components/UploadImage';
+import CreateBill from '../components/CreateBill';
 
-
-
-const EditName = () => {
+const EditName = ({firebase, onChangeGroupId, onChangeGroupMembers, onChangeIsGroupOwner}) => {
   const [show, setShow] = useState(false);
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
+  const [name, setName] = useState('');
+
+  const onSubmit = event => {
+    event.preventDefault();
+
+    firebase.updateUsername(name, onChangeGroupId, onChangeGroupMembers, onChangeIsGroupOwner).then(() => {
+      window.location.reload();
+    });
+  }
+
   return (
     <>
-      <Button variant="secondary" onClick={handleShow}>Edit Name</Button>
+      <Button variant="secondary" onClick={handleShow}>
+        Update Username
+      </Button>
 
       <Modal show={show} onHide={handleClose} animation={false}>
         <Modal.Header closeButton>
-          <Modal.Title>Edit Name</Modal.Title>
+          <Modal.Title>Update Username</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <InputGroup className="mb-3">
-            <FormControl
-              placeholder="Name"
-              aria-label="Edit Name"
-              aria-describedby="basic-addon2"
-            />
-            <InputGroup.Append>
-              <Button variant="outline-secondary">Submit</Button>
-            </InputGroup.Append>
-          </InputGroup>
+          <form onSubmit={onSubmit}>
+            <input type="text" value={name} onChange={e => setName(e.target.value)} />
+            <Button type="submit" variant="secondary">Update</Button>
+          </form>
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleClose}>
             Close
-                     </Button>
+          </Button>
         </Modal.Footer>
       </Modal>
     </>
@@ -165,6 +169,7 @@ class Profile extends React.Component {
     this.state = {
       groupMembers: null,
       groupName: null,
+      groupId: null,
       isNotGroupMember: false,
       isGroupMember: false,
       isGroupOwner: false
@@ -172,26 +177,48 @@ class Profile extends React.Component {
   }
   componentDidMount() {
     const authUser = this.props.authUser;
-    this.props.firebase.getHouseGroupData().then(result => {
-      console.log("Result:", result);
-      let groupOwnerUid = result.owner_uid
-      this.setState({
-        groupMembers: result.group_members,
-        groupName: result.group_name,
-        isGroupMember: true
-      });
+    const groupState = this.props.groupState;
+    //Ensures that if the groupState is delayed in being updated 
+    //then it will be updated properly
+    if(!groupState.groupName) {
+      setTimeout(() => { //Start Timer
+        const authUser = this.props.authUser;
+        const groupState = this.props.groupState;
+        const isGroupOwner = authUser.uid === groupState.ownerUid;
 
-      if (groupOwnerUid === authUser.uid) {
-        console.log("Owner")
-        this.setState({ isGroupOwner: true });
-      }
-    })
-      .catch(error => {
-        console.log(error.message);
-        //If there is an error then they aren't part of a group
-        //So they should see the Create Group button.
-        this.setState({ isNotGroupMember: true });
+        this.setState({
+          groupMembers: groupState.groupMembers,
+          groupName: groupState.groupName,
+          isNotGroupMember: groupState.isNotGroupMember,
+          isGroupMember: groupState.isGroupMember,
+          isGroupOwner,
+          groupId: groupState.groupId,
+          ownerUid: groupState.ownerUid,
+        });
+      }, 700);
+    } else {
+      const isGroupOwner = authUser.uid === groupState.ownerUid;
+
+      this.setState({
+        groupMembers: groupState.groupMembers,
+        groupName: groupState.groupName,
+        groupId: groupState.groupId,
+        isNotGroupMember: groupState.isNotGroupMember,
+        isGroupMember: groupState.isGroupMember,
+        isGroupOwner
       });
+    }
+  }
+  testClick = () => {
+    const date = new Date();
+    const dueDate = `${('0' + (date.getMonth() + 1)).slice(-2)}/${('0' + date.getDate()).slice(-2)}/${date.getFullYear()}-${('0' + date.getHours()).slice(-2)}:${('0' + date.getMinutes()).slice(-2)}:${('0' + date.getSeconds()).slice(-2)}`;
+    const epoch = `${Math.floor(date.getTime()/1000)}`;
+    const rentTotal = 870.73;
+    console.log(dueDate);
+    console.log(epoch);
+    this.props.firebase.createBill(this.state.groupId, this.state.groupMembers, dueDate, epoch, rentTotal).then().catch(error => {
+      console.log(error.message);
+    });
   }
   render() {
     const authUser = this.props.authUser;
@@ -217,14 +244,20 @@ class Profile extends React.Component {
                 src={authUser.photoURL ? authUser.photoURL : avatar}
               />
             </Figure>
+            {/* <button onClick={this.testClick}>Test</button> */}
             <UpdatePhoto />
-            <EditName />
+            <EditName 
+              firebase={this.props.firebase} 
+              onChangeGroupId={this.state.groupId} 
+              onChangeGroupMembers={this.state.groupMembers}
+              onChangeIsGroupOwner={this.state.isGroupOwner} />
           </div>
-
+            
           <div className="right-grid">
             <RightAccordion onChangeGroupMembers={this.state.groupMembers} />
           </div>
         </div>
+        {/* <CreateBill /> */}
       </div>
     );
   }
