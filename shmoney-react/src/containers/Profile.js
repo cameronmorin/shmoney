@@ -7,6 +7,7 @@ import { withAuthorization, withAuthUserContext } from '../components/session';
 import { withFirebase } from '../components/firebase';
 
 import UploadImage from '../components/UploadImage';
+import CreateBill from '../components/CreateBill';
 
 const EditName = ({firebase, onChangeGroupId, onChangeGroupMembers, onChangeIsGroupOwner}) => {
   const [show, setShow] = useState(false);
@@ -175,37 +176,48 @@ class Profile extends React.Component {
     };
   }
   componentDidMount() {
-    //Ensures that if the groupState is delayed in being updated 
-		//then it will be updated properly
-		setTimeout(() => { //Start Timer
-			const authUser = this.props.authUser;
-			const groupState = this.props.groupState;
-			let isGroupOwner = false;
-			if(authUser.uid === groupState.ownerUid) isGroupOwner = true; 
-
-			this.setState({
-				groupMembers: groupState.groupMembers,
-				groupName: groupState.groupName,
-				isNotGroupMember: groupState.isNotGroupMember,
-				isGroupMember: groupState.isGroupMember,
-				isGroupOwner,
-				groupId: groupState.groupId,
-				ownerUid: groupState.ownerUid,
-			});
-    }, 700);
-    
     const authUser = this.props.authUser;
     const groupState = this.props.groupState;
-    let isGroupOwner = false;
-    if(authUser.uid === groupState.ownerUid) isGroupOwner = true;
+    //Ensures that if the groupState is delayed in being updated 
+    //then it will be updated properly
+    if(!groupState.groupName) {
+      setTimeout(() => { //Start Timer
+        const authUser = this.props.authUser;
+        const groupState = this.props.groupState;
+        const isGroupOwner = authUser.uid === groupState.ownerUid;
 
-    this.setState({
-      groupMembers: groupState.groupMembers,
-      groupName: groupState.groupName,
-      groupId: groupState.groupId,
-      isNotGroupMember: groupState.isNotGroupMember,
-      isGroupMember: groupState.isGroupMember,
-      isGroupOwner
+        this.setState({
+          groupMembers: groupState.groupMembers,
+          groupName: groupState.groupName,
+          isNotGroupMember: groupState.isNotGroupMember,
+          isGroupMember: groupState.isGroupMember,
+          isGroupOwner,
+          groupId: groupState.groupId,
+          ownerUid: groupState.ownerUid,
+        });
+      }, 700);
+    } else {
+      const isGroupOwner = authUser.uid === groupState.ownerUid;
+
+      this.setState({
+        groupMembers: groupState.groupMembers,
+        groupName: groupState.groupName,
+        groupId: groupState.groupId,
+        isNotGroupMember: groupState.isNotGroupMember,
+        isGroupMember: groupState.isGroupMember,
+        isGroupOwner
+      });
+    }
+  }
+  testClick = () => {
+    const date = new Date();
+    const dueDate = `${('0' + (date.getMonth() + 1)).slice(-2)}/${('0' + date.getDate()).slice(-2)}/${date.getFullYear()}-${('0' + date.getHours()).slice(-2)}:${('0' + date.getMinutes()).slice(-2)}:${('0' + date.getSeconds()).slice(-2)}`;
+    const epoch = `${Math.floor(date.getTime()/1000)}`;
+    const rentTotal = 870.73;
+    console.log(dueDate);
+    console.log(epoch);
+    this.props.firebase.createBill(this.state.groupId, this.state.groupMembers, dueDate, epoch, rentTotal).then().catch(error => {
+      console.log(error.message);
     });
   }
   render() {
@@ -232,6 +244,7 @@ class Profile extends React.Component {
                 src={authUser.photoURL ? authUser.photoURL : avatar}
               />
             </Figure>
+            {/* <button onClick={this.testClick}>Test</button> */}
             <UpdatePhoto />
             <EditName 
               firebase={this.props.firebase} 
@@ -239,11 +252,12 @@ class Profile extends React.Component {
               onChangeGroupMembers={this.state.groupMembers}
               onChangeIsGroupOwner={this.state.isGroupOwner} />
           </div>
-
+            
           <div className="right-grid">
             <RightAccordion onChangeGroupMembers={this.state.groupMembers} />
           </div>
         </div>
+        {/* <CreateBill /> */}
       </div>
     );
   }

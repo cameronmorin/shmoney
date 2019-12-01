@@ -17,7 +17,10 @@ const withAuthentication = Component => {
 				isGroupMember: false,
 				groupId: null,
 				ownerUid: null,
-				onGroupListUpdate: null,
+            onGroupListUpdate: null,
+            previousRentTotal: null,
+            currentBillId: null,
+            bills: null
 			};
       }
       componentDidMount() {
@@ -32,8 +35,19 @@ const withAuthentication = Component => {
 								isGroupMember: true,
 								groupId: result.group_id,
 								ownerUid: groupOwnerUid,
-								onGroupListUpdate: this.updateGroupMembers,
-							});
+                        onGroupListUpdate: this.updateGroupMembers,
+                        previousRentTotal: result.previous_rent_total,
+                        currentBillId: result.current_bill_id
+                     });
+                     
+                     return this.props.firebase.getAllBills(this.state.groupId).then(snapshot => {
+                     	let bills = [];
+                     	snapshot.forEach(doc => {
+                     		bills.push(doc.data());
+                        });
+
+                        this.setState({bills});
+                     });
 						}).catch(error => {
 							console.log(error.message);
 							//If there is an error then they aren't part of a group
@@ -50,6 +64,7 @@ const withAuthentication = Component => {
                   isGroupOwner: false,
                   groupId: null,
                   ownerId: null,
+                  previousRentTotal: null
 				   });
             }
          }) 

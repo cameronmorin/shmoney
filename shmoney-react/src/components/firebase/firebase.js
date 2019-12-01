@@ -38,13 +38,9 @@ class Firebase {
 		this.auth.currentUser.updateProfile({
 			displayName: newUsername
 		});
-		return this.user(this.auth.currentUser.uid)
-			.set({
+		return this.user(this.auth.currentUser.uid).set({
 				username: newUsername,
-			}, {
-				merge: true
-			})
-			.then(() => {
+			},{merge: true}).then(() => {
 				if (groupId) {
 					//Update group username
 					for (let item in groupMembers) {
@@ -280,6 +276,12 @@ class Firebase {
 				current_bill_id: newBillDoc.id
 			},{merge:true});
 		})
+	}
+
+	getAllBills = async (groupId) => {
+		const groupDoc = this.house_groups().doc(groupId);
+
+		return groupDoc.collection('bills').get();
 	}
 
 	/* MERGE AUTH AND FIRESTORE API */
