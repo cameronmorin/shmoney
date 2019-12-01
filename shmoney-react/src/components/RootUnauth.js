@@ -9,7 +9,7 @@ export default class NoPath extends React.Component {
     return (
         
           <AuthUserContext.Consumer>
-            {authUser => authUser ? <Dashboard/> :
+            {context => context.state.authUser ? <Dashboard/> :
               <div className="page">
                 <div className = "UnAuth">
                   <div className="title-text">

@@ -6,7 +6,7 @@ const WelcomeMessage = () => {
 	return (
 		<div className="welcome-message">
 			<AuthUserContext.Consumer>
-				{authUser => authUser ? <h1>Welcome {authUser.displayName}</h1> : <h1></h1>}
+				{context => context.state.authUser ? <h1>Welcome {context.state.authUser.displayName}</h1> : null}
 			</AuthUserContext.Consumer>
 		</div>
 	)
