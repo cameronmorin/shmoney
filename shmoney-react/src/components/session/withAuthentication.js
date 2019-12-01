@@ -10,20 +10,74 @@ const withAuthentication = Component => {
          super(props)
 
          this.state = {
-            authUser: null
-         }
+				authUser: null,
+				groupMembers: null,
+				groupName: null,
+				isNotGroupMember: false,
+				isGroupMember: false,
+				groupId: null,
+				ownerUid: null,
+            onGroupListUpdate: null,
+            previousRentTotal: null,
+            currentBillId: null,
+            bills: null
+			};
       }
       componentDidMount() {
          this.listener = this.props.firebase.auth.onAuthStateChanged(authUser => {
-            authUser ? this.setState({ authUser }) : this.setState({ authUser: null })
-         })
+            if(authUser) {
+               this.setState({authUser});
+					this.props.firebase.getHouseGroupData().then(result => {
+							let groupOwnerUid = result.owner_uid;
+							this.setState({
+								groupMembers: result.group_members,
+								groupName: result.group_name,
+								isGroupMember: true,
+								groupId: result.group_id,
+								ownerUid: groupOwnerUid,
+                        onGroupListUpdate: this.updateGroupMembers,
+                        previousRentTotal: result.previous_rent_total,
+                        currentBillId: result.current_bill_id
+                     });
+                     
+                     return this.props.firebase.getAllBills(this.state.groupId).then(snapshot => {
+                     	let bills = [];
+                     	snapshot.forEach(doc => {
+                     		bills.push(doc.data());
+                        });
+
+                        this.setState({bills});
+                     });
+						}).catch(error => {
+							console.log(error.message);
+							//If there is an error then they aren't part of a group
+							//So they should see the Create Group button.
+							this.setState({isNotGroupMember: true });
+						});
+				} else {
+               this.setState({
+                  authUser: null,
+                  groupMembers: null,
+                  groupName: null,
+                  isNotGroupMember: false,
+                  isGroupMember: false,
+                  isGroupOwner: false,
+                  groupId: null,
+                  ownerId: null,
+                  previousRentTotal: null
+				   });
+            }
+         }) 
       }
       componentWillUnmount() {
          this.listener();
       }
+      updateGroupMembers = groupMembers => {
+         this.setState({groupMembers});
+      }
       render() {
          return(
-            <AuthUserContext.Provider value={this.state.authUser}>
+            <AuthUserContext.Provider value={{state: this.state}}>
                <Component {...this.props}/>
             </AuthUserContext.Provider>
          )

@@ -12,8 +12,12 @@ class SignInGoogleBase extends Component {
 	onSubmit = event => {
 		event.preventDefault();
 
+		const defaultPhotoUrl = 'https://firebasestorage.googleapis.com/v0/b/shmoney-617ec.appspot.com/o/profilePictures%2FDefault-Profile.png?alt=media&token=a16fcc18-d04c-43d4-a64c-7f676a089889';
+
 		this.props.firebase.signInWithGoogle().then(result => {
 			let authUser = result.user;
+			//Update authUser with default photoURL if they don't have one
+			authUser.updateProfile({ photoURL: authUser.photoURL ? authUser.photoURL : defaultPhotoUrl });
 			let isNewUser = result.additionalUserInfo.isNewUser;
 			//Check if new user before creating firestore document
 			if(isNewUser) {
@@ -21,7 +25,7 @@ class SignInGoogleBase extends Component {
 					username: authUser.displayName,
 					email: authUser.email,
 					uid: authUser.uid,
-					photoURL: authUser.photoURL,
+					photoURL: authUser.photoURL ? authUser.photoURL : defaultPhotoUrl,
 					group_id: null
 				},{ merge:true })
 			} else {

@@ -26,44 +26,56 @@ class SearchUsersBase extends React.Component {
 		event.preventDefault();
 
 		const {searchName} = this.state;
-		const authUser = this.props.authUser;
 
 		this.props.firebase.searchUser(searchName).then(querySnapshot => {
+			let queryResults = [];
 			let userResults = [];
 			querySnapshot.forEach(doc => {
-				userResults.push(doc.data());
-			})
+				queryResults.push(doc.data());
+			});
 
 			//Remove users who are already in a group from the results list
-			const length = userResults.length
+			const length = queryResults.length
 			for(let i = 0; i < length; i++) {
-				if(userResults[i].group_id !== null || userResults[i].uid === authUser.uid) {
-					userResults.splice(i, 1);
+				if(queryResults[i].group_id === null) {
+					userResults.push(queryResults[i]);
+					userResults[i].added = false;
 				}
 			}
 
-			this.setState({userResults});
+			return this.setState({userResults});
 		}).catch(error => {
 			console.log(error);
 		})
 	}
-	addUser = (username, uid) => {
-		let {groupId} = this.state;
+	addUser = (uid) => {
+		let {groupId, userResults} = this.state;
 		console.log(`Adding User ${uid}`);
-		this.props.firebase.addUserToHouseGroup(uid, username, groupId).then(() => {
+		this.props.firebase.addUserToHouseGroup(uid, groupId).then(() => {
 			//TODO Find a way to refresh search so add button no longer appears after adding them
 			//to the group. Also good place to implement group reqest.
-			window.location.reload();
+			for(let i = 0; i < userResults.length; i++) {
+				if(userResults[i].uid === uid) {
+					userResults[i].added = true;
+					this.setState({userResults});
+					
+					this.props.firebase.getHouseGroupData().then(result => {
+						const groupMembers = result.group_members;
+						this.props.onGroupListUpdate(groupMembers);
+						this.props.onLocalGroupListUpdate(groupMembers);
+					});
+				}
+			}
 		}).catch(error => {
 			console.log(error);
 		});
 	}
 	componentDidMount() {
-		//Populate state variables
-		this.props.firebase.getHouseGroupData().then(result => {
-			let groupId = result.group_id;
-			this.setState({groupId});
-		})
+		const groupState = this.props.groupState;
+
+		this.setState({
+			groupId: groupState.groupId
+		});
 	}
 	render() {
 		const {searchName, userResults, searched} = this.state;
@@ -94,11 +106,15 @@ class SearchUsersBase extends React.Component {
 								height={64}
 								className="mr-3"
 								src={item.photoURL ? item.photoURL : avatar}
-								alt="No Image"
+								alt="None"
 							/>
 							<Media.Body>
 								<h5>{item.username}</h5>
-								<Button variant="secondary" onClick={() => this.addUser(item.username, item.uid)}>Add</Button>
+								<p>{item.email}</p>
+								{/* TODO Style button placement/spacing */}
+								<Button variant="success" disabled={item.added} onClick={() => this.addUser(item.uid)}>
+									{item.added ? <>Added</> : <>Add</>}
+								</Button>
 							</Media.Body>
 						</Media>
 						</li>
