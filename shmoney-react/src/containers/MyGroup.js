@@ -380,13 +380,28 @@ class MyGroupBase extends React.Component {
 		};
 	}
 	componentDidMount() {
+		const authUser = this.props.authUser;
+		const groupState = this.props.groupState;
 		//Ensures that if the groupState is delayed in being updated 
 		//then it will be updated properly
-		setTimeout(() => { //Start Timer
-			const authUser = this.props.authUser;
-			const groupState = this.props.groupState;
-			let isGroupOwner = false;
-			if(authUser.uid === groupState.ownerUid) isGroupOwner = true; 
+		if(!groupState.groupName) {
+			setTimeout(() => { //Start Timer
+				const authUser = this.props.authUser;
+				const groupState = this.props.groupState;
+				const isGroupOwner = authUser.uid === groupState.ownerUid;
+
+				this.setState({
+					groupMembers: groupState.groupMembers,
+					groupName: groupState.groupName,
+					isNotGroupMember: groupState.isNotGroupMember,
+					isGroupMember: groupState.isGroupMember,
+					isGroupOwner,
+					groupId: groupState.groupId,
+					ownerUid: groupState.ownerUid,
+				});
+			}, 700);	
+		} else {
+			const isGroupOwner = authUser.uid === groupState.ownerUid;
 
 			this.setState({
 				groupMembers: groupState.groupMembers,
@@ -397,24 +412,7 @@ class MyGroupBase extends React.Component {
 				groupId: groupState.groupId,
 				ownerUid: groupState.ownerUid,
 			});
-		}, 700);
-
-		//Ensures that data shows up instantly if the groupState is
-		//already updated
-		const authUser = this.props.authUser;
-		const groupState = this.props.groupState;
-		let isGroupOwner = false;
-		if (authUser.uid === groupState.ownerUid) isGroupOwner = true;
-
-		this.setState({
-			groupMembers: groupState.groupMembers,
-			groupName: groupState.groupName,
-			isNotGroupMember: groupState.isNotGroupMember,
-			isGroupMember: groupState.isGroupMember,
-			isGroupOwner,
-			groupId: groupState.groupId,
-			ownerUid: groupState.ownerUid,
-		});
+		}
 	}
 	updateMembersList = groupMembers => {
 		//Update the group members list with updated list
