@@ -73,9 +73,6 @@ const AddBill = () => {
 				</Modal.Body>
 				<Modal.Footer>
 					<Button variant="secondary" onClick={handleClose}>
-						Add
-					</Button>
-					<Button variant="secondary" onClick={handleClose}>
 						Close
 					</Button>
 				</Modal.Footer>
@@ -401,7 +398,7 @@ class MyGroupBase extends React.Component {
 					groupId: groupState.groupId,
 					ownerUid: groupState.ownerUid,
 				});
-			}, 700);	
+			}, 800);	
 		} else {
 			const isGroupOwner = authUser.uid === groupState.ownerUid;
 

@@ -16,7 +16,8 @@ class CreateBillBase extends Component {
 			groupId: null,
 			groupMembers: null,
 			rentTotal: 0,
-			split: 0
+			split: 0,
+			created: false
 		}
 	}
 	componentDidMount() {
@@ -56,6 +57,7 @@ class CreateBillBase extends Component {
 
 		this.props.firebase.createBill(groupId, groupMembers, dueDate, rentTotal).then(() => {
 			console.log("Bill Created");
+			this.setState({created: true});
 		}).catch(error => {
 			console.log(error.message);
 		})
@@ -110,7 +112,12 @@ class CreateBillBase extends Component {
 					</ul>}
 				</div>
 				<div className="universal-padding-3">
-					<Button variant="secondary" onClick={this.onClick}>Create</Button>
+					<Button 
+						variant="secondary" 
+						onClick={this.onClick} 
+						disabled={this.state.created}>
+						{this.state.created ? <>Created</> : <>Create</>}
+					</Button>
 				</div>
 			</div>
 		);
