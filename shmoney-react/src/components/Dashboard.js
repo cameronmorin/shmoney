@@ -12,6 +12,7 @@ class DashboardBase extends React.Component {
     super(props);
 
     this.state = {
+      authUser: null,
       groupMembers: null,
       groupName: null,
       isNotGroupMember: false,
@@ -38,6 +39,7 @@ class DashboardBase extends React.Component {
         this.updateCurrentBill(groupState.currentBillId, groupState.bills);
 
         this.setState({
+          authUser,
           groupMembers: groupState.groupMembers,
           groupName: groupState.groupName,
           isNotGroupMember: groupState.isNotGroupMember,
@@ -55,6 +57,7 @@ class DashboardBase extends React.Component {
       this.updateCurrentBill(groupState.currentBillId, groupState.bills);
 
       this.setState({
+        authUser,
         groupMembers: groupState.groupMembers,
         groupName: groupState.groupName,
         isNotGroupMember: groupState.isNotGroupMember,
@@ -80,7 +83,10 @@ class DashboardBase extends React.Component {
         <div className = "main-grid" >
           <div className = "left-grid" >
               
-              <BillCard/>
+              <BillCard
+                onChangeCurrentBill={this.state.currentBill}
+                onChangeAuthUser={this.state.authUser}
+              />
               <Pie/>
           </div>
           <div className = "right-grid">
@@ -115,7 +121,24 @@ const MyAccord = () => {
   );
 };
 
-const BillCard = () => {
+const BillCard = ({onChangeCurrentBill, onChangeAuthUser}) => {
+  //Only show card once the state has updated and if a current bill exists
+  if(!onChangeCurrentBill || !onChangeAuthUser) return <></>;
+
+  const billMembers = onChangeCurrentBill.group_members;
+  const dueDate = onChangeCurrentBill.due_date;
+  console.log(billMembers);
+
+  let amountDue = null;
+  let paidStatus = false;
+
+  for(let item in billMembers) {
+    if(billMembers[item].uid === onChangeAuthUser.uid) {
+      amountDue = billMembers[item].amount_owed;
+      paidStatus = billMembers[item].paid_status;
+    }
+  }
+  
   return (
     <>
       <Card bg="light"  text="dark">
@@ -123,11 +146,11 @@ const BillCard = () => {
             Current Bill
         </Card.Header>
         <Card.Body>
-          <Card.Title>Due: November 31, 2019</Card.Title>
+          <Card.Title>Due: {dueDate.toDate().toLocaleDateString()}</Card.Title>
           <Card.Text>
-            Amount: $400
+            Amount: ${amountDue}
           </Card.Text>
-          <NotPaid/>
+          {paidStatus ? <Paid /> : <NotPaid />}
         </Card.Body>
       </Card>
       <br />
