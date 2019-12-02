@@ -313,7 +313,7 @@ const PaymentsTable = () => {
 	);
 };
 
-const CurrentBillsTable = () => {
+const CurrentBillsTableOwner = () => {
 	const [show, setShow] = useState(false);
 	const handleShow = () => setShow(true);
 	const handleClose = () => setShow(false);
@@ -334,17 +334,17 @@ const CurrentBillsTable = () => {
 				<thead>
 					<tr>
 						<th>#</th>
-						<th>House Name</th>
+						<th>Member Name</th>
 						<th>Due Date</th>
 						<th>Bill Amount</th>
-						<th>On Time?</th>
+						<th>Paid/Not Paid</th>
 						<th>Verify Button</th>
 					</tr>
 				</thead>
 				<tbody>
 					<tr>
 						<td>1</td>
-						<td>Cool House</td>
+						<td>Chris</td>
 						<td>11/11/19</td>
 						<td>$1000</td>
 						<td>Yes/No</td>
@@ -352,7 +352,7 @@ const CurrentBillsTable = () => {
 					</tr>
 					<tr>
 						<td>2</td>
-						<td>Cool House</td>
+						<td>Cameron</td>
 						<td>12/11/19</td>
 						<td>$1000</td>
 						<td>Yes/No</td>
@@ -360,7 +360,7 @@ const CurrentBillsTable = () => {
 					</tr>
 					<tr>
 						<td>3</td>
-						<td>Cool House</td>
+						<td>Kelton</td>
 						<td>1/11/20</td>
 						<td>$1000</td>
 						<td>Yes/No</td>
@@ -389,6 +389,155 @@ const CurrentBillsTable = () => {
 		</>
 	);
 };
+
+const CurrentBillsTable = () => {
+	const [show, setShow] = useState(false);
+	const handleShow = () => setShow(true);
+	const handleClose = () => setShow(false);
+
+	const [value, setValue] = useState([1, 2]);
+
+	/*
+	 * The second argument that will be passed to
+	 * `handleChange` from `ToggleButtonGroup`
+	 * is the SyntheticEvent object, but we are
+	 * not using it in this example so we will omit it.
+	 */
+	const handleChange = val => setValue(val);
+
+	return (
+		<>
+			<Table striped bordered hover>
+				<thead>
+					<tr>
+						<th>#</th>
+						<th>Member Name</th>
+						<th>Due Date</th>
+						<th>Bill Amount</th>
+						<th>Paid/Not Paid</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>1</td>
+						<td>notowner</td>
+						<td>11/11/19</td>
+						<td>$1000</td>
+						<td>Yes/No</td>
+					</tr>
+				</tbody>
+			</Table>
+
+			<Modal show={show} onHide={handleClose} animation={false}>
+				<Modal.Header closeButton>
+					<Modal.Title>Verify Payment</Modal.Title>
+				</Modal.Header>
+				<Modal.Body>
+					<p>Paid on time?</p>
+					<ToggleButtonGroup type="checkbox" value={value} onChange={handleChange}>
+						<ToggleButton value={1}>Yes</ToggleButton>
+						<ToggleButton value={2}>No</ToggleButton>
+					</ToggleButtonGroup>
+				</Modal.Body>
+				<Modal.Footer>
+					<Button variant="secondary" onClick={handleClose}>
+						Confirm
+					</Button>
+				</Modal.Footer>
+			</Modal>
+		</>
+	);
+};
+const CurrentBillsAccordion = () => {
+	return (
+		<>
+	<Accordion defaultActiveKey="0">
+				<Card>
+					<Card.Header>
+						<Accordion.Toggle as={Button} variant="link" eventKey="0">
+							<h1>Bill due 11/11/2019</h1>
+						</Accordion.Toggle>
+					</Card.Header>
+					<Accordion.Collapse eventKey="0">
+						<Card.Body>
+							<CurrentBillsTable as={Button}/>
+						</Card.Body>
+					</Accordion.Collapse>
+				</Card>
+				<Card>
+					<Card.Header>
+						<Accordion.Toggle as={Button} variant="link" eventKey="1">
+							<h1>Bill Due 12/11/2019</h1>
+						</Accordion.Toggle>
+					</Card.Header>
+					<Accordion.Collapse eventKey="1">
+						<Card.Body>
+								<CurrentBillsTable as={Button} />
+						</Card.Body>
+					</Accordion.Collapse>
+				</Card>
+				<Card>
+					<Card.Header>
+						<Accordion.Toggle as={Button} variant="link" eventKey="2">
+							<h1>Bill Due 01/11/2020</h1>
+						</Accordion.Toggle>
+					</Card.Header>
+					<Accordion.Collapse eventKey="2">
+						<Card.Body>
+								<CurrentBillsTable as={Button} />
+						</Card.Body>
+					</Accordion.Collapse>
+				</Card>
+	</Accordion>
+	</>
+	);
+};
+
+const CurrentBillsAccordionOwner = () => {
+	return (
+		<>
+	<Accordion defaultActiveKey="0">
+				<Card>
+					<Card.Header>
+						<Accordion.Toggle as={Button} variant="link" eventKey="0">
+							<h1>Bills due 11/11/2019</h1>
+						</Accordion.Toggle>
+					</Card.Header>
+					<Accordion.Collapse eventKey="0">
+						<Card.Body>
+							<CurrentBillsTableOwner as={Button}/>
+						</Card.Body>
+					</Accordion.Collapse>
+				</Card>
+				<Card>
+					<Card.Header>
+						<Accordion.Toggle as={Button} variant="link" eventKey="1">
+							<h1>Bills Due 12/11/2019</h1>
+						</Accordion.Toggle>
+					</Card.Header>
+					<Accordion.Collapse eventKey="1">
+						<Card.Body>
+								<CurrentBillsTableOwner as={Button} />
+						</Card.Body>
+					</Accordion.Collapse>
+				</Card>
+				<Card>
+					<Card.Header>
+						<Accordion.Toggle as={Button} variant="link" eventKey="2">
+							<h1>Bills Due 01/11/2020</h1>
+						</Accordion.Toggle>
+					</Card.Header>
+					<Accordion.Collapse eventKey="2">
+						<Card.Body>
+								<CurrentBillsTableOwner as={Button} />
+						</Card.Body>
+					</Accordion.Collapse>
+				</Card>
+	</Accordion>
+	</>
+	);
+};
+
 
 const TransferOwnership = ({ groupMembers, currentOwnerID, firebase, groupId }) => {
 	const [show, setShow] = useState(false);
@@ -438,6 +587,54 @@ const TransferOwnership = ({ groupMembers, currentOwnerID, firebase, groupId }) 
 		</>
 	);
 }
+const RightInfoOwner = ({ onChangeGroupMembers, onChangeCurrentBill }) => {
+	return (
+		<>
+			<Accordion defaultActiveKey="0">
+				<Card>
+					<Card.Header>
+						<Accordion.Toggle as={Button} variant="link" eventKey="0">
+							<h1>Group Members</h1>
+						</Accordion.Toggle>
+					</Card.Header>
+					<Accordion.Collapse eventKey="0">
+						<Card.Body>
+							{onChangeGroupMembers &&
+								onChangeGroupMembers.map((item, key) => <p key={key}>{item.username}</p>)}
+						</Card.Body>
+					</Accordion.Collapse>
+				</Card>
+				<Card>
+					<Card.Header>
+						<Accordion.Toggle as={Button} variant="link" eventKey="1">
+							<h1>View Current Bills</h1>
+						</Accordion.Toggle>
+					</Card.Header>
+					<Accordion.Collapse eventKey="1">
+						<Card.Body>
+							<div className="curBills">
+								<CurrentBillsAccordionOwner as={Button} />
+							</div>
+						</Card.Body>
+					</Accordion.Collapse>
+				</Card>
+				<Card>
+					<Card.Header>
+						<Accordion.Toggle as={Button} variant="link" eventKey="2">
+							<h1>Payment History</h1>
+						</Accordion.Toggle>
+					</Card.Header>
+					<Accordion.Collapse eventKey="2">
+						<Card.Body>
+							<PaymentsTable />
+						</Card.Body>
+					</Accordion.Collapse>
+				</Card>
+			</Accordion>
+		</>
+	);
+};
+
 const RightInfo = ({ onChangeGroupMembers, onChangeCurrentBill }) => {
 	return (
 		<>
@@ -464,7 +661,7 @@ const RightInfo = ({ onChangeGroupMembers, onChangeCurrentBill }) => {
 					<Accordion.Collapse eventKey="1">
 						<Card.Body>
 							<div className="curBills">
-								<CurrentBillsTable as={Button} />
+								<CurrentBillsAccordion as={Button} />
 							</div>
 						</Card.Body>
 					</Accordion.Collapse>
@@ -604,9 +801,15 @@ class MyGroupBase extends React.Component {
 					
 
 					<div className="right-grid">
-						<RightInfo 
+						{this.state.isGroupMember && !this.state.isGroupOwner && <RightInfo 
+													onChangeGroupMembers={this.state.groupMembers}
+													onChangeCurrentBill={this.state.currentBill}/>}
+						{this.state.isGroupMember && this.state.isGroupOwner && <RightInfoOwner 
+													onChangeGroupMembers={this.state.groupMembers}
+													onChangeCurrentBill={this.state.currentBill}/>}
+						{/* <RightInfo 
 							onChangeGroupMembers={this.state.groupMembers}
-							onChangeCurrentBill={this.state.currentBill} />
+							onChangeCurrentBill={this.state.currentBill} /> */}
 					</div>
 				</div>
 			</div>
