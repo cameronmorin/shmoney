@@ -12,7 +12,7 @@
     padding: 0 15px;
 }
 
-.get-started-button {
+.sign-up-button {
     grid-column: 2;
     display: flex;
     justify-content: flex-start;
@@ -51,7 +51,7 @@
 
 .subject-text-right {
     margin-left: 60%;
-    padding-top: 140px;
+    padding-top: 225px;
     font-size: 40px;
     font-weight: bold;
 }
@@ -63,7 +63,7 @@
 
 .subject-text {
     margin-left: 15%;
-    padding-top: 70px;
+    padding-top: 125px; 
     font-size: 40px;
     font-weight: bold;
 }
@@ -72,4 +72,23 @@
     margin-left: 15%;
     font-size: 22px;
     padding-bottom: 20px;
+}
+
+.image {
+    max-width: 700px;
+    height: auto;
+    box-shadow: 2px 2px 5px 1px #1d1c1c;
+}
+
+.insert-image-2{
+    float: right;
+    padding-top: 50px;
+    margin-right: 15%;
+}
+
+.insert-image-3{
+    float: left;
+    padding-top: 50px;
+    margin-left: 15%;
+    padding-bottom: 50px;
 }
