@@ -40,7 +40,7 @@ class Firebase {
 		});
 		return this.user(this.auth.currentUser.uid).set({
 				username: newUsername,
-			},{merge: true}).then(() => {
+			},{merge:true}).then(() => {
 				if (groupId) {
 					//Update group username
 					for (let item in groupMembers) {
@@ -54,17 +54,13 @@ class Firebase {
 							.set({
 								group_members: groupMembers,
 								owner_username: newUsername,
-							}, {
-								merge: true
-							});
+							},{merge: true});
 					} else {
 						return this.house_groups()
 							.doc(groupId)
 							.set({
 								group_members: groupMembers,
-							}, {
-								merge: true
-							});
+							},{merge:true});
 					}
 				}
 			})
@@ -148,8 +144,6 @@ class Firebase {
 	 *	@return empty callback or error that can be caught
 	 */
 	addUserToHouseGroup = async (uid, groupId) => {
-		//Two Reads and Two Writes per call
-		//Check if user is already in group so they are not added to multiple
 		return this.user(uid)
 			.get()
 			.then(doc => {
@@ -168,7 +162,7 @@ class Firebase {
 						//Add group id to user's document
 						return this.user(uid).set({
 							group_id: groupId,
-						}, {merge:true});
+						},{merge:true});
 					});
 				}
 			});
