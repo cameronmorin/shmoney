@@ -20,7 +20,8 @@ const withAuthentication = Component => {
             onGroupListUpdate: null,
             previousRentTotal: null,
             currentBillId: null,
-            bills: null
+            bills: null,
+            loaded: false
 			};
       }
       componentDidMount() {
@@ -46,13 +47,13 @@ const withAuthentication = Component => {
                      		bills.push(doc.data());
                         });
 
-                        this.setState({bills});
+                        this.setState({bills, loaded: true});
                      });
 						}).catch(error => {
 							console.log(error.message);
 							//If there is an error then they aren't part of a group
 							//So they should see the Create Group button.
-							this.setState({isNotGroupMember: true });
+							this.setState({isNotGroupMember: true, loaded: true });
 						});
 				} else {
                this.setState({
@@ -64,7 +65,8 @@ const withAuthentication = Component => {
                   isGroupOwner: false,
                   groupId: null,
                   ownerId: null,
-                  previousRentTotal: null
+                  previousRentTotal: null,
+                  loaded: true
 				   });
             }
          }) 

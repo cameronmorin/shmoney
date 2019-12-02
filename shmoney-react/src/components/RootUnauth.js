@@ -11,7 +11,7 @@ export default class NoPath extends React.Component {
     return (
         
           <AuthUserContext.Consumer>
-            {context => context.state.authUser ? <Dashboard/> :
+            {context => context.state.authUser ? <Dashboard/> : context.state.loaded ?
               <div className="page">
                 <div className = "top-box">
                   <div className="subject-text top">
@@ -67,6 +67,7 @@ export default class NoPath extends React.Component {
                   </div>
                 </div>
               </div>
+              : <></>
             }
           </AuthUserContext.Consumer>
         

@@ -9,9 +9,7 @@ class App extends React.Component {
   onClickHome = async event => {
     event.preventDefault();
     
-    if (window.location.pathname !== "/") {
-      this.props.history.push("/");
-    }
+    this.props.history.push("/");
   }
 
   onClickLogout = async event => {
