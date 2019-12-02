@@ -90,9 +90,7 @@ class DashboardBase extends React.Component {
               onChangeCurrentBill={this.state.currentBill} 
               onChangeAuthUser={this.state.authUser}
               onChangeIsGroupOwner={this.state.isGroupOwner} />}
-              
-              <OutStandingBills/>
-              <br/>
+
               <Pie/>
           </div>
           <div className = "right-grid">
@@ -149,15 +147,11 @@ const BillCard = ({onChangeCurrentBill, onChangeAuthUser, onChangeIsGroupOwner})
       paidStatus = billMembers[item].paid_status;
     }
   }
-
-  let cardStyle = '';
-  onChangeIsGroupOwner ? (cardStyle = 'card h-25 bg-light text-dark') : (cardStyle = 'card h-50 bg-light text-dark');
   
   return (
-    <>
-      <div className ={cardStyle} > 
-        <Card.Header >
-            Current Bill
+      <Card className="mb-4" text="dark">
+        <Card.Header>
+          Current Bill
         </Card.Header>
         <Card.Body>
           <Card.Title>Due: {dueDate.toDate().toLocaleDateString()}</Card.Title>
@@ -166,9 +160,7 @@ const BillCard = ({onChangeCurrentBill, onChangeAuthUser, onChangeIsGroupOwner})
           </Card.Text>
           {paidStatus ? <Paid /> : <NotPaid />}
         </Card.Body>
-      </div>
-      <br />
-    </>
+      </Card>
   );
 };
 
@@ -225,7 +217,6 @@ const CheckIcon = () => {
 
 const Pie = () => {
 	return (
-		<>
       <Card className = "bg-light" text="light" >
         <Card.Title className = "bg-dark" text="light">
           On Time History
@@ -234,8 +225,6 @@ const Pie = () => {
           <PieChart/>
         </Card.Body>
       </Card>
-      <br />  
-		</>
 	);
 };
 

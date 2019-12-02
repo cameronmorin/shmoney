@@ -103,11 +103,10 @@ class CreateBillBase extends Component {
 						minDate={this.state.startDate}
 					/>
 				</div>
-				<div className="group-members-list">
-					{groupMembers && <ul>{groupMembers.map((item, key) => (
-						<li key={key}>
-							<p>{item.username}</p>
-							<p>{split}</p>
+				<div className="group-members-list my-1">
+					{groupMembers && <ul className="list-group" >{groupMembers.map((item, key) => (
+						<li className="list-group-item" key={key}>
+							<p style={{margin: "auto"}}>{item.username} : ${split}</p>
 						</li>
 						))}
 					</ul>}
