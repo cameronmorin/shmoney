@@ -278,10 +278,42 @@ class Firebase {
 		})
 	}
 
-	getAllBills = async (groupId) => {
+	/**
+	 * Gets all the bills within a group
+	 * @param groupId group id for document where bills are
+	 * @return snapshot of all documents in bills collection or error that can be caught
+	 */
+	getAllBills = async groupId => {
 		const groupDoc = this.house_groups().doc(groupId);
 
 		return groupDoc.collection('bills').get();
+	};
+
+	/**
+	 * Create a new bill
+	 * @param uid user id of user that paid
+	 * @param groupName name of group
+	 * @param groupId document id for group
+	 * @param groupMembers array of group members
+	 * @param paymentAmount amount that was paid by the user
+	 * @param billId id for the bill
+	 * @return empty callback or error that can be caught
+	 */
+	markPaid = async (uid, groupName, groupId, groupMembers, paymentAmount, billId) => {
+		const newPaymentDoc = this.user(uid).collection('payment_history').doc();
+		const groupDoc = this.house_groups().doc(groupId);
+
+		return newPaymentDoc.set({
+			group_name: groupName,
+			owner_uid: uid,
+			payment_time: new Date(),
+			payment_amount: paymentAmount,
+			doc_id: newPaymentDoc.id
+		},{merge:true}).then(() => {
+			groupDoc.collection('bills').doc(billId).set({
+				group_members: groupMembers
+			},{merge:true})
+		})
 	}
 
 	/* MERGE AUTH AND FIRESTORE API */
