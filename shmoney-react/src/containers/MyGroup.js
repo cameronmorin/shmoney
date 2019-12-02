@@ -111,11 +111,11 @@ const DeleteMembers = ({onChangeGroupId, onChangeGroupMembers, onChangeOwnerUid,
 				</Modal.Header>
 				<Modal.Body>
 					<InputGroup className="mb-3">
-						<ul>
+						<ul className="list-group">
 							{onChangeGroupMembers.map((index, key) => (
 								<div key={key}>
-								{index.uid !== onChangeOwnerUid && <li key={key}>
-									{index.username}
+								{index.uid !== onChangeOwnerUid && <li className="list-group-item" style={{display: "flex", justifyContent: "space-between"}} key={key}>
+									<span className="align-items-center mx-2" style={{margin: "auto"}}>{index.username}</span>
 									<Button variant="outline-secondary" onClick={() => removeUser(index.uid)}>Delete</Button>
 								</li>}
 								</div>
