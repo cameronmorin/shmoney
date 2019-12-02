@@ -13,21 +13,12 @@ class UploadImageBase extends Component {
 			imageSelectFailure: false,
 			errorMessage: '',
 			url: '',
-			authUser: null,
 			error: null
 		}
-		this.handleChange = this.handleChange.bind(this);
-		this.handleUpload = this.handleUpload.bind(this);
 	}
 	componentDidUpdate() {
 		const {url} = this.state;
 		if(url) window.location.reload();
-		console.log(url);
-	}
-	componentDidMount() {
-		const authUser = this.props.authUser;
-		this.setState({authUser: authUser,})
-		console.log(authUser.photoURL)
 	}
 	handleChange = event => {
 		const maxAllowedSize = 1 * 1024 * 1024;
@@ -42,18 +33,19 @@ class UploadImageBase extends Component {
 		}
 	}
 	handleUpload = () => {
-		let authUser = this.state.authUser;
+		let authUser = this.props.authUser;
 		const {image} = this.state;
 
 		this.props.firebase.storageRef.child(`profilePictures/${authUser.uid}`).put(image).then(() => {
 			this.props.firebase.storageRef.child(`profilePictures/${authUser.uid}`).getDownloadURL().then(url => {
-				this.setState({url: url});
 				//Update the authUser's photo url
-				authUser.updateProfile({photoURL: url})
+				authUser.updateProfile({photoURL: url});
 				//Update photoURL in user's firestore document
 				return this.props.firebase.user(authUser.uid).set({
 					photoURL: url
-				},{merge:true});
+				},{merge:true}).then(() => {
+					this.setState({url: url});
+				});
 			}).catch(error => {
 				this.setState({error});
 			});
