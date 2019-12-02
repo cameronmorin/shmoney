@@ -744,6 +744,8 @@ class MyGroupBase extends React.Component {
 	componentDidMount() {
 		const authUser = this.props.authUser;
 		const groupState = this.props.groupState;
+
+		this.setState({isNotGroupMember: groupState.isNotGroupMember});
 		//Ensures that if the groupState is delayed in being updated
 		//then it will be updated properly
 		if (!groupState.groupName) {
