@@ -11,6 +11,7 @@ import { withFirebase } from '../components/firebase';
 
 import CreateGroup from '../components/CreateGroup';
 import SearchUsers from '../components/SearchUsers';
+import CreateBill from '../components/CreateBill';
 
 const AddMembers = ({onGroupListUpdate, onLocalGroupListUpdate}) => {
 	const [show, setShow] = useState(false);
@@ -59,7 +60,8 @@ const AddBill = () => {
 					<Modal.Title>Add Bills</Modal.Title>
 				</Modal.Header>
 				<Modal.Body>
-					<InputGroup className="mb-3">
+					<CreateBill />
+					{/* <InputGroup className="mb-3">
 						<InputGroup.Prepend>
 							<InputGroup.Text>$</InputGroup.Text>
 						</InputGroup.Prepend>
@@ -67,12 +69,9 @@ const AddBill = () => {
 						<InputGroup.Append>
 							<InputGroup.Text>.00</InputGroup.Text>
 						</InputGroup.Append>
-					</InputGroup>
+					</InputGroup> */}
 				</Modal.Body>
 				<Modal.Footer>
-					<Button variant="secondary" onClick={handleClose}>
-						Add
-					</Button>
 					<Button variant="secondary" onClick={handleClose}>
 						Close
 					</Button>
@@ -421,7 +420,7 @@ const TransferOwnership = () => {
 		</>
 	);
 }
-const RightInfo = ({ onChangeGroupMembers }) => {
+const RightInfo = ({ onChangeGroupMembers, onChangeCurrentBill }) => {
 	return (
 		<>
 			<Accordion defaultActiveKey="0">
@@ -480,7 +479,8 @@ class MyGroupBase extends React.Component {
 			isGroupMember: false,
 			isGroupOwner: false,
 			groupId: null,
-			ownerUid: null
+			ownerUid: null,
+			currentBill: null,
 		};
 	}
 	componentDidMount() {
@@ -493,6 +493,8 @@ class MyGroupBase extends React.Component {
 				const authUser = this.props.authUser;
 				const groupState = this.props.groupState;
 				const isGroupOwner = authUser.uid === groupState.ownerUid;
+				
+				this.updateCurrentBill(groupState.currentBillId, groupState.bills);
 
 				this.setState({
 					groupMembers: groupState.groupMembers,
@@ -503,9 +505,11 @@ class MyGroupBase extends React.Component {
 					groupId: groupState.groupId,
 					ownerUid: groupState.ownerUid,
 				});
-			}, 700);	
+			}, 800);	
 		} else {
 			const isGroupOwner = authUser.uid === groupState.ownerUid;
+
+			this.updateCurrentBill(groupState.currentBillId, groupState.bills);
 
 			this.setState({
 				groupMembers: groupState.groupMembers,
@@ -518,6 +522,13 @@ class MyGroupBase extends React.Component {
 			});
 		}
 	}
+	updateCurrentBill = (currentBillId, bills) => {
+    for(let item in bills) {
+      if(bills[item].doc_id === currentBillId) {
+        this.setState({currentBill: bills[item]});
+      }
+    }
+  }
 	updateMembersList = groupMembers => {
 		//Update the group members list with updated list
 		this.setState({groupMembers});
@@ -569,7 +580,9 @@ class MyGroupBase extends React.Component {
 					
 
 					<div className="right-grid">
-						<RightInfo onChangeGroupMembers={this.state.groupMembers} />
+						<RightInfo 
+							onChangeGroupMembers={this.state.groupMembers}
+							onChangeCurrentBill={this.state.currentBill} />
 					</div>
 				</div>
 			</div>

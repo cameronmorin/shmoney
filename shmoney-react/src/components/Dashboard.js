@@ -15,6 +15,7 @@ class DashboardBase extends React.Component {
     super(props);
 
     this.state = {
+      authUser: null,
       groupMembers: null,
       groupName: null,
       isNotGroupMember: false,
@@ -41,6 +42,7 @@ class DashboardBase extends React.Component {
         this.updateCurrentBill(groupState.currentBillId, groupState.bills);
 
         this.setState({
+          authUser,
           groupMembers: groupState.groupMembers,
           groupName: groupState.groupName,
           isNotGroupMember: groupState.isNotGroupMember,
@@ -58,6 +60,7 @@ class DashboardBase extends React.Component {
       this.updateCurrentBill(groupState.currentBillId, groupState.bills);
 
       this.setState({
+        authUser,
         groupMembers: groupState.groupMembers,
         groupName: groupState.groupName,
         isNotGroupMember: groupState.isNotGroupMember,
@@ -74,14 +77,19 @@ class DashboardBase extends React.Component {
     for(let item in bills) {
       if(bills[item].doc_id === currentBillId) {
         this.setState({currentBill: bills[item]});
-        console.log(bills[item])
       }
     }
   }
   render() {
+    const {isGroupOwner, isGroupMember} = this.state;
+
     return (
         <div className = "main-grid" >
           <div className = "left-grid" >
+              {isGroupOwner && <BillCard 
+              onChangeCurrentBill={this.state.currentBill} 
+              onChangeAuthUser={this.state.authUser}
+              onChangeIsGroupOwner={this.state.isGroupOwner} />}
               
               <OutStandingBills/>
               <br/>
@@ -89,7 +97,11 @@ class DashboardBase extends React.Component {
           </div>
           <div className = "right-grid">
             <h1> Your Group: {this.state.groupName && this.state.groupName}</h1>
-              <BillCard/>             
+            {isGroupMember && !isGroupOwner && <BillCard 
+              onChangeCurrentBill={this.state.currentBill} 
+              onChangeAuthUser={this.state.authUser}
+              onChangeIsGroupOwner={this.state.isGroupOwner} />}
+            {isGroupOwner && <MyAccord onChangeCurrentBill={this.state.currentBill} />}       
           </div>
 
         </div>
@@ -97,7 +109,9 @@ class DashboardBase extends React.Component {
   };
 };
 
-const MyAccord = () => {
+const MyAccord = ({onChangeCurrentBill}) => {
+  if(!onChangeCurrentBill) return <h3 className="center">No Bills Yet</h3>;
+
   return (
     <>
       <Accordion defaultActiveKey = "0">
@@ -109,7 +123,7 @@ const MyAccord = () => {
             </Card.Header>
             <Accordion.Collapse eventKey="0">
                 <Card.Body >
-                    <MemberTable/>
+                    <MemberTable onChangeCurrentBill={onChangeCurrentBill}/>
                 </Card.Body>
             </Accordion.Collapse>
         </Card>
@@ -119,19 +133,38 @@ const MyAccord = () => {
   );
 };
 
-const BillCard = () => {
+const BillCard = ({onChangeCurrentBill, onChangeAuthUser, onChangeIsGroupOwner}) => {
+  //Only show card once the state has updated and if a current bill exists
+  if(!onChangeCurrentBill || !onChangeAuthUser) return <></>;
+
+  const billMembers = onChangeCurrentBill.group_members;
+  const dueDate = onChangeCurrentBill.due_date;
+
+  let amountDue = null;
+  let paidStatus = false;
+
+  for(let item in billMembers) {
+    if(billMembers[item].uid === onChangeAuthUser.uid) {
+      amountDue = billMembers[item].amount_owed;
+      paidStatus = billMembers[item].paid_status;
+    }
+  }
+
+  let cardStyle = '';
+  onChangeIsGroupOwner ? (cardStyle = 'card h-25 bg-light text-dark') : (cardStyle = 'card h-50 bg-light text-dark');
+  
   return (
     <>
-      <div class = "card h-75 bg-light text-dark" > 
+      <div className ={cardStyle} > 
         <Card.Header >
             Current Bill
         </Card.Header>
         <Card.Body>
-          <Card.Title>Due: November 31, 2019</Card.Title>
+          <Card.Title>Due: {dueDate.toDate().toLocaleDateString()}</Card.Title>
           <Card.Text>
-            Amount: $400
+            Amount: ${amountDue}
           </Card.Text>
-          <NotPaid/>
+          {paidStatus ? <Paid /> : <NotPaid />}
         </Card.Body>
       </div>
       <br />
@@ -230,7 +263,9 @@ const Paid = () => {
   );
 };
 
-const MemberTable = () => {
+const MemberTable = ({onChangeCurrentBill}) => {
+  const billMembers = onChangeCurrentBill.group_members;
+
   return (
     <Table striped bordered hover responsive>
       <thead>
@@ -241,38 +276,15 @@ const MemberTable = () => {
           <th>Payment Status</th>
         </tr>
       </thead>
-      <tbody>
-        <tr>
-          <td>1</td>
-          <td>Cameron</td>
-          <td>800</td>
-          <td><Paid/></td>
+      {billMembers && <tbody>{billMembers.map((item, key) => (
+        <tr key={key}>
+          <td>{key + 1}</td>
+          <td>{item.username}</td>
+          <td>{item.amount_owed}</td>
+          <td>{item.paid_status ? <Paid /> : <NotPaid />}</td>
         </tr>
-        <tr>
-          <td>2</td>
-          <td>Chris</td>
-          <td>800</td>
-          <td><NotPaid/></td>
-        </tr>
-        <tr>
-          <td>3</td>
-          <td>Cole</td>
-          <td>400</td>
-          <td><NotPaid/></td>
-        </tr>
-        <tr>
-          <td>3</td>
-          <td>Alex</td>
-          <td>400</td>
-          <td><NotPaid/></td>
-        </tr>
-        <tr>
-          <td>4</td>
-          <td>Kelton</td>
-          <td>650</td>
-          <td><Paid/></td>
-        </tr>
-      </tbody>
+      ))
+      }</tbody>}
     </Table>
   );
 };

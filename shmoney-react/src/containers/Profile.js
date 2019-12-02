@@ -209,17 +209,6 @@ class Profile extends React.Component {
       });
     }
   }
-  testClick = () => {
-    const date = new Date();
-    const dueDate = `${('0' + (date.getMonth() + 1)).slice(-2)}/${('0' + date.getDate()).slice(-2)}/${date.getFullYear()}-${('0' + date.getHours()).slice(-2)}:${('0' + date.getMinutes()).slice(-2)}:${('0' + date.getSeconds()).slice(-2)}`;
-    const epoch = `${Math.floor(date.getTime()/1000)}`;
-    const rentTotal = 870.73;
-    console.log(dueDate);
-    console.log(epoch);
-    this.props.firebase.createBill(this.state.groupId, this.state.groupMembers, dueDate, epoch, rentTotal).then().catch(error => {
-      console.log(error.message);
-    });
-  }
   render() {
     const authUser = this.props.authUser;
 
@@ -244,7 +233,6 @@ class Profile extends React.Component {
                 src={authUser.photoURL ? authUser.photoURL : avatar}
               />
             </Figure>
-            {/* <button onClick={this.testClick}>Test</button> */}
             <UpdatePhoto />
             <EditName 
               firebase={this.props.firebase} 
@@ -257,7 +245,6 @@ class Profile extends React.Component {
             <RightAccordion onChangeGroupMembers={this.state.groupMembers} />
           </div>
         </div>
-        {/* <CreateBill /> */}
       </div>
     );
   }
