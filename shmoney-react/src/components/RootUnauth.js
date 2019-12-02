@@ -3,6 +3,7 @@ import '../styles/RootUnauth.css'
 import './Home.jsx';
 import { AuthUserContext } from './session'
 import Dashboard from '../components/Dashboard';
+import DashboardImage from '../images/DashboardImage.png';
 
 export default class NoPath extends React.Component {  
   render() {
@@ -31,9 +32,9 @@ export default class NoPath extends React.Component {
                         Sign In
                       </div> 
                     </div>
-                    <div className="get-started-button">
+                    <div className="sign-up-button">
                       <div className="button" onClick={this.props.onClickButton}>
-                        Get Started
+                        Sign Up
                       </div>
                     </div>
                   </div>
@@ -46,6 +47,10 @@ export default class NoPath extends React.Component {
                   to your group to divide up the rent <br></br>
                   amongst group members.
                 </div>
+                <div>
+                  <div className="insert-image-3">
+                    <img src={DashboardImage} className="image"/>
+                  </div>
                 <div className = "subject-text-right">
                   Information at a glance
                 </div>
@@ -53,6 +58,7 @@ export default class NoPath extends React.Component {
                   Access data regarding your group such as <br></br>
                   who has/hasn't paid rent, due dates, previous<br></br>
                   bill history, and other statistical data.
+                </div>
                 </div>
               </div>
             }
