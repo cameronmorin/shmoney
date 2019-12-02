@@ -538,7 +538,7 @@ const CurrentBillsAccordionOwner = () => {
 	);
 };
 
-const TransferOwnership = () => {
+
 const TransferOwnership = ({ groupMembers, currentOwnerID, firebase, groupId }) => {
 	const [show, setShow] = useState(false);
 
