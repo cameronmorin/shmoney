@@ -26,10 +26,6 @@
     justify-content: center;
 }
 
-/* .left-grid h1{
-    font-size: 30px;
-    padding-bottom: 5%;
-} */
 .left-grid .p{
     font-size:15px;
 }
@@ -39,13 +35,22 @@
     background: #c4c4c4;
     padding: 25px 25px;
 }
-/* .right-grid h1{
-    font-size: 40px;
-    color: black;
-} */
+
 
 .right-grid p{
     color: black;
+}
+
+.btn:hover {background:#35B27F;}
+
+.card {
+    text-align: center;
+}
+
+.check {
+    border-radius: 50%;
+    height: 30px;
+    float: right;
 }
 
 /* .right-grid .btn{

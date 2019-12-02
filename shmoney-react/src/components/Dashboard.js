@@ -1,6 +1,9 @@
 import React from 'react';
 import '../styles/RootStyle.css'
 import './Home.jsx';
+import RedX from '../images/red_x.svg';
+import GreenCheck from '../images/checked.svg';
+
 import { Table, Accordion, Card, Alert, AccordionCollapse } from 'react-bootstrap';
 import PieChart from './PieChart.js';
 import { compose } from 'recompose';
@@ -80,12 +83,13 @@ class DashboardBase extends React.Component {
         <div className = "main-grid" >
           <div className = "left-grid" >
               
-              <BillCard/>
+              <OutStandingBills/>
+              <br/>
               <Pie/>
           </div>
           <div className = "right-grid">
             <h1> Your Group: {this.state.groupName && this.state.groupName}</h1>
-            <MyAccord/>
+              <BillCard/>             
           </div>
 
         </div>
@@ -118,7 +122,7 @@ const MyAccord = () => {
 const BillCard = () => {
   return (
     <>
-      <Card bg="light"  text="dark">
+      <div class = "card h-75 bg-light text-dark" > 
         <Card.Header >
             Current Bill
         </Card.Header>
@@ -129,11 +133,63 @@ const BillCard = () => {
           </Card.Text>
           <NotPaid/>
         </Card.Body>
-      </Card>
+      </div>
       <br />
     </>
   );
 };
+
+const OutStandingBills = () => {
+  return(
+    <>
+    {/* 0here */}
+
+
+
+      <Card bg="light"  text="dark">
+        <Card.Header >
+            Outstanding Bills
+        </Card.Header>
+        <Card.Body>
+            
+          <Card.Title>
+            Past Bills 
+            <CheckIcon/>
+          </Card.Title>
+          {/* If good display only check CheckIcon. If outstanding bill display XIcon and then card Text displaying amount and date values for outstanding bill */}
+          <br/>
+
+          <Card.Title>
+            Future Bills
+            <XIcon/>
+          </Card.Title>
+
+          <Card.Text>
+            Amount: $600
+          </Card.Text>
+
+          <Card.Text>
+            Due: December 31, 2019
+          </Card.Text>
+
+        </Card.Body>
+      </Card>
+    </>
+  );
+};
+
+const XIcon = () => {
+  return(
+    <img className="check" src= {RedX} alt="RedX" />
+  );
+};
+
+const CheckIcon = () => {
+  return(
+    <img className="check" src= {GreenCheck} alt="Check" />
+  );
+};
+
 const Pie = () => {
 	return (
 		<>
@@ -149,6 +205,14 @@ const Pie = () => {
 		</>
 	);
 };
+
+// const NotPaidFlex = () => {
+//   return(
+//     <div role = "alert" class = "fade alert alert-danger show position-relative">
+//       Not Paid
+//     </div>
+//   );
+// };
 
 const NotPaid = () => {
   return(
