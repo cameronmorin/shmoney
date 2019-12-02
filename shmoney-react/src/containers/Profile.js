@@ -1,7 +1,7 @@
 import React, { useState, useInput } from 'react';
 import NavBar from '../components/NavBar';
 import { Card, Table, Accordion, Figure, Button, Modal, InputGroup, FormControl } from 'react-bootstrap';
-import avatar from '../images/avatar.svg';
+import avatar from '../images/avatar.png';
 import "../styles/Profile.css";
 import { withAuthorization, withAuthUserContext } from '../components/session';
 import { withFirebase } from '../components/firebase';
