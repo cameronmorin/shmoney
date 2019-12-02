@@ -94,13 +94,22 @@ class DashboardBase extends React.Component {
               <Pie/>
           </div>
           <div className = "right-grid">
+            {isGroupMember && 
+            <>
             <h1> Your Group: {this.state.groupName && this.state.groupName}</h1>
             {isGroupMember && !isGroupOwner && <BillCard 
               onChangeCurrentBill={this.state.currentBill} 
               onChangeAuthUser={this.state.authUser}
               onChangeIsGroupOwner={this.state.isGroupOwner} />}
             {isGroupOwner && <MyAccord onChangeCurrentBill={this.state.currentBill} />}       
-          </div>
+            </>
+            }
+            {!isGroupMember &&
+            <>
+              <h1 style={{display: "block"}}>Please Create or Join a Group!</h1>
+            </>
+            }
+            </div>
 
         </div>
     );
@@ -108,7 +117,7 @@ class DashboardBase extends React.Component {
 };
 
 const MyAccord = ({onChangeCurrentBill}) => {
-  if(!onChangeCurrentBill) return <h3 className="center">No Bills Yet</h3>;
+  if(!onChangeCurrentBill) return <h2 style={{display: "block", textAlign: "center"}}>No Bills Yet</h2>;
 
   return (
     <>
