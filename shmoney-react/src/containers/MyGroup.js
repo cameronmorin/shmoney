@@ -4,7 +4,7 @@ import { compose } from 'recompose';
 import NavBar from '../components/NavBar';
 import '../styles/MyGroup.css';
 
-import { ToggleButton, ToggleButtonGroup, Figure, Table, Accordion, Card, Button, Modal, InputGroup, FormControl, ListGroup } from 'react-bootstrap';
+import { ToggleButton, ToggleButtonGroup, Figure, Table, Accordion, Card, Button, Modal, InputGroup, FormControl, ListGroup, Media } from 'react-bootstrap';
 import { withAuthorization, withAuthUserContext } from '../components/session';
 
 import { withFirebase } from '../components/firebase';
@@ -381,11 +381,15 @@ const CurrentBillsTable = () => {
 	);
 };
 
-const TransferOwnership = () => {
+const TransferOwnership = ({ groupMembers, currentOwnerID, firebase, groupId }) => {
 	const [show, setShow] = useState(false);
 
 	const handleClose = () => setShow(false);
 	const handleShow = () => setShow(true);
+
+	var onlyMembers = groupMembers.filter(function notOwner(user) {
+		return user.uid !== currentOwnerID;
+	});
 
 	return (
 		<>
@@ -395,12 +399,26 @@ const TransferOwnership = () => {
 
 			<Modal show={show} onHide={handleClose} animation={false}>
 				<Modal.Header closeButton>
-					<Modal.Title>Create Group</Modal.Title>
+					<Modal.Title>Pick New Owner</Modal.Title>
 				</Modal.Header>
 				<Modal.Body>
-					<InputGroup className="mb-3">
-						Ownership transfer
-					</InputGroup>
+					{onlyMembers.length === 0 && <h5 style={{textAlign: "center", color: "gray"}}>No Group Member to Promote.</h5>}
+
+					{onlyMembers.length > 0 && <ul className="list-group">{onlyMembers.map((item, key) => (
+						<li className="list-group-item"key={key}>
+							<Media>
+								<Media.Body>
+									<h5>{item.username}</h5>
+									<Button variant="primary" onClick={() => firebase.updateGroupOwner(item.uid, item.username, groupId)
+																														.then(event => {window.location.reload();})
+																														.catch(err => {alert('Error : ' + err);window.location.reload();})}>
+										Make Owner
+									</Button>
+								</Media.Body>
+							</Media>
+						</li>
+					))
+					}</ul>}
 				</Modal.Body>
 				<Modal.Footer>
 					<Button variant="secondary" onClick={handleClose}>
@@ -471,7 +489,7 @@ class MyGroupBase extends React.Component {
 			isGroupOwner: false,
 			groupId: null,
 			ownerUid: null,
-			currentBill: null,
+			currentBill: null
 		};
 	}
 	componentDidMount() {
@@ -509,7 +527,7 @@ class MyGroupBase extends React.Component {
 				isGroupMember: groupState.isGroupMember,
 				isGroupOwner,
 				groupId: groupState.groupId,
-				ownerUid: groupState.ownerUid,
+				ownerUid: groupState.ownerUid
 			});
 		}
 	}
@@ -524,6 +542,7 @@ class MyGroupBase extends React.Component {
 		//Update the group members list with updated list
 		this.setState({groupMembers});
 	}
+
 	render() {
 		const authUser = this.props.authUser;
 		return (
@@ -560,6 +579,11 @@ class MyGroupBase extends React.Component {
 							onLocalGroupListUpdate={this.updateMembersList} />}
 						
 						{this.state.isNotGroupMember && <CreateGroupModal />}
+						{this.state.isGroupOwner && <TransferOwnership 
+							groupMembers={this.state.groupMembers}
+							currentOwnerID={this.state.ownerUid}
+							firebase={this.props.firebase} 
+							groupId={this.state.groupId} />}
 						{this.state.isGroupOwner && <DeleteGroup 
 							firebase={this.props.firebase}
 							onChangeGroupId={this.state.groupId} />}
