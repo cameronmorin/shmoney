@@ -74,7 +74,6 @@ class DashboardBase extends React.Component {
     for(let item in bills) {
       if(bills[item].doc_id === currentBillId) {
         this.setState({currentBill: bills[item]});
-        console.log(bills[item])
       }
     }
   }
@@ -87,7 +86,7 @@ class DashboardBase extends React.Component {
                 onChangeCurrentBill={this.state.currentBill}
                 onChangeAuthUser={this.state.authUser}
               />
-              <Pie/>
+              {this.state.currentBill && <Pie/>}
           </div>
           <div className = "right-grid">
             <h1> Your Group: {this.state.groupName && this.state.groupName}</h1>
@@ -100,7 +99,7 @@ class DashboardBase extends React.Component {
 };
 
 const MyAccord = ({onChangeCurrentBill}) => {
-  if(!onChangeCurrentBill) return <></>;
+  if(!onChangeCurrentBill) return <h3 className="center">No Bills Yet</h3>;
 
   return (
     <>
@@ -129,7 +128,6 @@ const BillCard = ({onChangeCurrentBill, onChangeAuthUser}) => {
 
   const billMembers = onChangeCurrentBill.group_members;
   const dueDate = onChangeCurrentBill.due_date;
-  console.log(billMembers);
 
   let amountDue = null;
   let paidStatus = false;
@@ -192,7 +190,6 @@ const Paid = () => {
 };
 
 const MemberTable = ({onChangeCurrentBill}) => {
-  console.log(onChangeCurrentBill);
   const billMembers = onChangeCurrentBill.group_members;
 
   return (

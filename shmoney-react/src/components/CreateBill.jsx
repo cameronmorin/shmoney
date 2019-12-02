@@ -58,6 +58,7 @@ class CreateBillBase extends Component {
 		this.props.firebase.createBill(groupId, groupMembers, dueDate, rentTotal).then(() => {
 			console.log("Bill Created");
 			this.setState({created: true});
+			window.location.reload();
 		}).catch(error => {
 			console.log(error.message);
 		})
