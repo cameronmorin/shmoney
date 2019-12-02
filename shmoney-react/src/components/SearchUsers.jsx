@@ -3,7 +3,7 @@ import { compose } from 'recompose';
 
 import Media from 'react-bootstrap/Media';
 import Button from 'react-bootstrap/Button';
-import avatar from '../images/avatar.svg';
+import avatar from '../images/avatar.png';
 
 import { withFirebase } from './firebase';
 import { withAuthorization, withAuthUserContext } from './session'
@@ -97,8 +97,8 @@ class SearchUsersBase extends React.Component {
 					<Button variant="secondary" type="submit" disabled={isInvalid}>Search</Button>
 				</form>
 				<div className="search-results">
-					{userResults && <ul>{userResults.map((item, key) => (
-						<li key={key}>
+					{userResults && <ul className="list-group">{userResults.map((item, key) => (
+						<li className="list-group-item" key={key}>
 						<Media>
 							<img 
 								width={64}
