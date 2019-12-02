@@ -15,17 +15,68 @@ class DashboardBase extends React.Component {
     super(props);
 
     this.state = {
-      groupName: null
-    }
+      groupMembers: null,
+      groupName: null,
+      isNotGroupMember: false,
+      isGroupMember: false,
+      isGroupOwner: false,
+      groupId: null,
+      ownerUid: null,
+      currentBillId: null,
+      bills: null,
+      currentBill: null
+	  };
   }
   componentDidMount() {
-    this.props.firebase.getHouseGroupData().then(result => {
+    const authUser = this.props.authUser;
+    const groupState = this.props.groupState;
+    //Ensures that if the groupState is delayed in being updated 
+    //then it will be updated properly
+    if(!groupState.groupName) {
+      setTimeout(() => { //Start Timer
+        const authUser = this.props.authUser;
+        const groupState = this.props.groupState;
+        const isGroupOwner = authUser.uid === groupState.ownerUid;
+        
+        this.updateCurrentBill(groupState.currentBillId, groupState.bills);
+
+        this.setState({
+          groupMembers: groupState.groupMembers,
+          groupName: groupState.groupName,
+          isNotGroupMember: groupState.isNotGroupMember,
+          isGroupMember: groupState.isGroupMember,
+          isGroupOwner,
+          groupId: groupState.groupId,
+          ownerUid: groupState.ownerUid,
+          currentBillId: groupState.currentBillId,
+          bills: groupState.bills
+        });
+      }, 700);
+    } else {
+      const isGroupOwner = authUser.uid === groupState.ownerUid;
+
+      this.updateCurrentBill(groupState.currentBillId, groupState.bills);
+
       this.setState({
-        groupName: result.group_name
+        groupMembers: groupState.groupMembers,
+        groupName: groupState.groupName,
+        isNotGroupMember: groupState.isNotGroupMember,
+        isGroupMember: groupState.isGroupMember,
+        isGroupOwner,
+        groupId: groupState.groupId,
+        ownerUid: groupState.ownerUid,
+        currentBillId: groupState.currentBillId,
+        bills: groupState.bills
       });
-    }).catch(error => {
-      console.log(error);
-    });
+    }
+  }
+  updateCurrentBill = (currentBillId, bills) => {
+    for(let item in bills) {
+      if(bills[item].doc_id === currentBillId) {
+        this.setState({currentBill: bills[item]});
+        console.log(bills[item])
+      }
+    }
   }
   render() {
     return (
@@ -178,6 +229,7 @@ const Paid = () => {
     </Alert>
   );
 };
+
 const MemberTable = () => {
   return (
     <Table striped bordered hover responsive>

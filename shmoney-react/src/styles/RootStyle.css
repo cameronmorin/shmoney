@@ -41,7 +41,6 @@
     color: black;
 }
 
-
 .btn:hover {background:#35B27F;}
 
 .card {
@@ -53,3 +52,18 @@
     height: 30px;
     float: right;
 }
+
+/* .right-grid .btn{
+    width: 100%;
+    border: none;
+    background-color: inherit;
+    padding: 10px 28px;
+    font-size: 15px;
+    color:white;
+    margin-bottom: 10px;
+    cursor: pointer;
+    display: inline-block;
+} */
+/*
+.btn:hover {background:#35B27F;}
+*/

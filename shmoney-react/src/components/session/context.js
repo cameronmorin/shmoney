@@ -8,8 +8,8 @@ export const withAuthUserContext = Component => {
 	return props => {
 		return (
 			<AuthUserContext.Consumer>
-				{authUser => authUser ?
-					<Component {...props} authUser={authUser} />
+				{context => context.state.authUser ?
+					<Component {...props} authUser={context.state.authUser} groupState={context.state} />
 					: null
 				}
 			</AuthUserContext.Consumer>

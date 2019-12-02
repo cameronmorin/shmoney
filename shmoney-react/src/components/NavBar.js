@@ -4,7 +4,7 @@ import { AuthUserContext } from './session'
 import { Navbar, Nav, NavDropdown } from 'react-bootstrap';
 
 import logo from '../images/box_logo.png';
-import avatar from '../images/avatar.svg';
+import avatar from '../images/avatar.png';
 import '../styles/NavBar.css';
 
 export default class CustomNavBar extends React.Component {
@@ -16,7 +16,7 @@ export default class CustomNavBar extends React.Component {
             <img className="logo" src={logo} alt="logo" onClick={this.props.onClickHome} />
           </Navbar.Brand>
           <AuthUserContext.Consumer>
-            {authUser => authUser ?
+            {context => context.state.authUser ?
               <>
                 <Navbar.Toggle aria-controls="responsive-navbar-nav" />
                 <Navbar.Collapse id="responsive-navbar-nav">
@@ -28,10 +28,10 @@ export default class CustomNavBar extends React.Component {
                   <div className="nav-user">
                     {/* insert user info here if signed in, else signIn/Up links */}
                     <div className="user-msg">
-                      <div className="welcome-msg">{authUser.displayName}</div>
+                      <div className="welcome-msg">{context.state.authUser.displayName}</div>
                       <div className="logout-msg" onClick={this.props.onClickLogout}>Logout</div>
                     </div>
-                    <img className="avatar" src={authUser.photoURL ? authUser.photoURL : avatar} alt="user" onClick={this.props.onClickAvatar} />
+                    <img className="avatar" src={context.state.authUser.photoURL ? context.state.authUser.photoURL : avatar} alt="user" onClick={this.props.onClickAvatar} />
                   </div>
                   </Nav>
                 </Navbar.Collapse>

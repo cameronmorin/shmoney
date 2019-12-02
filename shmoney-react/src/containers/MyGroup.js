@@ -4,7 +4,7 @@ import { compose } from 'recompose';
 import NavBar from '../components/NavBar';
 import '../styles/MyGroup.css';
 
-import { Figure, Table, Accordion, Card, Button, Modal, InputGroup, FormControl, ListGroup } from 'react-bootstrap';
+import { ToggleButton, ToggleButtonGroup, Figure, Table, Accordion, Card, Button, Modal, InputGroup, FormControl, ListGroup } from 'react-bootstrap';
 import { withAuthorization, withAuthUserContext } from '../components/session';
 
 import { withFirebase } from '../components/firebase';
@@ -12,7 +12,7 @@ import { withFirebase } from '../components/firebase';
 import CreateGroup from '../components/CreateGroup';
 import SearchUsers from '../components/SearchUsers';
 
-const AddMembers = ({firebase}) => {
+const AddMembers = ({onGroupListUpdate, onLocalGroupListUpdate}) => {
 	const [show, setShow] = useState(false);
 
 	const handleClose = () => setShow(false);
@@ -29,7 +29,9 @@ const AddMembers = ({firebase}) => {
 					<Modal.Title>Add Members</Modal.Title>
 				</Modal.Header>
 				<Modal.Body>
-					<SearchUsers />
+					<SearchUsers 
+						onGroupListUpdate={onGroupListUpdate} 
+						onLocalGroupListUpdate={onLocalGroupListUpdate} />
 				</Modal.Body>
 				<Modal.Footer>
 					<Button variant="secondary" onClick={handleClose}>
@@ -80,17 +82,19 @@ const AddBill = () => {
 	);
 };
 
-const DeleteMembers = ({onChangeGroupId, onChangeGroupMembers, onChangeOwnerId, firebase}) => {
+const DeleteMembers = ({onChangeGroupId, onChangeGroupMembers, onChangeOwnerUid, firebase, onGroupListUpdate, onLocalGroupListUpdate}) => {
 	const [show, setShow] = useState(false);
 
 	const handleClose = () => setShow(false);
 	const handleShow = () => setShow(true);
 
 	const removeUser = uid => {
-		console.log(uid);
-		console.log(onChangeGroupId);
 		firebase.removeUserFromGroup(uid, onChangeGroupId).then(() => {
-			window.location.reload();
+			firebase.getHouseGroupData().then(result => {
+				const groupMembers = result.group_members;
+				onGroupListUpdate(groupMembers);
+				onLocalGroupListUpdate(groupMembers);
+			});
 		}).catch(error => {
 			console.log(error);
 		})
@@ -111,7 +115,7 @@ const DeleteMembers = ({onChangeGroupId, onChangeGroupMembers, onChangeOwnerId, 
 						<ul>
 							{onChangeGroupMembers.map((index, key) => (
 								<div key={key}>
-								{index.uid !== onChangeOwnerId && <li key={key}>
+								{index.uid !== onChangeOwnerUid && <li key={key}>
 									{index.username}
 									<Button variant="outline-secondary" onClick={() => removeUser(index.uid)}>Delete</Button>
 								</li>}
@@ -133,7 +137,7 @@ const DeleteMembers = ({onChangeGroupId, onChangeGroupMembers, onChangeOwnerId, 
 	);
 };
 
-const DeleteGroup = ({firebase, onChangeGroupId}) => {
+const DeleteGroup = ({ firebase, onChangeGroupId }) => {
 	const [show, setShow] = useState(false);
 
 	const handleClose = () => setShow(false);
@@ -168,6 +172,44 @@ const DeleteGroup = ({firebase, onChangeGroupId}) => {
 	);
 };
 
+const LeaveGroup = ({ firebase, onChangeGroupId, currentUser }) => {
+	const [show, setShow] = useState(false);
+
+	const handleClose = () => setShow(false);
+	const handleShow = () => setShow(true);
+
+	const leaveGroup = () => {
+		firebase.removeUserFromGroup(currentUser.uid, onChangeGroupId).then(() => {
+			window.location.reload();
+		});
+	};
+
+	return (
+		<>
+			<Button variant="secondary" onClick={handleShow}>
+				Leave Group
+			</Button>
+
+			<Modal show={show} onHide={handleClose} animation={false}>
+				<Modal.Header closeButton>
+					<Modal.Title>Are you sure?</Modal.Title>
+				</Modal.Header>
+				<Modal.Body>
+					<Button variant="secondary" onClick={leaveGroup}>
+						Confirm
+					</Button>
+				</Modal.Body>
+				<Modal.Footer>
+					<Button variant="secondary" onClick={handleClose}>
+						Close
+					</Button>
+				</Modal.Footer>
+			</Modal>
+		</>
+	);
+};
+
+/*
 const ViewLedger = () => {
 	const [show, setShow] = useState(false);
 
@@ -202,6 +244,7 @@ const ViewLedger = () => {
 		</>
 	);
 };
+*/
 
 const CreateGroupModal = () => {
 	const [show, setShow] = useState(false);
@@ -271,6 +314,113 @@ const PaymentsTable = () => {
 	);
 };
 
+const CurrentBillsTable = () => {
+	const [show, setShow] = useState(false);
+	const handleShow = () => setShow(true);
+	const handleClose = () => setShow(false);
+
+	const [value, setValue] = useState([1, 2]);
+
+	/*
+	 * The second argument that will be passed to
+	 * `handleChange` from `ToggleButtonGroup`
+	 * is the SyntheticEvent object, but we are
+	 * not using it in this example so we will omit it.
+	 */
+	const handleChange = val => setValue(val);
+
+	return (
+		<>
+			<Table striped bordered hover>
+				<thead>
+					<tr>
+						<th>#</th>
+						<th>House Name</th>
+						<th>Due Date</th>
+						<th>Bill Amount</th>
+						<th>On Time?</th>
+						<th>Verify Button</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>1</td>
+						<td>Cool House</td>
+						<td>11/11/19</td>
+						<td>$1000</td>
+						<td>Yes/No</td>
+						<td><Button className="billsbtn" variant="warning" onClick={handleShow}>Verify</Button></td>
+					</tr>
+					<tr>
+						<td>2</td>
+						<td>Cool House</td>
+						<td>12/11/19</td>
+						<td>$1000</td>
+						<td>Yes/No</td>
+						<td><Button className="billsbtn" variant="warning" onClick={handleShow}>Verify</Button></td>
+					</tr>
+					<tr>
+						<td>3</td>
+						<td>Cool House</td>
+						<td>1/11/20</td>
+						<td>$1000</td>
+						<td>Yes/No</td>
+						<td><Button className="billsbtn" variant="warning" onClick={handleShow}>Verify</Button></td>
+					</tr>
+				</tbody>
+			</Table>
+
+			<Modal show={show} onHide={handleClose} animation={false}>
+				<Modal.Header closeButton>
+					<Modal.Title>Verify Payment</Modal.Title>
+				</Modal.Header>
+				<Modal.Body>
+					<p>Paid on time?</p>
+					<ToggleButtonGroup type="checkbox" value={value} onChange={handleChange}>
+						<ToggleButton value={1}>Yes</ToggleButton>
+						<ToggleButton value={2}>No</ToggleButton>
+					</ToggleButtonGroup>
+				</Modal.Body>
+				<Modal.Footer>
+					<Button variant="secondary" onClick={handleClose}>
+						Confirm
+					</Button>
+				</Modal.Footer>
+			</Modal>
+		</>
+	);
+};
+
+const TransferOwnership = () => {
+	const [show, setShow] = useState(false);
+
+	const handleClose = () => setShow(false);
+	const handleShow = () => setShow(true);
+
+	return (
+		<>
+			<Button variant="secondary" onClick={handleShow}>
+				Transfer Ownership
+			</Button>
+
+			<Modal show={show} onHide={handleClose} animation={false}>
+				<Modal.Header closeButton>
+					<Modal.Title>Create Group</Modal.Title>
+				</Modal.Header>
+				<Modal.Body>
+					<InputGroup className="mb-3">
+						Ownership transfer
+					</InputGroup>
+				</Modal.Body>
+				<Modal.Footer>
+					<Button variant="secondary" onClick={handleClose}>
+						Close
+					</Button>
+				</Modal.Footer>
+			</Modal>
+		</>
+	);
+}
 const RightInfo = ({ onChangeGroupMembers }) => {
 	return (
 		<>
@@ -291,19 +441,14 @@ const RightInfo = ({ onChangeGroupMembers }) => {
 				<Card>
 					<Card.Header>
 						<Accordion.Toggle as={Button} variant="link" eventKey="1">
-							<h1>Bills Due</h1>
+							<h1>View Current Bills</h1>
 						</Accordion.Toggle>
 					</Card.Header>
 					<Accordion.Collapse eventKey="1">
 						<Card.Body>
-							<p>
-								Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-								incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
-								exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure
-								dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-								Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt
-								mollit anim id est laborum.
-							</p>
+							<div className="curBills">
+								<CurrentBillsTable as={Button} />
+							</div>
 						</Card.Body>
 					</Accordion.Collapse>
 				</Card>
@@ -335,34 +480,50 @@ class MyGroupBase extends React.Component {
 			isGroupMember: false,
 			isGroupOwner: false,
 			groupId: null,
-			ownerId: null
+			ownerUid: null
 		};
 	}
 	componentDidMount() {
 		const authUser = this.props.authUser;
-		this.props.firebase.getHouseGroupData().then(result => {
-				let groupOwnerUid = result.owner_uid
+		const groupState = this.props.groupState;
+		//Ensures that if the groupState is delayed in being updated 
+		//then it will be updated properly
+		if(!groupState.groupName) {
+			setTimeout(() => { //Start Timer
+				const authUser = this.props.authUser;
+				const groupState = this.props.groupState;
+				const isGroupOwner = authUser.uid === groupState.ownerUid;
+
 				this.setState({
-						groupMembers: result.group_members,
-						groupName: result.group_name,
-						isGroupMember: true,
-						groupId: result.group_id,
-						ownerId: groupOwnerUid
+					groupMembers: groupState.groupMembers,
+					groupName: groupState.groupName,
+					isNotGroupMember: groupState.isNotGroupMember,
+					isGroupMember: groupState.isGroupMember,
+					isGroupOwner,
+					groupId: groupState.groupId,
+					ownerUid: groupState.ownerUid,
 				});
-				
-				if(groupOwnerUid === authUser.uid) {
-						this.setState({isGroupOwner:true});
-				}
-		}).catch(error => {
-			console.log(error.message);
-			//If there is an error then they aren't part of a group
-			//So they should see the Create Group button.
-			this.setState({isNotGroupMember:true});
-		});
+			}, 700);	
+		} else {
+			const isGroupOwner = authUser.uid === groupState.ownerUid;
+
+			this.setState({
+				groupMembers: groupState.groupMembers,
+				groupName: groupState.groupName,
+				isNotGroupMember: groupState.isNotGroupMember,
+				isGroupMember: groupState.isGroupMember,
+				isGroupOwner,
+				groupId: groupState.groupId,
+				ownerUid: groupState.ownerUid,
+			});
+		}
+	}
+	updateMembersList = groupMembers => {
+		//Update the group members list with updated list
+		this.setState({groupMembers});
 	}
 	render() {
 		const authUser = this.props.authUser;
-
 		return (
 			<div>
 				<NavBar
@@ -385,20 +546,27 @@ class MyGroupBase extends React.Component {
 							/>
 						</Figure>
 						{this.state.isGroupMember && <AddBill />}
-						{this.state.isGroupOwner && <AddMembers firebase={this.props.firebase} />}
-						{this.state.isGroupOwner && 
-						<DeleteMembers 
-						onChangeGroupId={this.state.groupId} 
-						onChangeGroupMembers={this.state.groupMembers} 
-						onChangeOwnerId={this.state.ownerId} 
-						firebase={this.props.firebase} />}
-						{this.state.isGroupMember && <ViewLedger />}
+						{this.state.isGroupOwner && <AddMembers 
+							onGroupListUpdate={this.props.groupState.onGroupListUpdate}
+							onLocalGroupListUpdate={this.updateMembersList} />}
+						{this.state.isGroupOwner && <DeleteMembers 
+							onChangeGroupId={this.state.groupId} 
+							onChangeGroupMembers={this.state.groupMembers} 
+							onChangeOwnerUid={this.state.ownerUid} 
+							firebase={this.props.firebase}
+							onGroupListUpdate={this.props.groupState.onGroupListUpdate}
+							onLocalGroupListUpdate={this.updateMembersList} />}
+						
 						{this.state.isNotGroupMember && <CreateGroupModal />}
-						{this.state.isGroupOwner && 
-						<DeleteGroup 
-						firebase={this.props.firebase}
-						onChangeGroupId={this.state.groupId} />}
+						{this.state.isGroupOwner && <DeleteGroup 
+							firebase={this.props.firebase}
+							onChangeGroupId={this.state.groupId} />}
+						{this.state.isGroupMember && !this.state.isGroupOwner && <LeaveGroup 
+							firebase={this.props.firebase}
+							onChangeGroupId={this.state.groupId}
+							currentUser={this.props.authUser} />}
 					</div>
+					
 
 					<div className="right-grid">
 						<RightInfo onChangeGroupMembers={this.state.groupMembers} />
