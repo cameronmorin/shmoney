@@ -101,6 +101,8 @@ class CreateBillBase extends Component {
 						onSelect={this.updateDate}
 						onChange={this.updateDate}
 						minDate={this.state.startDate}
+						showTimeSelect
+  					dateFormat="Pp"
 					/>
 				</div>
 				<div className="group-members-list">
