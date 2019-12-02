@@ -1,7 +1,7 @@
 import React, { useState, useInput } from 'react';
 import NavBar from '../components/NavBar';
 import { Card, Table, Accordion, Figure, Button, Modal, InputGroup, FormControl } from 'react-bootstrap';
-import avatar from '../images/avatar.svg';
+import avatar from '../images/avatar.png';
 import "../styles/Profile.css";
 import { withAuthorization, withAuthUserContext } from '../components/session';
 import { withFirebase } from '../components/firebase';
@@ -126,18 +126,18 @@ const RightAccordion = ({ onChangeGroupMembers }) => {
         <Card>
           <Card.Header>
             <Accordion.Toggle as={Button} variant="link" eventKey="0">
-              <h1>Bills Due</h1>
+              <h1>Total spent in 2019</h1>
             </Accordion.Toggle>
           </Card.Header>
           <Accordion.Collapse eventKey="0">
-            <Card.Body> [TABLE] </Card.Body>
+            <Card.Body> <h1>$12000</h1> </Card.Body>
           </Accordion.Collapse>
         </Card>
         <Card>
           <Card.Header>
 
             <Accordion.Toggle as={Button} variant="link" eventKey="1">
-              <h1>House Members</h1>
+              <h1>Current House Members</h1>
             </Accordion.Toggle>
           </Card.Header>
           <Accordion.Collapse eventKey="1">
@@ -150,7 +150,7 @@ const RightAccordion = ({ onChangeGroupMembers }) => {
         <Card>
           <Card.Header>
             <Accordion.Toggle as={Button} variant="link" eventKey="2">
-              <h1>Recent Payments</h1>
+              <h1>Last Payment Made</h1>
             </Accordion.Toggle>
           </Card.Header>
           <Accordion.Collapse eventKey="2">

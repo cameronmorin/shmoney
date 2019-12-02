@@ -4,7 +4,7 @@ import { AuthUserContext } from './session'
 import { Navbar, Nav, NavDropdown } from 'react-bootstrap';
 
 import logo from '../images/box_logo.png';
-import avatar from '../images/avatar.svg';
+import avatar from '../images/avatar.png';
 import '../styles/NavBar.css';
 
 export default class CustomNavBar extends React.Component {

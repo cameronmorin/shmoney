@@ -4,7 +4,7 @@ import { compose } from 'recompose';
 import NavBar from '../components/NavBar';
 import '../styles/MyGroup.css';
 
-import { Figure, Table, Accordion, Card, Button, Modal, InputGroup, FormControl, ListGroup } from 'react-bootstrap';
+import { ToggleButton, ToggleButtonGroup, Figure, Table, Accordion, Card, Button, Modal, InputGroup, FormControl, ListGroup } from 'react-bootstrap';
 import { withAuthorization, withAuthUserContext } from '../components/session';
 
 import { withFirebase } from '../components/firebase';
@@ -136,7 +136,7 @@ const DeleteMembers = ({onChangeGroupId, onChangeGroupMembers, onChangeOwnerUid,
 	);
 };
 
-const DeleteGroup = ({firebase, onChangeGroupId}) => {
+const DeleteGroup = ({ firebase, onChangeGroupId }) => {
 	const [show, setShow] = useState(false);
 
 	const handleClose = () => setShow(false);
@@ -208,6 +208,7 @@ const LeaveGroup = ({ firebase, onChangeGroupId, currentUser }) => {
 	);
 };
 
+/*
 const ViewLedger = () => {
 	const [show, setShow] = useState(false);
 
@@ -242,6 +243,7 @@ const ViewLedger = () => {
 		</>
 	);
 };
+*/
 
 const CreateGroupModal = () => {
 	const [show, setShow] = useState(false);
@@ -311,6 +313,113 @@ const PaymentsTable = () => {
 	);
 };
 
+const CurrentBillsTable = () => {
+	const [show, setShow] = useState(false);
+	const handleShow = () => setShow(true);
+	const handleClose = () => setShow(false);
+
+	const [value, setValue] = useState([1, 2]);
+
+	/*
+	 * The second argument that will be passed to
+	 * `handleChange` from `ToggleButtonGroup`
+	 * is the SyntheticEvent object, but we are
+	 * not using it in this example so we will omit it.
+	 */
+	const handleChange = val => setValue(val);
+
+	return (
+		<>
+			<Table striped bordered hover>
+				<thead>
+					<tr>
+						<th>#</th>
+						<th>House Name</th>
+						<th>Due Date</th>
+						<th>Bill Amount</th>
+						<th>On Time?</th>
+						<th>Verify Button</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>1</td>
+						<td>Cool House</td>
+						<td>11/11/19</td>
+						<td>$1000</td>
+						<td>Yes/No</td>
+						<td><Button className="billsbtn" variant="warning" onClick={handleShow}>Verify</Button></td>
+					</tr>
+					<tr>
+						<td>2</td>
+						<td>Cool House</td>
+						<td>12/11/19</td>
+						<td>$1000</td>
+						<td>Yes/No</td>
+						<td><Button className="billsbtn" variant="warning" onClick={handleShow}>Verify</Button></td>
+					</tr>
+					<tr>
+						<td>3</td>
+						<td>Cool House</td>
+						<td>1/11/20</td>
+						<td>$1000</td>
+						<td>Yes/No</td>
+						<td><Button className="billsbtn" variant="warning" onClick={handleShow}>Verify</Button></td>
+					</tr>
+				</tbody>
+			</Table>
+
+			<Modal show={show} onHide={handleClose} animation={false}>
+				<Modal.Header closeButton>
+					<Modal.Title>Verify Payment</Modal.Title>
+				</Modal.Header>
+				<Modal.Body>
+					<p>Paid on time?</p>
+					<ToggleButtonGroup type="checkbox" value={value} onChange={handleChange}>
+						<ToggleButton value={1}>Yes</ToggleButton>
+						<ToggleButton value={2}>No</ToggleButton>
+					</ToggleButtonGroup>
+				</Modal.Body>
+				<Modal.Footer>
+					<Button variant="secondary" onClick={handleClose}>
+						Confirm
+					</Button>
+				</Modal.Footer>
+			</Modal>
+		</>
+	);
+};
+
+const TransferOwnership = () => {
+	const [show, setShow] = useState(false);
+
+	const handleClose = () => setShow(false);
+	const handleShow = () => setShow(true);
+
+	return (
+		<>
+			<Button variant="secondary" onClick={handleShow}>
+				Transfer Ownership
+			</Button>
+
+			<Modal show={show} onHide={handleClose} animation={false}>
+				<Modal.Header closeButton>
+					<Modal.Title>Create Group</Modal.Title>
+				</Modal.Header>
+				<Modal.Body>
+					<InputGroup className="mb-3">
+						Ownership transfer
+					</InputGroup>
+				</Modal.Body>
+				<Modal.Footer>
+					<Button variant="secondary" onClick={handleClose}>
+						Close
+					</Button>
+				</Modal.Footer>
+			</Modal>
+		</>
+	);
+}
 const RightInfo = ({ onChangeGroupMembers, onChangeCurrentBill }) => {
 	return (
 		<>
@@ -331,20 +440,14 @@ const RightInfo = ({ onChangeGroupMembers, onChangeCurrentBill }) => {
 				<Card>
 					<Card.Header>
 						<Accordion.Toggle as={Button} variant="link" eventKey="1">
-							<h1>Bills Due</h1>
+							<h1>View Current Bills</h1>
 						</Accordion.Toggle>
 					</Card.Header>
 					<Accordion.Collapse eventKey="1">
 						<Card.Body>
-							{/* {onChangeCurrentBill && onChangeCurrentBill.due_date} */}
-							<p>
-								Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-								incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
-								exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure
-								dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-								Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt
-								mollit anim id est laborum.
-							</p>
+							<div className="curBills">
+								<CurrentBillsTable as={Button} />
+							</div>
 						</Card.Body>
 					</Accordion.Collapse>
 				</Card>
@@ -464,7 +567,7 @@ class MyGroupBase extends React.Component {
 							firebase={this.props.firebase}
 							onGroupListUpdate={this.props.groupState.onGroupListUpdate}
 							onLocalGroupListUpdate={this.updateMembersList} />}
-						{this.state.isGroupMember && <ViewLedger />}
+						
 						{this.state.isNotGroupMember && <CreateGroupModal />}
 						{this.state.isGroupOwner && <DeleteGroup 
 							firebase={this.props.firebase}
@@ -474,6 +577,7 @@ class MyGroupBase extends React.Component {
 							onChangeGroupId={this.state.groupId}
 							currentUser={this.props.authUser} />}
 					</div>
+					
 
 					<div className="right-grid">
 						<RightInfo 

@@ -15,3 +15,8 @@
     background:rgb(41, 136, 98);
     text-decoration: none;
 }
+
+.curBills .btn{
+    font-family: 'Righteous', cursive;
+    background-color:grey;
+}

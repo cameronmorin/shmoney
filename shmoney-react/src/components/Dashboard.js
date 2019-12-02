@@ -1,6 +1,9 @@
 import React from 'react';
 import '../styles/RootStyle.css'
 import './Home.jsx';
+import RedX from '../images/red_x.svg';
+import GreenCheck from '../images/checked.svg';
+
 import { Table, Accordion, Card, Alert, AccordionCollapse } from 'react-bootstrap';
 import PieChart from './PieChart.js';
 import { compose } from 'recompose';
@@ -78,19 +81,27 @@ class DashboardBase extends React.Component {
     }
   }
   render() {
+    const {isGroupOwner, isGroupMember} = this.state;
+
     return (
         <div className = "main-grid" >
           <div className = "left-grid" >
+              {isGroupOwner && <BillCard 
+              onChangeCurrentBill={this.state.currentBill} 
+              onChangeAuthUser={this.state.authUser}
+              onChangeIsGroupOwner={this.state.isGroupOwner} />}
               
-              <BillCard
-                onChangeCurrentBill={this.state.currentBill}
-                onChangeAuthUser={this.state.authUser}
-              />
-              {this.state.currentBill && <Pie/>}
+              <OutStandingBills/>
+              <br/>
+              <Pie/>
           </div>
           <div className = "right-grid">
             <h1> Your Group: {this.state.groupName && this.state.groupName}</h1>
-            <MyAccord onChangeCurrentBill={this.state.currentBill}/>
+            {isGroupMember && !isGroupOwner && <BillCard 
+              onChangeCurrentBill={this.state.currentBill} 
+              onChangeAuthUser={this.state.authUser}
+              onChangeIsGroupOwner={this.state.isGroupOwner} />}
+            {isGroupOwner && <MyAccord onChangeCurrentBill={this.state.currentBill} />}       
           </div>
 
         </div>
@@ -122,7 +133,7 @@ const MyAccord = ({onChangeCurrentBill}) => {
   );
 };
 
-const BillCard = ({onChangeCurrentBill, onChangeAuthUser}) => {
+const BillCard = ({onChangeCurrentBill, onChangeAuthUser, onChangeIsGroupOwner}) => {
   //Only show card once the state has updated and if a current bill exists
   if(!onChangeCurrentBill || !onChangeAuthUser) return <></>;
 
@@ -138,10 +149,13 @@ const BillCard = ({onChangeCurrentBill, onChangeAuthUser}) => {
       paidStatus = billMembers[item].paid_status;
     }
   }
+
+  let cardStyle = '';
+  onChangeIsGroupOwner ? (cardStyle = 'card h-25 bg-light text-dark') : (cardStyle = 'card h-50 bg-light text-dark');
   
   return (
     <>
-      <Card bg="light"  text="dark">
+      <div className ={cardStyle} > 
         <Card.Header >
             Current Bill
         </Card.Header>
@@ -152,11 +166,63 @@ const BillCard = ({onChangeCurrentBill, onChangeAuthUser}) => {
           </Card.Text>
           {paidStatus ? <Paid /> : <NotPaid />}
         </Card.Body>
-      </Card>
+      </div>
       <br />
     </>
   );
 };
+
+const OutStandingBills = () => {
+  return(
+    <>
+    {/* 0here */}
+
+
+
+      <Card bg="light"  text="dark">
+        <Card.Header >
+            Outstanding Bills
+        </Card.Header>
+        <Card.Body>
+            
+          <Card.Title>
+            Past Bills 
+            <CheckIcon/>
+          </Card.Title>
+          {/* If good display only check CheckIcon. If outstanding bill display XIcon and then card Text displaying amount and date values for outstanding bill */}
+          <br/>
+
+          <Card.Title>
+            Future Bills
+            <XIcon/>
+          </Card.Title>
+
+          <Card.Text>
+            Amount: $600
+          </Card.Text>
+
+          <Card.Text>
+            Due: December 31, 2019
+          </Card.Text>
+
+        </Card.Body>
+      </Card>
+    </>
+  );
+};
+
+const XIcon = () => {
+  return(
+    <img className="check" src= {RedX} alt="RedX" />
+  );
+};
+
+const CheckIcon = () => {
+  return(
+    <img className="check" src= {GreenCheck} alt="Check" />
+  );
+};
+
 const Pie = () => {
 	return (
 		<>
@@ -172,6 +238,14 @@ const Pie = () => {
 		</>
 	);
 };
+
+// const NotPaidFlex = () => {
+//   return(
+//     <div role = "alert" class = "fade alert alert-danger show position-relative">
+//       Not Paid
+//     </div>
+//   );
+// };
 
 const NotPaid = () => {
   return(
