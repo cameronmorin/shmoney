@@ -419,7 +419,7 @@ const TransferOwnership = ({ groupMembers, currentOwnerID, firebase, groupId }) 
 							<Media>
 								<Media.Body>
 									<h5>{item.username}</h5>
-									<Button variant="primary" onClick={() => firebase.updateGroupOwner(item.uid, groupId).then(event => {})}>
+									<Button variant="primary" onClick={() => firebase.updateGroupOwner(item.uid, item.username, groupId).then(event => {window.location.reload();})}>
 										Make Owner
 									</Button>
 								</Media.Body>

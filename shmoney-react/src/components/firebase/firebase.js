@@ -308,16 +308,11 @@ class Firebase {
 		});
 	};
 
-	updateGroupOwner = async (uid, groupId) => {
-		return this.user(uid)
-			.get()
-			.then(doc => {
-				const username = doc.data().username;
-				return this.house_groups().doc(groupId).update({
-					owner_uid: uid,
-					owner_username: username
-				})
-			});
+	updateGroupOwner = async (uid, username, groupId) => {
+		return this.house_groups().doc(groupId).update({
+			owner_uid: uid,
+			owner_username: username
+		});
 	};
 }
 
