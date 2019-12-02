@@ -238,6 +238,20 @@ class Firebase {
 	};
 
 	/**
+	 *	Change the owner_uid and owner_username to a different user
+	 *	@param uid uid of the new owner of the group
+	 *	@param username username of the new owner of the group
+	 *	@param groupId groupId of the group whose owner is being updated
+	 *	@return true or false boolean or error that can be caught
+	 */
+	updateGroupOwner = async (uid, username, groupId) => {
+		return this.house_groups().doc(groupId).update({
+			owner_uid: uid,
+			owner_username: username
+		});
+	};
+
+	/**
 	 *	Get the house group data from the current user's group
 	 *	@return returns data snapshot that can be used to access the document's data or error that can be caught
 	 */
@@ -261,19 +275,19 @@ class Firebase {
 	 * @param rentTotal the rent total for the bill
 	 * @return empty callback or error that can be caught
 	 */
-	createBill = async (groupId, groupMembers, dueDate, epoch, rentTotal) => {
+	createBill = async (groupId, groupMembers, dueDate, rentTotal) => {
 		const groupDoc = this.house_groups().doc(groupId);
 		const newBillDoc = this.group_bills(groupId).doc();
 		
 		return newBillDoc.set({
 			due_date: dueDate,
-			due_date_epoch: epoch,
 			group_members: groupMembers,
 			doc_id: newBillDoc.id,
 			rent_total: rentTotal
 		},{merge:true}).then(() => {
 			return groupDoc.set({
-				current_bill_id: newBillDoc.id
+				current_bill_id: newBillDoc.id,
+				previous_rent_total: rentTotal
 			},{merge:true});
 		})
 	}
@@ -307,6 +321,7 @@ class Firebase {
 			}
 		});
 	};
+
 }
 
 export default Firebase;

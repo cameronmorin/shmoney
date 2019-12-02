@@ -16,7 +16,8 @@ class CreateBillBase extends Component {
 			groupId: null,
 			groupMembers: null,
 			rentTotal: 0,
-			amountOwed: 0
+			split: 0,
+			created: false
 		}
 	}
 	componentDidMount() {
@@ -43,20 +44,46 @@ class CreateBillBase extends Component {
 	updateDate = date => {
 		this.setState({dueDate: date});
 	}
-	onClick = () => {
-		
+	onClick = event => {
+		event.preventDefault();
+
+		const {groupId, groupMembers, dueDate, rentTotal, split} = this.state;
+
+		//Set split for each group member and default paid status to false
+		for(let item in groupMembers) {
+			groupMembers[item].amount_owed = split;
+			groupMembers[item].paid_status = false;
+		}
+
+		this.props.firebase.createBill(groupId, groupMembers, dueDate, rentTotal).then(() => {
+			console.log("Bill Created");
+			this.setState({created: true});
+			window.location.reload();
+		}).catch(error => {
+			console.log(error.message);
+		})
 	}
 	onChange = event => {
 		this.setState({[event.target.name]: event.target.value});
 	}
+	componentDidUpdate() {
+		const {groupMembers, rentTotal, split} = this.state;
+
+		if(!groupMembers) return;
+
+		const numberOfMembers = groupMembers.length;
+		const newSplit = Math.round(rentTotal / numberOfMembers);
+		
+		if(newSplit !== split) this.setState({split: newSplit});
+	}
 	render() {
-		const {groupMembers, rentTotal, amountOwed} = this.state;
+		const {groupMembers, rentTotal, split} = this.state;
 
 		return (
 			<div>
 				<div className="rent-total-input">
 					<div className="universal-padding-3">
-						<p>Rent Total</p>
+						<label>Rent Total</label>
 					</div>
 					<input 
 						type="number"
@@ -66,6 +93,9 @@ class CreateBillBase extends Component {
 					/>
 				</div>
 				<div className="date-picker">
+					<div className="universal-padding-3">
+						<label>Due Date</label>
+					</div>
 					<DatePicker
 						selected={this.state.dueDate}
 						onSelect={this.updateDate}
@@ -73,8 +103,22 @@ class CreateBillBase extends Component {
 						minDate={this.state.startDate}
 					/>
 				</div>
-				<div className="create-group-button">
-					<Button variant="secondary" onClick={this.onClick}>Create</Button>
+				<div className="group-members-list">
+					{groupMembers && <ul>{groupMembers.map((item, key) => (
+						<li key={key}>
+							<p>{item.username}</p>
+							<p>{split}</p>
+						</li>
+						))}
+					</ul>}
+				</div>
+				<div className="universal-padding-3">
+					<Button 
+						variant="secondary" 
+						onClick={this.onClick} 
+						disabled={this.state.created}>
+						{this.state.created ? <>Created</> : <>Create</>}
+					</Button>
 				</div>
 			</div>
 		);

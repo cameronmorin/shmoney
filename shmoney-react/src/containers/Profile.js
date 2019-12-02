@@ -1,7 +1,7 @@
 import React, { useState, useInput } from 'react';
 import NavBar from '../components/NavBar';
 import { Card, Table, Accordion, Figure, Button, Modal, InputGroup, FormControl } from 'react-bootstrap';
-import avatar from '../images/avatar.svg';
+import avatar from '../images/avatar.png';
 import "../styles/Profile.css";
 import { withAuthorization, withAuthUserContext } from '../components/session';
 import { withFirebase } from '../components/firebase';
@@ -126,18 +126,18 @@ const RightAccordion = ({ onChangeGroupMembers }) => {
         <Card>
           <Card.Header>
             <Accordion.Toggle as={Button} variant="link" eventKey="0">
-              <h1>Bills Due</h1>
+              <h1>Total spent in 2019</h1>
             </Accordion.Toggle>
           </Card.Header>
           <Accordion.Collapse eventKey="0">
-            <Card.Body> [TABLE] </Card.Body>
+            <Card.Body> <h1>$12000</h1> </Card.Body>
           </Accordion.Collapse>
         </Card>
         <Card>
           <Card.Header>
 
             <Accordion.Toggle as={Button} variant="link" eventKey="1">
-              <h1>House Members</h1>
+              <h1>Current House Members</h1>
             </Accordion.Toggle>
           </Card.Header>
           <Accordion.Collapse eventKey="1">
@@ -150,7 +150,7 @@ const RightAccordion = ({ onChangeGroupMembers }) => {
         <Card>
           <Card.Header>
             <Accordion.Toggle as={Button} variant="link" eventKey="2">
-              <h1>Recent Payments</h1>
+              <h1>Last Payment Made</h1>
             </Accordion.Toggle>
           </Card.Header>
           <Accordion.Collapse eventKey="2">
@@ -209,17 +209,6 @@ class Profile extends React.Component {
       });
     }
   }
-  testClick = () => {
-    const date = new Date();
-    const dueDate = `${('0' + (date.getMonth() + 1)).slice(-2)}/${('0' + date.getDate()).slice(-2)}/${date.getFullYear()}-${('0' + date.getHours()).slice(-2)}:${('0' + date.getMinutes()).slice(-2)}:${('0' + date.getSeconds()).slice(-2)}`;
-    const epoch = `${Math.floor(date.getTime()/1000)}`;
-    const rentTotal = 870.73;
-    console.log(dueDate);
-    console.log(epoch);
-    this.props.firebase.createBill(this.state.groupId, this.state.groupMembers, dueDate, epoch, rentTotal).then().catch(error => {
-      console.log(error.message);
-    });
-  }
   render() {
     const authUser = this.props.authUser;
 
@@ -244,7 +233,6 @@ class Profile extends React.Component {
                 src={authUser.photoURL ? authUser.photoURL : avatar}
               />
             </Figure>
-            {/* <button onClick={this.testClick}>Test</button> */}
             <UpdatePhoto />
             <EditName 
               firebase={this.props.firebase} 
@@ -257,7 +245,6 @@ class Profile extends React.Component {
             <RightAccordion onChangeGroupMembers={this.state.groupMembers} />
           </div>
         </div>
-        {/* <CreateBill /> */}
       </div>
     );
   }
