@@ -20,7 +20,8 @@ const withAuthentication = Component => {
             onGroupListUpdate: null,
             previousRentTotal: null,
             currentBillId: null,
-            bills: null
+            bills: null,
+            loaded: false
 			};
       }
       componentDidMount() {
@@ -46,7 +47,7 @@ const withAuthentication = Component => {
                      		bills.push(doc.data());
                         });
 
-                        this.setState({bills});
+                        this.setState({bills, loaded: true});
                      });
 						}).catch(error => {
 							console.log(error.message);
@@ -64,7 +65,8 @@ const withAuthentication = Component => {
                   isGroupOwner: false,
                   groupId: null,
                   ownerId: null,
-                  previousRentTotal: null
+                  previousRentTotal: null,
+                  loaded: true
 				   });
             }
          }) 
