@@ -261,19 +261,19 @@ class Firebase {
 	 * @param rentTotal the rent total for the bill
 	 * @return empty callback or error that can be caught
 	 */
-	createBill = async (groupId, groupMembers, dueDate, epoch, rentTotal) => {
+	createBill = async (groupId, groupMembers, dueDate, rentTotal) => {
 		const groupDoc = this.house_groups().doc(groupId);
 		const newBillDoc = this.group_bills(groupId).doc();
 		
 		return newBillDoc.set({
 			due_date: dueDate,
-			due_date_epoch: epoch,
 			group_members: groupMembers,
 			doc_id: newBillDoc.id,
 			rent_total: rentTotal
 		},{merge:true}).then(() => {
 			return groupDoc.set({
-				current_bill_id: newBillDoc.id
+				current_bill_id: newBillDoc.id,
+				previous_rent_total: rentTotal
 			},{merge:true});
 		})
 	}

@@ -1,0 +1,93 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    //Read
+    //allow get; for reading document
+    //allow list; for collection query
+
+    //Write
+    //allow create; for creating new data
+    //allow update; for updating existing data
+    //allow delete; for deleting data
+    
+    /// Rules ///
+    
+    match /users/{document=**} {
+    	//Allow new auth user to create their document
+    	allow create: if request.resource.id == request.auth.uid;
+    }
+    
+    match /users/{userId} {
+    	//Allow any user to read a user document
+      //Allow only the document owner to write to their document
+      //Allow the group owner to update the user document
+    	allow read: if isSignedIn();
+      allow write: if isOwner(userId);
+      allow update: if isGroupOwner();
+      
+      match /payment_history/{document=**} {
+      	//Allow user to read and write to new/existing payment history sub-collection
+      	allow read, write: if isOwner(existingData().owner_uid) || isOwner(incomingData().owner_uid);
+      }
+    }
+    
+    match /house_groups/{document=*} {
+    	//Allow user to create a new house group
+      //Allow user to delete their owned group
+    	allow create: if incomingData().owner_uid == authUser().uid;
+      allow delete: if existingData().owner_uid == authUser().uid;
+    }
+    
+    match /house_groups/{groupId} {
+    	//Allow only members to read and update group document
+      //Allow only group owner to write to group document
+      allow read, update: if isGroupMember();
+      allow write: if isGroupOwner();
+      
+      match /bills/{document=**} {
+      	//Allow any user to read bills sub-collection
+        //Allow only group owner to write to bills sub-collection
+      	allow read: if isSignedIn();
+        allow write: if isGroupOwner();
+      }
+    }
+    
+    /// Functions ///
+    
+    function authUser() {
+    	return request.auth;
+    }
+    
+    function isSignedIn() {
+    	return authUser() != null;
+    }
+    
+    function isOwner(userId) {
+    	return authUser().uid == userId;
+    }
+    
+    function existingData() {
+    	return resource.data;
+    }
+    
+    function incomingData() {
+    	return request.resource.data;
+    }
+    
+    function getUserData() {
+    	return get(/databases/$(database)/documents/users/$(authUser().uid)).data;
+    }
+    
+    function getGroupData(groupId) {
+    	return get(/databases/$(database)/documents/house_groups/$(groupId)).data;
+    }
+    
+    function isGroupOwner() {
+    	return authUser().uid == getGroupData(getUserData().group_id).owner_uid;
+    }
+    
+    function isGroupMember() {
+    	return authUser().uid in getGroupData(getUserData().group_id).group_members_uids;
+    }
+  }
+}
