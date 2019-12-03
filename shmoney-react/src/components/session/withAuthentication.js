@@ -53,7 +53,7 @@ const withAuthentication = Component => {
                         this.setState({bills, loaded: true});
                      });
 						}).catch(error => {
-							console.log(error.message);
+							console.error(error);
 							//If there is an error then they aren't part of a group
 							//So they should see the Create Group button.
 							this.setState({isNotGroupMember: true, loaded: true });

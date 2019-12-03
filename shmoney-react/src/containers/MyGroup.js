@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { compose } from 'recompose';
 
+import avatar from '../images/avatar.png';
+
 import NavBar from '../components/NavBar';
 import '../styles/MyGroup.css';
 
@@ -110,7 +112,7 @@ const DeleteMembers = ({
 				});
 			})
 			.catch(error => {
-				console.log(error);
+				console.error(error);
 			});
 	};
 
@@ -643,7 +645,23 @@ const RightInfoOwner = ({ onChangeGroupMembers, onChangeCurrentBill }) => {
 					<Accordion.Collapse eventKey="0">
 						<Card.Body>
 							{onChangeGroupMembers &&
-								onChangeGroupMembers.map((item, key) => <p key={key}>{item.username}</p>)}
+							<ul>{onChangeGroupMembers.map((item, key) => (
+									<li key={key}>
+										<Media>
+											<img
+												width={64}
+												height={64}
+												className="mr-3"
+												src={item.photo_url ? item.photo_url : avatar }
+												alt="None"
+											/>
+											<Media.Body>
+												<h1>{item.username}</h1>
+											</Media.Body>
+										</Media>
+									</li>
+								))}
+								</ul>}
 						</Card.Body>
 					</Accordion.Collapse>
 				</Card>
@@ -691,7 +709,23 @@ const RightInfo = ({ onChangeGroupMembers, onChangeCurrentBill }) => {
 					<Accordion.Collapse eventKey="0">
 						<Card.Body>
 							{onChangeGroupMembers &&
-								onChangeGroupMembers.map((item, key) => <p key={key}>{item.username}</p>)}
+								<ul>{onChangeGroupMembers.map((item, key) => 
+									<li key={key}>
+										<Media>
+											<img
+												width={64}
+												height={64}
+												className="mr-3"
+												src={item.photo_url ? item.photo_url : avatar }
+												alt="None"
+											/>
+											<Media.Body>
+												<h5>{item.username}</h5>
+											</Media.Body>
+										</Media>
+									</li>
+								)}
+								</ul>}
 						</Card.Body>
 					</Accordion.Collapse>
 				</Card>

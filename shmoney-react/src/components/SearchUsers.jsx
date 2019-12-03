@@ -45,7 +45,7 @@ class SearchUsersBase extends React.Component {
 
 			return this.setState({userResults});
 		}).catch(error => {
-			console.log(error);
+			console.error(error);
 		})
 	}
 	addUser = (uid) => {
@@ -67,7 +67,7 @@ class SearchUsersBase extends React.Component {
 				}
 			}
 		}).catch(error => {
-			console.log(error);
+			console.error(error);
 		});
 	}
 	componentDidMount() {
