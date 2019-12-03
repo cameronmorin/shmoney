@@ -40,7 +40,7 @@ class Firebase {
 		});
 		return this.user(this.auth.currentUser.uid).set({
 				username: newUsername,
-			},{merge: true}).then(() => {
+			},{merge:true}).then(() => {
 				if (groupId) {
 					//Update group username
 					for (let item in groupMembers) {
@@ -54,17 +54,13 @@ class Firebase {
 							.set({
 								group_members: groupMembers,
 								owner_username: newUsername,
-							}, {
-								merge: true
-							});
+							},{merge: true});
 					} else {
 						return this.house_groups()
 							.doc(groupId)
 							.set({
 								group_members: groupMembers,
-							}, {
-								merge: true
-							});
+							},{merge:true});
 					}
 				}
 			})
@@ -148,8 +144,6 @@ class Firebase {
 	 *	@return empty callback or error that can be caught
 	 */
 	addUserToHouseGroup = async (uid, groupId) => {
-		//Two Reads and Two Writes per call
-		//Check if user is already in group so they are not added to multiple
 		return this.user(uid)
 			.get()
 			.then(doc => {
@@ -168,7 +162,7 @@ class Firebase {
 						//Add group id to user's document
 						return this.user(uid).set({
 							group_id: groupId,
-						}, {merge:true});
+						},{merge:true});
 					});
 				}
 			});
@@ -292,10 +286,42 @@ class Firebase {
 		})
 	}
 
-	getAllBills = async (groupId) => {
+	/**
+	 * Gets all the bills within a group
+	 * @param groupId group id for document where bills are
+	 * @return snapshot of all documents in bills collection or error that can be caught
+	 */
+	getAllBills = async groupId => {
 		const groupDoc = this.house_groups().doc(groupId);
 
 		return groupDoc.collection('bills').get();
+	};
+
+	/**
+	 * Create a new bill
+	 * @param uid user id of user that paid
+	 * @param groupName name of group
+	 * @param groupId document id for group
+	 * @param groupMembers array of group members
+	 * @param paymentAmount amount that was paid by the user
+	 * @param billId id for the bill
+	 * @return empty callback or error that can be caught
+	 */
+	markPaid = async (uid, groupName, groupId, groupMembers, paymentAmount, billId) => {
+		const newPaymentDoc = this.user(uid).collection('payment_history').doc();
+		const groupDoc = this.house_groups().doc(groupId);
+
+		return newPaymentDoc.set({
+			group_name: groupName,
+			owner_uid: uid,
+			payment_time: new Date(),
+			payment_amount: paymentAmount,
+			doc_id: newPaymentDoc.id
+		},{merge:true}).then(() => {
+			groupDoc.collection('bills').doc(billId).set({
+				group_members: groupMembers
+			},{merge:true})
+		})
 	}
 
 	/* MERGE AUTH AND FIRESTORE API */

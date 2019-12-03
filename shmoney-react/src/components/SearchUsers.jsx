@@ -94,8 +94,7 @@ class SearchUsersBase extends React.Component {
 						placeholder=""
 						id="rounded-corner-input"
 					/>
-
-					<button type="submit" disabled={isInvalid}>Search</button>
+					<Button variant="secondary" type="submit" disabled={isInvalid}>Search</Button>
 				</form>
 				<div className="search-results">
 					{userResults && <ul className="list-group">{userResults.map((item, key) => (
