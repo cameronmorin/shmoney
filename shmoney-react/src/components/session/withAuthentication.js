@@ -19,7 +19,7 @@ const withAuthentication = Component => {
 				ownerUid: null,
             onGroupListUpdate: null,
             previousRentTotal: null,
-            currentBillId: null,
+            currentBill: null,
             bills: null,
             loaded: false
 			};
@@ -29,7 +29,9 @@ const withAuthentication = Component => {
             if(authUser) {
                this.setState({authUser});
 					this.props.firebase.getHouseGroupData().then(result => {
-							let groupOwnerUid = result.owner_uid;
+                     const groupOwnerUid = result.owner_uid;
+                     const currentBillId = result.current_bill_id;
+
 							this.setState({
 								groupMembers: result.group_members,
 								groupName: result.group_name,
@@ -37,8 +39,7 @@ const withAuthentication = Component => {
 								groupId: result.group_id,
 								ownerUid: groupOwnerUid,
                         onGroupListUpdate: this.updateGroupMembers,
-                        previousRentTotal: result.previous_rent_total,
-                        currentBillId: result.current_bill_id
+                        previousRentTotal: result.previous_rent_total
                      });
                      
                      return this.props.firebase.getAllBills(this.state.groupId).then(snapshot => {
@@ -46,6 +47,8 @@ const withAuthentication = Component => {
                      	snapshot.forEach(doc => {
                      		bills.push(doc.data());
                         });
+
+                        this.updateCurrentBill(currentBillId, bills);
 
                         this.setState({bills, loaded: true});
                      });
@@ -77,6 +80,13 @@ const withAuthentication = Component => {
       updateGroupMembers = groupMembers => {
          this.setState({groupMembers});
       }
+      updateCurrentBill = (currentBillId, bills) => {
+		for (let item in bills) {
+			if (bills[item].doc_id === currentBillId) {
+				this.setState({ currentBill: bills[item] });
+			}
+		}
+	};
       render() {
          return(
             <AuthUserContext.Provider value={{state: this.state}}>

@@ -755,8 +755,6 @@ class MyGroupBase extends React.Component {
 				const groupState = this.props.groupState;
 				const isGroupOwner = authUser.uid === groupState.ownerUid;
 
-				this.updateCurrentBill(groupState.currentBillId, groupState.bills);
-
 				this.setState({
 					groupMembers: groupState.groupMembers,
 					groupName: groupState.groupName,
@@ -765,12 +763,11 @@ class MyGroupBase extends React.Component {
 					isGroupOwner,
 					groupId: groupState.groupId,
 					ownerUid: groupState.ownerUid,
+					currentBill: groupState.currentBill
 				});
 			}, 800);
 		} else {
 			const isGroupOwner = authUser.uid === groupState.ownerUid;
-
-			this.updateCurrentBill(groupState.currentBillId, groupState.bills);
 
 			this.setState({
 				groupMembers: groupState.groupMembers,
@@ -780,16 +777,10 @@ class MyGroupBase extends React.Component {
 				isGroupOwner,
 				groupId: groupState.groupId,
 				ownerUid: groupState.ownerUid,
+				currentBill: groupState.currentBill
 			});
 		}
 	}
-	updateCurrentBill = (currentBillId, bills) => {
-		for (let item in bills) {
-			if (bills[item].doc_id === currentBillId) {
-				this.setState({ currentBill: bills[item] });
-			}
-		}
-	};
 	updateMembersList = groupMembers => {
 		//Update the group members list with updated list
 		this.setState({ groupMembers });
