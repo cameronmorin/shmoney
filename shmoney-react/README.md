@@ -1,3 +1,1 @@
-#Shmoney (Rent Sharing React Web App)
-
- [Check It Out](https://www.shmoney.software/#/)
+[Shmoney](https://www.shmoney.software/#/) (A Rent Sharing React Web App)
