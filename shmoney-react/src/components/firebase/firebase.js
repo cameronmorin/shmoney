@@ -99,6 +99,7 @@ class Firebase {
 			group_members: [{
 				uid: this.auth.currentUser.uid,
 				username: this.auth.currentUser.displayName,
+				photo_url: this.auth.currentUser.photoURL
 			}],
 			group_members_uids: [this.auth.currentUser.uid]
 		},{merge:true});
@@ -156,13 +157,15 @@ class Firebase {
 			.then(doc => {
 				const userGroupId = doc.data().group_id;
 				const username = doc.data().username;
+				const photo_url = doc.data().photoURL;
 
 				if (!userGroupId) {
 					//Add user to house members list
 					return this.house_groups().doc(groupId).set({
 						group_members: this.fieldValue.arrayUnion({
-							uid: uid,
-							username: username,
+							uid,
+							username,
+							photo_url 
 						}),
 						group_members_uids: this.fieldValue.arrayUnion(uid)
 					},{merge:true}).then(() => {
