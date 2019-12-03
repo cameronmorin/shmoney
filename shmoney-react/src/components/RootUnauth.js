@@ -16,7 +16,7 @@ export default class NoPath extends React.Component {
                 <div className = "top-box">
                   <div className="subject-text top">
                     <div>
-                      $hmoney helps you <br></br>
+                      Shmoney helps you <br></br>
                       keep track of your rent <br></br>
                       and stay organized.
                     </div>
