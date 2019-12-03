@@ -21,8 +21,9 @@ service cloud.firestore {
     	//Allow any user to read a user document
       //Allow only the document owner to write to their document
       //Allow the group owner to update the user document
-    	allow read, update: if isSignedIn();
+    	allow read: if isSignedIn();
       allow write: if isOwner(userId);
+      allow update: if isGroupOwner();
       
       match /payment_history/{document=**} {
       	//Allow user to read and write to new/existing payment history sub-collection
