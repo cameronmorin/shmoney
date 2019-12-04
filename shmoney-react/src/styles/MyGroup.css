@@ -36,14 +36,6 @@
     font-family: 'Righteous', cursive;
 }
 
-.padding-10 {
-    padding-bottom: 10px;
-}
-
-.padding-left-10 {
-    padding-left: 10px;
-}
-
 .header-styling {
     background-color: #35B27F;
 }
@@ -64,10 +56,6 @@
     border: none;
     justify-content: center;
     align-items: center;
-}
-
-.button-spacing {
-    padding-right: 10px;
 }
 
 #button-styling:hover {

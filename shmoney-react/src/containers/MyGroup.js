@@ -43,7 +43,7 @@ const AddMembers = ({ onGroupListUpdate, onLocalGroupListUpdate }) => {
 			</Button>
 
 			<Modal show={show} onHide={handleClose} animation={false}>
-				<Modal.Header className="header-styling button-spacing" closeButton>
+				<Modal.Header className="header-styling" closeButton>
 					<Modal.Title className="universal-font">Add Members</Modal.Title>
 				</Modal.Header>
 				<Modal.Body>
@@ -74,7 +74,7 @@ const AddBill = () => {
 				Add Bills
 			</Button>
 			<Modal show={show} onHide={handleClose} animation={false}>
-				<Modal.Header className="header-styling button-spacing" closeButton>
+				<Modal.Header className="header-styling" closeButton>
 					<Modal.Title className="universal-font">Add Bills</Modal.Title>
 				</Modal.Header>
 				<Modal.Body>
@@ -125,7 +125,7 @@ const DeleteMembers = ({
 			</Button>
 
 			<Modal show={show} onHide={handleClose} animation={false}>
-				<Modal.Header className="header-styling button-spacing" closeButton>
+				<Modal.Header className="header-styling" closeButton>
 					<Modal.Title className="universal-font">Delete Members</Modal.Title>
 				</Modal.Header>
 				<Modal.Body>
