@@ -324,19 +324,10 @@ class Firebase {
 		})
 	}
 
-	verifyPayment = async (uid, groupId, billId, groupName, paymentAmount) => {
-		const currentBill = this.house_groups().doc(groupId).collection('bills').doc(billId);
-		let houseMembers = currentBill.data().group_members;
-		for (let member in houseMembers) {
-			if (member.uid === uid) {
-				member.paid_status = true;
-				break;
-			}
-		}
-		
+	verifyPayment = async (uid, groupId, billId, billMembers, groupName, paymentAmount) => {
 		//Update Bill
-		return this.group_bills(groupId).doc(billId).update({
-			group_members: houseMembers
+		return this.group_bills(groupId).doc(billId).set({
+			group_members: billMembers
 		},{merge:true}).then(() => {
 			const paymentDoc = this.user(uid).collection('payment_history').doc();
 

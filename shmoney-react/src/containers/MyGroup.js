@@ -367,7 +367,7 @@ const CurrentBillsTableOwner = ({ isGroupOwner, groupId, billId, billMembers, gr
 					break;
 			}
 
-			console.log(currentUser, groupId, billId, billMembers, groupName, paymentAmount)
+			console.log(currentUser, groupId, billId, billMembers, groupName, paymentAmount);
 
 			firebase.verifyPayment(currentUser, groupId, billId, billMembers, groupName, paymentAmount)
 				.then(() => {
