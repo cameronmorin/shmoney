@@ -70,14 +70,14 @@ const AddBill = () => {
 				Add Bills
 			</Button>
 			<Modal show={show} onHide={handleClose} animation={false}>
-				<Modal.Header closeButton>
-					<Modal.Title>Add Bills</Modal.Title>
+				<Modal.Header className="header-styling" closeButton>
+					<Modal.Title className="universal-font">Add Bills</Modal.Title>
 				</Modal.Header>
 				<Modal.Body>
 					<CreateBill />
 				</Modal.Body>
 				<Modal.Footer>
-					<Button variant="secondary" onClick={handleClose}>
+					<Button variant="secondary" id="button-styling" onClick={handleClose}>
 						Close
 					</Button>
 				</Modal.Footer>
@@ -272,16 +272,19 @@ const CreateGroupModal = () => {
 			</Button>
 
 			<Modal show={show} onHide={handleClose} animation={false}>
-				<Modal.Header closeButton>
-					<Modal.Title>Create Group</Modal.Title>
+				<Modal.Header closeButton className="header-styling">
+					<Modal.Title className="universal-font" variant="secondary">
+						Create Group
+					</Modal.Title>
 				</Modal.Header>
 				<Modal.Body>
+					<div className="universal-font">House Name:</div>
 					<InputGroup className="mb-3">
 						<CreateGroup />
 					</InputGroup>
 				</Modal.Body>
 				<Modal.Footer>
-					<Button variant="secondary" onClick={handleClose}>
+					<Button variant="secondary" id="button-styling" onClick={handleClose}>
 						Close
 					</Button>
 				</Modal.Footer>
