@@ -92,11 +92,10 @@ class CreateBillBase extends Component {
 						onChange={this.onChange}
 						id="modified-input-field"
 					/>
-					<div className="padding-10"></div>
 				</div>
 				<div className="date-picker">
 					<div className="universal-padding-3">
-						<label className="universal-font">Due Date</label>
+						<label className="universal-font my-1">Due Date</label>
 					</div>
 					<DatePicker
 						selected={this.state.dueDate}
