@@ -20,5 +20,6 @@
 # Sprint 3
 ## PostSprint Goals:
 -Update LatePayment History Graph
+
 ![](Burndown3.png)
 
