@@ -324,6 +324,26 @@ class Firebase {
 		})
 	}
 
+	verifyPayment = async (uid, groupId, billId) => {
+		
+		return this.house_groups()
+			.doc(groupId)
+			.collection('bills')
+			.doc(billId)
+			.get()
+			.then(doc => {
+				//Get the array of house member objects
+				let houseMembers = doc.data().group_members;
+				//Find user object by uid and remove them from the array
+				for (let i = 0; i < houseMembers.length; i++) {
+					if (houseMembers[i].uid === uid) {
+						houseMembers[i].paid_status = true;
+						break;
+					}
+				}
+			});
+	}
+
 	/* MERGE AUTH AND FIRESTORE API */
 	onAuthUserListener = (next, fallback) => {
 		this.auth.onAuthStateChanged(authUser => {
