@@ -20,6 +20,7 @@ const withAuthentication = Component => {
             onGroupListUpdate: null,
             previousRentTotal: null,
             currentBill: null,
+            currentBillId: null,
             bills: null,
             paymentHistory: null,
             loaded: false
@@ -40,7 +41,8 @@ const withAuthentication = Component => {
 								groupId: result.group_id,
 								ownerUid: groupOwnerUid,
                         onGroupListUpdate: this.updateGroupMembers,
-                        previousRentTotal: result.previous_rent_total
+                        previousRentTotal: result.previous_rent_total,
+                        currentBillId
                      });
 
                      //this.updatePaymentHistory();
@@ -69,9 +71,7 @@ const withAuthentication = Component => {
                            //Order list by date
                            paymentHistory.sort((x, y) => {
                               return y.payment_time - x.payment_time;
-                           })
-
-                           console.log(paymentHistory);
+                           });
 
                            this.setState({paymentHistory});
                         });
@@ -93,7 +93,9 @@ const withAuthentication = Component => {
                   groupId: null,
                   ownerId: null,
                   previousRentTotal: null,
-                  loaded: true
+                  currentBill: null,
+                  currentBillId: null,
+                  loaded: true 
 				   });
             }
          }) 
