@@ -31,3 +31,44 @@
     color: white;
     text-decoration: none;
 }
+
+.universal-font {
+    font-family: 'Righteous', cursive;
+}
+
+.header-styling {
+    background-color: #35B27F;
+}
+
+#modified-input-field {
+    border-radius: 5px; 
+    border-color: #e5e5e5;
+    border-width: 1px;
+    background-color: #d6d6d6;
+}
+
+#button-styling {
+    background-color: #35B27F;
+    border-radius: 5px;
+    border-color: white;
+    height: 40px;
+    color: black;
+    border: none;
+    justify-content: center;
+    align-items: center;
+}
+
+#button-styling:hover {
+    background-color: rgb(41, 136, 98);
+}
+
+#button-styling-search {
+    background-color: #35B27F;
+    border-radius: 5px;
+    border-color: white;
+    height: 40px;
+    color: black;
+    border: none;
+    justify-content: center;
+    align-items: center;
+}

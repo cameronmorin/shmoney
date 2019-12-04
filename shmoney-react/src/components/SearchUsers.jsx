@@ -86,7 +86,7 @@ class SearchUsersBase extends React.Component {
 		return (
 			<div>
 				<form onSubmit={this.onSubmit}>
-					<div className="universal-padding-3">
+					<div className="universal-padding-3 universal-font">
 						Username:
 					</div>
 					<input
@@ -97,7 +97,7 @@ class SearchUsersBase extends React.Component {
 						placeholder=""
 						id="rounded-corner-input"
 					/>
-					<Button variant="secondary" type="submit" disabled={isInvalid}>Search</Button>
+					<Button variant="secondary" type="submit" id="button-styling-search" disabled={isInvalid}>Search</Button>
 				</form>
 				<div className="search-results">
 					{userResults && <ul className="list-group">{userResults.map((item, key) => (

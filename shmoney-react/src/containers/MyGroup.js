@@ -43,8 +43,8 @@ const AddMembers = ({ onGroupListUpdate, onLocalGroupListUpdate }) => {
 			</Button>
 
 			<Modal show={show} onHide={handleClose} animation={false}>
-				<Modal.Header closeButton>
-					<Modal.Title>Add Members</Modal.Title>
+				<Modal.Header className="header-styling" closeButton>
+					<Modal.Title className="universal-font">Add Members</Modal.Title>
 				</Modal.Header>
 				<Modal.Body>
 					<SearchUsers
@@ -53,7 +53,7 @@ const AddMembers = ({ onGroupListUpdate, onLocalGroupListUpdate }) => {
 					/>
 				</Modal.Body>
 				<Modal.Footer>
-					<Button variant="secondary" onClick={handleClose}>
+					<Button variant="secondary" id="button-styling" onClick={handleClose}>
 						Close
 					</Button>
 				</Modal.Footer>
@@ -74,14 +74,14 @@ const AddBill = () => {
 				Add Bills
 			</Button>
 			<Modal show={show} onHide={handleClose} animation={false}>
-				<Modal.Header closeButton>
-					<Modal.Title>Add Bills</Modal.Title>
+				<Modal.Header className="header-styling" closeButton>
+					<Modal.Title className="universal-font">Add Bills</Modal.Title>
 				</Modal.Header>
 				<Modal.Body>
 					<CreateBill />
 				</Modal.Body>
 				<Modal.Footer>
-					<Button variant="secondary" onClick={handleClose}>
+					<Button variant="secondary" id="button-styling" onClick={handleClose}>
 						Close
 					</Button>
 				</Modal.Footer>
@@ -125,8 +125,8 @@ const DeleteMembers = ({
 			</Button>
 
 			<Modal show={show} onHide={handleClose} animation={false}>
-				<Modal.Header closeButton>
-					<Modal.Title>Delete Members</Modal.Title>
+				<Modal.Header className="header-styling" closeButton>
+					<Modal.Title className="universal-font">Delete Members</Modal.Title>
 				</Modal.Header>
 				<Modal.Body>
 					<InputGroup className="mb-3">
@@ -135,7 +135,7 @@ const DeleteMembers = ({
 								<div key={key}>
 									{index.uid !== onChangeOwnerUid && <li className="list-group-item" style={{display: "flex", justifyContent: "space-between"}} key={key}>
 										<span className="align-items-center mx-2" style={{margin: "auto"}}>{index.username}</span>
-										<Button variant="outline-secondary" onClick={() => removeUser(index.uid)}>Delete</Button>
+										<Button variant="outline-secondary" id="button-styling" onClick={() => removeUser(index.uid)}>Delete</Button>
 									</li>}
 								</div>
 							))}
@@ -143,7 +143,7 @@ const DeleteMembers = ({
 					</InputGroup>
 				</Modal.Body>
 				<Modal.Footer>
-					<Button variant="secondary" onClick={handleClose}>
+					<Button variant="secondary" id="button-styling" onClick={handleClose}>
 						Close
 					</Button>
 				</Modal.Footer>
@@ -171,16 +171,16 @@ const DeleteGroup = ({ firebase, onChangeGroupId }) => {
 			</Button>
 
 			<Modal show={show} onHide={handleClose} animation={false}>
-				<Modal.Header closeButton>
-					<Modal.Title>Are you sure?</Modal.Title>
+				<Modal.Header className="header-styling" closeButton>
+					<Modal.Title className="universal-font">Are you sure?</Modal.Title>
 				</Modal.Header>
 				<Modal.Body>
-					<Button variant="secondary" onClick={deleteGroup}>
+					<Button variant="secondary" id="button-styling" onClick={deleteGroup}>
 						Confirm
 					</Button>
 				</Modal.Body>
 				<Modal.Footer>
-					<Button variant="secondary" onClick={handleClose}>
+					<Button variant="secondary" id="button-styling" onClick={handleClose}>
 						Close
 					</Button>
 				</Modal.Footer>
@@ -208,16 +208,16 @@ const LeaveGroup = ({ firebase, onChangeGroupId, currentUser }) => {
 			</Button>
 
 			<Modal show={show} onHide={handleClose} animation={false}>
-				<Modal.Header closeButton>
-					<Modal.Title>Are you sure?</Modal.Title>
+				<Modal.Header className="header-styling" closeButton>
+					<Modal.Title className="universal-font">Are you sure?</Modal.Title>
 				</Modal.Header>
 				<Modal.Body>
-					<Button variant="secondary" onClick={leaveGroup}>
+					<Button variant="secondary" id="button-styling" onClick={leaveGroup}>
 						Confirm
 					</Button>
 				</Modal.Body>
 				<Modal.Footer>
-					<Button variant="secondary" onClick={handleClose}>
+					<Button variant="secondary" id="button-styling" onClick={handleClose}>
 						Close
 					</Button>
 				</Modal.Footer>
@@ -276,16 +276,19 @@ const CreateGroupModal = () => {
 			</Button>
 
 			<Modal show={show} onHide={handleClose} animation={false}>
-				<Modal.Header closeButton>
-					<Modal.Title>Create Group</Modal.Title>
+				<Modal.Header closeButton className="header-styling">
+					<Modal.Title className="universal-font" variant="secondary">
+						Create Group
+					</Modal.Title>
 				</Modal.Header>
 				<Modal.Body>
+					<div className="universal-font">House Name:</div>
 					<InputGroup className="mb-3">
 						<CreateGroup />
 					</InputGroup>
 				</Modal.Body>
 				<Modal.Footer>
-					<Button variant="secondary" onClick={handleClose}>
+					<Button variant="secondary" id="button-styling" onClick={handleClose}>
 						Close
 					</Button>
 				</Modal.Footer>
@@ -414,8 +417,8 @@ const CurrentBillsTableOwner = ({ isGroupOwner, groupId, billId, billMembers, gr
 			}
 
 			<Modal show={currentUser} onHide={handleCancel} animation={false}>
-				<Modal.Header closeButton>
-					<Modal.Title>Verify Payment</Modal.Title>
+				<Modal.Header className="header-styling" closeButton>
+					<Modal.Title className="universal-font">Verify Payment</Modal.Title>
 				</Modal.Header>
 				<Modal.Body>
 					<p>Paid on time?</p>
@@ -424,12 +427,12 @@ const CurrentBillsTableOwner = ({ isGroupOwner, groupId, billId, billMembers, gr
 						<ToggleButton value={2}>No</ToggleButton>
 					</ToggleButtonGroup> */}
 					<ButtonGroup>
-						<Button variant="primary" onClick={() => setPaidStatus('yes')}>Yes</Button>
-						<Button variant="primary" onClick={() => setPaidStatus('no')}>No</Button>
+						<Button variant="primary" id="button-styling" className="mx-1" onClick={() => setPaidStatus('yes')}>Yes</Button>
+						<Button variant="primary" id="button-styling" className="mx-1" onClick={() => setPaidStatus('no')}>No</Button>
 					</ButtonGroup>
 				</Modal.Body>
 				<Modal.Footer>
-					<Button variant="secondary" onClick={handleClose}>
+					<Button variant="secondary" id="button-styling" onClick={handleClose}>
 						Confirm
 					</Button>
 				</Modal.Footer>
@@ -584,8 +587,8 @@ const TransferOwnership = ({ groupMembers, currentOwnerID, firebase, groupId }) 
 			</Button>
 
 			<Modal show={show} onHide={handleClose} animation={false}>
-				<Modal.Header closeButton>
-					<Modal.Title>Pick New Owner</Modal.Title>
+				<Modal.Header className="header-styling" closeButton>
+					<Modal.Title className="universal-font">Pick New Owner</Modal.Title>
 				</Modal.Header>
 				<Modal.Body>
 					{onlyMembers.length === 0 && (
@@ -612,6 +615,7 @@ const TransferOwnership = ({ groupMembers, currentOwnerID, firebase, groupId }) 
 															window.location.reload();
 														})
 												}
+												id="button-styling"
 											>
 												Make Owner
 											</Button>
@@ -623,7 +627,7 @@ const TransferOwnership = ({ groupMembers, currentOwnerID, firebase, groupId }) 
 					)}
 				</Modal.Body>
 				<Modal.Footer>
-					<Button variant="secondary" onClick={handleClose}>
+					<Button variant="secondary" id="button-styling" onClick={handleClose}>
 						Close
 					</Button>
 				</Modal.Footer>
