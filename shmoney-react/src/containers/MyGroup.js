@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { compose } from 'recompose';
 
+import avatar from '../images/avatar.png';
+
 import NavBar from '../components/NavBar';
 import '../styles/MyGroup.css';
 
@@ -110,7 +112,7 @@ const DeleteMembers = ({
 				});
 			})
 			.catch(error => {
-				console.log(error);
+				console.error(error);
 			});
 	};
 
@@ -290,38 +292,27 @@ const CreateGroupModal = () => {
 	);
 };
 
-const PaymentsTable = () => {
+const PaymentsTable = ({onChangePaymentHistory}) => {
+	if(!onChangePaymentHistory) return <></>;
+	
 	return (
 		<>
 			<Table striped bordered hover>
 				<thead>
 					<tr>
-						<th>#</th>
 						<th>House Name</th>
 						<th>Payment Date</th>
 						<th>Payment Amount</th>
 					</tr>
 				</thead>
-				<tbody>
-					<tr>
-						<td>1</td>
-						<td>Cool House</td>
-						<td>11/11/19</td>
-						<td>$1000</td>
+				{onChangePaymentHistory && <tbody>{onChangePaymentHistory.map((item, key) => (
+					<tr key={key}>
+						<td>{item.group_name}</td>
+						<td>{item.payment_time.toLocaleString()}</td>
+						<td>{item.payment_amount}</td>
 					</tr>
-					<tr>
-						<td>2</td>
-						<td>Cool House</td>
-						<td>12/11/19</td>
-						<td>$1000</td>
-					</tr>
-					<tr>
-						<td>3</td>
-						<td>Cool House</td>
-						<td>1/11/20</td>
-						<td>$1000</td>
-					</tr>
-				</tbody>
+				))
+				}</tbody>}
 			</Table>
 		</>
 	);
@@ -630,7 +621,7 @@ const TransferOwnership = ({ groupMembers, currentOwnerID, firebase, groupId }) 
 	);
 }
 
-const RightInfoOwner = ({ onChangeGroupMembers, onChangeCurrentBill }) => {
+const RightInfoOwner = ({ onChangeGroupMembers, onChangeCurrentBill, onChangePaymentHistory }) => {
 	return (
 		<>
 			<Accordion defaultActiveKey="0">
@@ -643,7 +634,23 @@ const RightInfoOwner = ({ onChangeGroupMembers, onChangeCurrentBill }) => {
 					<Accordion.Collapse eventKey="0">
 						<Card.Body>
 							{onChangeGroupMembers &&
-								onChangeGroupMembers.map((item, key) => <p key={key}>{item.username}</p>)}
+							<ul>{onChangeGroupMembers.map((item, key) => (
+									<li key={key}>
+										<Media>
+											<img
+												width={64}
+												height={64}
+												className="mr-3"
+												src={item.photo_url ? item.photo_url : avatar }
+												alt="None"
+											/>
+											<Media.Body>
+												<h1>{item.username}</h1>
+											</Media.Body>
+										</Media>
+									</li>
+								))}
+								</ul>}
 						</Card.Body>
 					</Accordion.Collapse>
 				</Card>
@@ -669,7 +676,7 @@ const RightInfoOwner = ({ onChangeGroupMembers, onChangeCurrentBill }) => {
 					</Card.Header>
 					<Accordion.Collapse eventKey="2">
 						<Card.Body>
-							<PaymentsTable />
+							<PaymentsTable onChangePaymentHistory={onChangePaymentHistory} />
 						</Card.Body>
 					</Accordion.Collapse>
 				</Card>
@@ -678,7 +685,7 @@ const RightInfoOwner = ({ onChangeGroupMembers, onChangeCurrentBill }) => {
 	);
 };
 
-const RightInfo = ({ onChangeGroupMembers, onChangeCurrentBill }) => {
+const RightInfo = ({ onChangeGroupMembers, onChangeCurrentBill, onChangePaymentHistory }) => {
 	return (
 		<>
 			<Accordion defaultActiveKey="0">
@@ -691,7 +698,23 @@ const RightInfo = ({ onChangeGroupMembers, onChangeCurrentBill }) => {
 					<Accordion.Collapse eventKey="0">
 						<Card.Body>
 							{onChangeGroupMembers &&
-								onChangeGroupMembers.map((item, key) => <p key={key}>{item.username}</p>)}
+								<ul>{onChangeGroupMembers.map((item, key) => 
+									<li key={key}>
+										<Media>
+											<img
+												width={64}
+												height={64}
+												className="mr-3"
+												src={item.photo_url ? item.photo_url : avatar }
+												alt="None"
+											/>
+											<Media.Body>
+												<h5>{item.username}</h5>
+											</Media.Body>
+										</Media>
+									</li>
+								)}
+								</ul>}
 						</Card.Body>
 					</Accordion.Collapse>
 				</Card>
@@ -717,7 +740,7 @@ const RightInfo = ({ onChangeGroupMembers, onChangeCurrentBill }) => {
 					</Card.Header>
 					<Accordion.Collapse eventKey="2">
 						<Card.Body>
-							<PaymentsTable />
+							<PaymentsTable onChangePaymentHistory={onChangePaymentHistory} />
 						</Card.Body>
 					</Accordion.Collapse>
 				</Card>
@@ -739,6 +762,7 @@ class MyGroupBase extends React.Component {
 			groupId: null,
 			ownerUid: null,
 			currentBill: null,
+			paymentHistory: null
 		};
 	}
 	componentDidMount() {
@@ -755,8 +779,6 @@ class MyGroupBase extends React.Component {
 				const groupState = this.props.groupState;
 				const isGroupOwner = authUser.uid === groupState.ownerUid;
 
-				this.updateCurrentBill(groupState.currentBillId, groupState.bills);
-
 				this.setState({
 					groupMembers: groupState.groupMembers,
 					groupName: groupState.groupName,
@@ -765,12 +787,12 @@ class MyGroupBase extends React.Component {
 					isGroupOwner,
 					groupId: groupState.groupId,
 					ownerUid: groupState.ownerUid,
+					currentBill: groupState.currentBill,
+					paymentHistory: groupState.paymentHistory
 				});
-			}, 800);
+			}, 1000);
 		} else {
 			const isGroupOwner = authUser.uid === groupState.ownerUid;
-
-			this.updateCurrentBill(groupState.currentBillId, groupState.bills);
 
 			this.setState({
 				groupMembers: groupState.groupMembers,
@@ -780,16 +802,11 @@ class MyGroupBase extends React.Component {
 				isGroupOwner,
 				groupId: groupState.groupId,
 				ownerUid: groupState.ownerUid,
+				currentBill: groupState.currentBill,
+				paymentHistory: groupState.paymentHistory
 			});
 		}
 	}
-	updateCurrentBill = (currentBillId, bills) => {
-		for (let item in bills) {
-			if (bills[item].doc_id === currentBillId) {
-				this.setState({ currentBill: bills[item] });
-			}
-		}
-	};
 	updateMembersList = groupMembers => {
 		//Update the group members list with updated list
 		this.setState({ groupMembers });
@@ -859,10 +876,12 @@ class MyGroupBase extends React.Component {
 					<div className="right-grid">
 						{this.state.isGroupMember && !this.state.isGroupOwner && <RightInfo 
 													onChangeGroupMembers={this.state.groupMembers}
-													onChangeCurrentBill={this.state.currentBill}/>}
+													onChangeCurrentBill={this.state.currentBill}
+													onChangePaymentHistory={this.state.paymentHistory}/>}
 						{this.state.isGroupMember && this.state.isGroupOwner && <RightInfoOwner 
 													onChangeGroupMembers={this.state.groupMembers}
-													onChangeCurrentBill={this.state.currentBill}/>}
+													onChangeCurrentBill={this.state.currentBill}
+													onChangePaymentHistory={this.state.paymentHistory}/>}
 						{/* <RightInfo 
 							onChangeGroupMembers={this.state.groupMembers}
 							onChangeCurrentBill={this.state.currentBill} /> */}
