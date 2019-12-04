@@ -65,11 +65,7 @@
 
 .subject-text {
     margin-left: 15%;
-<<<<<<< HEAD
-    padding-top: 7%; 
-=======
     padding-top: 5%; 
->>>>>>> 733453b1c1e6226efc3980fa22583e7cc306e602
     font-size: 40px;
     font-family: 'Righteous', cursive;
     font-weight: bold;
@@ -90,25 +86,14 @@
 
 .insert-image-2{
     float: right;
-<<<<<<< HEAD
-    padding-top: 3%;
-    margin-right: 15%;
-=======
     padding-top: 50px;
     margin-right: 10%;
->>>>>>> 733453b1c1e6226efc3980fa22583e7cc306e602
 }
 
 .insert-image-3{
     float: left;
-<<<<<<< HEAD
-    padding-top: 3%;
-    margin-left: 15%;
-    padding-bottom: 3%;
-=======
     padding-top: 50px;
     margin-left: 14%;
     margin-right: 3%;
     padding-bottom: 50px;
->>>>>>> 733453b1c1e6226efc3980fa22583e7cc306e602
 }

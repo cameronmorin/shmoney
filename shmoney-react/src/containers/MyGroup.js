@@ -41,8 +41,8 @@ const AddMembers = ({ onGroupListUpdate, onLocalGroupListUpdate }) => {
 			</Button>
 
 			<Modal show={show} onHide={handleClose} animation={false}>
-				<Modal.Header closeButton>
-					<Modal.Title>Add Members</Modal.Title>
+				<Modal.Header className="header-styling" closeButton>
+					<Modal.Title className="universal-font">Add Members</Modal.Title>
 				</Modal.Header>
 				<Modal.Body>
 					<SearchUsers
@@ -51,7 +51,7 @@ const AddMembers = ({ onGroupListUpdate, onLocalGroupListUpdate }) => {
 					/>
 				</Modal.Body>
 				<Modal.Footer>
-					<Button variant="secondary" onClick={handleClose}>
+					<Button variant="secondary" id="button-styling" onClick={handleClose}>
 						Close
 					</Button>
 				</Modal.Footer>
@@ -123,8 +123,8 @@ const DeleteMembers = ({
 			</Button>
 
 			<Modal show={show} onHide={handleClose} animation={false}>
-				<Modal.Header closeButton>
-					<Modal.Title>Delete Members</Modal.Title>
+				<Modal.Header className="header-styling" closeButton>
+					<Modal.Title className="universal-font">Delete Members</Modal.Title>
 				</Modal.Header>
 				<Modal.Body>
 					<InputGroup className="mb-3">
@@ -133,7 +133,7 @@ const DeleteMembers = ({
 								<div key={key}>
 									{index.uid !== onChangeOwnerUid && <li className="list-group-item" style={{display: "flex", justifyContent: "space-between"}} key={key}>
 										<span className="align-items-center mx-2" style={{margin: "auto"}}>{index.username}</span>
-										<Button variant="outline-secondary" onClick={() => removeUser(index.uid)}>Delete</Button>
+										<Button variant="outline-secondary" id="button-styling" onClick={() => removeUser(index.uid)}>Delete</Button>
 									</li>}
 								</div>
 							))}
@@ -141,7 +141,7 @@ const DeleteMembers = ({
 					</InputGroup>
 				</Modal.Body>
 				<Modal.Footer>
-					<Button variant="secondary" onClick={handleClose}>
+					<Button variant="secondary" id="button-styling" onClick={handleClose}>
 						Close
 					</Button>
 				</Modal.Footer>
@@ -169,16 +169,16 @@ const DeleteGroup = ({ firebase, onChangeGroupId }) => {
 			</Button>
 
 			<Modal show={show} onHide={handleClose} animation={false}>
-				<Modal.Header closeButton>
-					<Modal.Title>Are you sure?</Modal.Title>
+				<Modal.Header className="header-styling" closeButton>
+					<Modal.Title className="universal-font">Are you sure?</Modal.Title>
 				</Modal.Header>
 				<Modal.Body>
-					<Button variant="secondary" onClick={deleteGroup}>
+					<Button variant="secondary" id="button-styling" onClick={deleteGroup}>
 						Confirm
 					</Button>
 				</Modal.Body>
 				<Modal.Footer>
-					<Button variant="secondary" onClick={handleClose}>
+					<Button variant="secondary" id="button-styling" onClick={handleClose}>
 						Close
 					</Button>
 				</Modal.Footer>
@@ -576,8 +576,8 @@ const TransferOwnership = ({ groupMembers, currentOwnerID, firebase, groupId }) 
 			</Button>
 
 			<Modal show={show} onHide={handleClose} animation={false}>
-				<Modal.Header closeButton>
-					<Modal.Title>Pick New Owner</Modal.Title>
+				<Modal.Header className="header-styling" closeButton>
+					<Modal.Title className="universal-font">Pick New Owner</Modal.Title>
 				</Modal.Header>
 				<Modal.Body>
 					{onlyMembers.length === 0 && (
@@ -604,6 +604,7 @@ const TransferOwnership = ({ groupMembers, currentOwnerID, firebase, groupId }) 
 															window.location.reload();
 														})
 												}
+												id="button-styling"
 											>
 												Make Owner
 											</Button>
@@ -615,7 +616,7 @@ const TransferOwnership = ({ groupMembers, currentOwnerID, firebase, groupId }) 
 					)}
 				</Modal.Body>
 				<Modal.Footer>
-					<Button variant="secondary" onClick={handleClose}>
+					<Button variant="secondary" id="button-styling" onClick={handleClose}>
 						Close
 					</Button>
 				</Modal.Footer>
