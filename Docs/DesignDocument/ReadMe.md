@@ -1,6 +1,4 @@
 # UML
-<<<<<<< HEAD
 
-![](ShmoneyArchitecture.png)
-=======
->>>>>>> master
+![](UmlDec3.png)
+
