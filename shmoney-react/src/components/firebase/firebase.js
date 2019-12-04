@@ -334,6 +334,18 @@ class Firebase {
 		})
 	}
 
+	/* Payment History Functions */
+
+	/**
+	 * Get current user's payment history
+	 * @return collection snapshot of payment documents or error that can be caught
+	 */
+	getPaymentHistory = async () => {
+		const userDoc = this.user(this.auth.currentUser.uid);
+		
+		return userDoc.collection('payment_history').get();
+	}
+
 	/* MERGE AUTH AND FIRESTORE API */
 	onAuthUserListener = (next, fallback) => {
 		this.auth.onAuthStateChanged(authUser => {

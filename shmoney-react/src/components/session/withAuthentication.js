@@ -21,6 +21,7 @@ const withAuthentication = Component => {
             previousRentTotal: null,
             currentBill: null,
             bills: null,
+            paymentHistory: null,
             loaded: false
 			};
       }
@@ -41,6 +42,8 @@ const withAuthentication = Component => {
                         onGroupListUpdate: this.updateGroupMembers,
                         previousRentTotal: result.previous_rent_total
                      });
+
+                     //this.updatePaymentHistory();
                      
                      return this.props.firebase.getAllBills(this.state.groupId).then(snapshot => {
                      	let bills = [];
@@ -51,7 +54,23 @@ const withAuthentication = Component => {
                         this.updateCurrentBill(currentBillId, bills);
 
                         this.setState({bills, loaded: true});
-                     });
+                     }).then(() => {
+                        this.props.firebase.getPaymentHistory().then(snapshot => {
+                           let paymentHistory = [];
+                           snapshot.forEach(doc => {
+                              paymentHistory.push(doc.data());
+                           });
+
+                           for(let item in paymentHistory) {
+                              let paymentTime = paymentHistory[item].payment_time;
+                              paymentHistory[item].payment_time = paymentTime.toDate();
+                           }
+
+                           console.log(paymentHistory);
+
+                           this.setState({paymentHistory});
+                        });
+                     })
 						}).catch(error => {
 							console.error(error);
 							//If there is an error then they aren't part of a group
@@ -85,7 +104,7 @@ const withAuthentication = Component => {
 			if (bills[item].doc_id === currentBillId) {
 				this.setState({ currentBill: bills[item] });
 			}
-		}
+      }
 	};
       render() {
          return(
