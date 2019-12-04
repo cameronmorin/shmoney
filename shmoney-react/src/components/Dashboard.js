@@ -4,7 +4,7 @@ import './Home.jsx';
 import RedX from '../images/red_x.svg';
 import GreenCheck from '../images/checked.svg';
 
-import { Table, Accordion, Card, Alert, AccordionCollapse } from 'react-bootstrap';
+import { Table, Button, Accordion, Card, Alert, AccordionCollapse } from 'react-bootstrap';
 import PieChart from './PieChart.js';
 import { compose } from 'recompose';
 import { withFirebase } from './firebase';
@@ -112,8 +112,8 @@ const MyAccord = ({onChangeCurrentBill}) => {
       <Accordion defaultActiveKey = "0">
         <Card text="dark" border="light">
             <Card.Header>
-                <Accordion.Toggle as={Card.Header}  eventKey="0">
-                    Group Info
+                <Accordion.Toggle as={Button} variant= "link" eventKey="0">
+                    <h1>Group Info</h1>
                 </Accordion.Toggle>
             </Card.Header>
             <Accordion.Collapse eventKey="0">
@@ -148,10 +148,10 @@ const BillCard = ({onChangeCurrentBill, onChangeAuthUser, onChangeIsGroupOwner})
   return (
       <Card className="mb-4" text="dark">
         <Card.Header>
-          Current Bill
+          <p>Current Bill</p>
         </Card.Header>
         <Card.Body>
-          <Card.Title>Due: {dueDate.toDate().toLocaleDateString()}</Card.Title>
+          <Card.Title><p>Due: {dueDate.toDate().toLocaleDateString()}</p></Card.Title>
           <Card.Text>
             Amount: ${amountDue}
           </Card.Text>
@@ -216,7 +216,7 @@ const Pie = () => {
 	return (
       <Card className = "bg-light" text="light" >
         <Card.Title className = "bg-dark" text="light">
-          On Time History
+        <p>On Time History</p>
         </Card.Title>
         <Card.Body>
           <PieChart/>

@@ -85,6 +85,8 @@ const UpdatePhoto = () => {
 
 const PaymentsTable = ({onChangePaymentHistory}) => {
 	if(!onChangePaymentHistory) return <></>;
+	
+	console.log(onChangePaymentHistory);
 
 	return (
 		<>
