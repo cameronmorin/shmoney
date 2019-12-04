@@ -40,7 +40,6 @@ class CreateGroupBase extends Component {
                   onChange={this.onChange}
                   id = "modified-input-field"
                />
-               <div className="padding-10"></div>
                <button type="submit" id="button-styling">Create</button>
                <div className="error-message">
                   {error && <p>{error.message}</p>}
