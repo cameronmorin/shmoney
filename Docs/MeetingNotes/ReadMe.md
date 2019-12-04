@@ -28,12 +28,12 @@
 ## Things to Improve On:
 - Consistent updating of the Trello Scrum Sheet
 ## PostSprint Goals:
--Change username <br/>
--Add bill functionality <br/>
--Verify Bills
--Establish Group Owner privileges
--Display payment history
--Display total amount spent
+- Change username <br/>
+- Add bill functionality <br/>
+- Verify Bills
+- Establish Group Owner privileges
+- Display payment history
+- Display total amount spent
 
 ![](Burndown2.png)
 
@@ -47,9 +47,9 @@
 - Security Rules implemented
 - Posting Bills to members connected through database
 ## PostSprint Goals:
--Update LatePayment History Graph
--Individual Rent Amount for Each Group Member
--Reset password
+- Update LatePayment History Graph
+- Individual Rent Amount for Each Group Member
+- Reset password
 
 ![](Burndown3.png)
 
