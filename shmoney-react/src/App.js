@@ -6,30 +6,28 @@ import { compose } from 'recompose';
 import Routes from './Routes';
 
 class App extends React.Component {
-  onClickHome = async event => {
+  onClickHome = event => {
     event.preventDefault();
     
-    this.props.history.push("/");
+    this.props.history.push('/');
   }
 
-  onClickLogout = async event => {
+  onClickLogout = event => {
     event.preventDefault();
 
     this.props.firebase.signOut();
-    this.props.history.push("/");
+    this.props.history.push('/');
   }
 
-  onClickAvatar = async event => {
+  onClickAvatar = event => {
     event.preventDefault();
 
-    // const userPath = '/' + authUser.displayName;
     if (window.location.pathname !== '/profile') {
-      // this.props.history.push(userPath);
       this.props.history.push('/profile');
     }
   }
 
-  onClickMenu = async event => {
+  onClickMenu = event => {
     const currTarget = event.currentTarget.textContent;
     
     switch(currTarget) {
@@ -50,7 +48,7 @@ class App extends React.Component {
     }
   }
 
-  onClickButton = async event => {
+  onClickButton = event => {
     event.preventDefault();
 
     const action = event.currentTarget.textContent;

@@ -4,7 +4,7 @@ import './Home.jsx';
 import RedX from '../images/red_x.svg';
 import GreenCheck from '../images/checked.svg';
 
-import { Table, Accordion, Card, Alert, AccordionCollapse } from 'react-bootstrap';
+import { Table, Button, Accordion, Card, Alert, AccordionCollapse } from 'react-bootstrap';
 import PieChart from './PieChart.js';
 import { compose } from 'recompose';
 import { withFirebase } from './firebase';
@@ -23,7 +23,6 @@ class DashboardBase extends React.Component {
       isGroupOwner: false,
       groupId: null,
       ownerUid: null,
-      currentBillId: null,
       bills: null,
       currentBill: null
 	  };
@@ -38,8 +37,6 @@ class DashboardBase extends React.Component {
         const authUser = this.props.authUser;
         const groupState = this.props.groupState;
         const isGroupOwner = authUser.uid === groupState.ownerUid;
-        
-        this.updateCurrentBill(groupState.currentBillId, groupState.bills);
 
         this.setState({
           authUser,
@@ -50,14 +47,12 @@ class DashboardBase extends React.Component {
           isGroupOwner,
           groupId: groupState.groupId,
           ownerUid: groupState.ownerUid,
-          currentBillId: groupState.currentBillId,
-          bills: groupState.bills
+          bills: groupState.bills,
+          currentBill: groupState.currentBill
         });
       }, 700);
     } else {
       const isGroupOwner = authUser.uid === groupState.ownerUid;
-
-      this.updateCurrentBill(groupState.currentBillId, groupState.bills);
 
       this.setState({
         authUser,
@@ -68,16 +63,9 @@ class DashboardBase extends React.Component {
         isGroupOwner,
         groupId: groupState.groupId,
         ownerUid: groupState.ownerUid,
-        currentBillId: groupState.currentBillId,
-        bills: groupState.bills
+        bills: groupState.bills,
+        currentBill: groupState.currentBill
       });
-    }
-  }
-  updateCurrentBill = (currentBillId, bills) => {
-    for(let item in bills) {
-      if(bills[item].doc_id === currentBillId) {
-        this.setState({currentBill: bills[item]});
-      }
     }
   }
   render() {
@@ -124,8 +112,8 @@ const MyAccord = ({onChangeCurrentBill}) => {
       <Accordion defaultActiveKey = "0">
         <Card text="dark" border="light">
             <Card.Header>
-                <Accordion.Toggle as={Card.Header}  eventKey="0">
-                    Group Info
+                <Accordion.Toggle as={Button} variant= "link" eventKey="0">
+                    <h1>Group Info</h1>
                 </Accordion.Toggle>
             </Card.Header>
             <Accordion.Collapse eventKey="0">
@@ -160,10 +148,10 @@ const BillCard = ({onChangeCurrentBill, onChangeAuthUser, onChangeIsGroupOwner})
   return (
       <Card className="mb-4" text="dark">
         <Card.Header>
-          Current Bill
+          <p>Current Bill</p>
         </Card.Header>
         <Card.Body>
-          <Card.Title>Due: {dueDate.toDate().toLocaleDateString()}</Card.Title>
+          <Card.Title><p>Due: {dueDate.toDate().toLocaleDateString()}</p></Card.Title>
           <Card.Text>
             Amount: ${amountDue}
           </Card.Text>
@@ -228,7 +216,7 @@ const Pie = () => {
 	return (
       <Card className = "bg-light" text="light" >
         <Card.Title className = "bg-dark" text="light">
-          On Time History
+        <p>On Time History</p>
         </Card.Title>
         <Card.Body>
           <PieChart/>
