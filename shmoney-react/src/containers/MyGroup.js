@@ -208,16 +208,16 @@ const LeaveGroup = ({ firebase, onChangeGroupId, currentUser }) => {
 			</Button>
 
 			<Modal show={show} onHide={handleClose} animation={false}>
-				<Modal.Header closeButton>
-					<Modal.Title>Are you sure?</Modal.Title>
+				<Modal.Header className="header-styling" closeButton>
+					<Modal.Title className="universal-font">Are you sure?</Modal.Title>
 				</Modal.Header>
 				<Modal.Body>
-					<Button variant="secondary" onClick={leaveGroup}>
+					<Button variant="secondary" id="button-styling" onClick={leaveGroup}>
 						Confirm
 					</Button>
 				</Modal.Body>
 				<Modal.Footer>
-					<Button variant="secondary" onClick={handleClose}>
+					<Button variant="secondary" id="button-styling" onClick={handleClose}>
 						Close
 					</Button>
 				</Modal.Footer>
@@ -417,8 +417,8 @@ const CurrentBillsTableOwner = ({ isGroupOwner, groupId, billId, billMembers, gr
 			}
 
 			<Modal show={currentUser} onHide={handleCancel} animation={false}>
-				<Modal.Header closeButton>
-					<Modal.Title>Verify Payment</Modal.Title>
+				<Modal.Header className="header-styling" closeButton>
+					<Modal.Title className="universal-font">Verify Payment</Modal.Title>
 				</Modal.Header>
 				<Modal.Body>
 					<p>Paid on time?</p>
@@ -427,12 +427,13 @@ const CurrentBillsTableOwner = ({ isGroupOwner, groupId, billId, billMembers, gr
 						<ToggleButton value={2}>No</ToggleButton>
 					</ToggleButtonGroup> */}
 					<ButtonGroup>
-						<Button variant="primary" onClick={() => setPaidStatus('yes')}>Yes</Button>
-						<Button variant="primary" onClick={() => setPaidStatus('no')}>No</Button>
+						<Button variant="primary" id="button-styling" onClick={() => setPaidStatus('yes')}>Yes</Button>
+						<div className="button-spacing"></div>
+						<Button variant="primary" id="button-styling" onClick={() => setPaidStatus('no')}>No</Button>
 					</ButtonGroup>
 				</Modal.Body>
 				<Modal.Footer>
-					<Button variant="secondary" onClick={handleClose}>
+					<Button variant="secondary" id="button-styling" onClick={handleClose}>
 						Confirm
 					</Button>
 				</Modal.Footer>
