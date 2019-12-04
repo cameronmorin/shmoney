@@ -324,24 +324,20 @@ class Firebase {
 		})
 	}
 
-	verifyPayment = async (uid, groupId, billId) => {
-		
-		return this.house_groups()
-			.doc(groupId)
-			.collection('bills')
-			.doc(billId)
-			.get()
-			.then(doc => {
-				//Get the array of house member objects
-				let houseMembers = doc.data().group_members;
-				//Find user object by uid and remove them from the array
-				for (let i = 0; i < houseMembers.length; i++) {
-					if (houseMembers[i].uid === uid) {
-						houseMembers[i].paid_status = true;
-						break;
-					}
-				}
-			});
+	verifyPayment = async (uid, groupId, billId, billMembers, groupName, paymentAmount) => {
+		//Update Bill
+		return this.group_bills(groupId).doc(billId).set({
+			group_members: billMembers
+		},{merge:true}).then(() => {
+			const paymentDoc = this.user(uid).collection('payment_history').doc();
+
+			return paymentDoc.set({
+				doc_id: paymentDoc.id,
+				group_name: groupName,
+				payment_amount: paymentAmount,
+				payment_time: new Date()
+			},{merge:true});
+		})
 	}
 
 	/* MERGE AUTH AND FIRESTORE API */

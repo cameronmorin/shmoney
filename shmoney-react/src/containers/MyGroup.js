@@ -345,7 +345,7 @@ const Paid = () => {
   );
 };
 
-const CurrentBillsTableOwner = ({ isGroupOwner, groupId, billId, billMembers, firebase }) => {
+const CurrentBillsTableOwner = ({ isGroupOwner, groupId, billId, billMembers, groupName, firebase }) => {
 
 	// const [show, setShow] = useState(false);
 	// const handleShow = () => setShow(true);
@@ -358,16 +358,23 @@ const CurrentBillsTableOwner = ({ isGroupOwner, groupId, billId, billMembers, fi
 			alert('Please declare payment status.');
 		}
 		else {
-			firebase.verifyPayment(currentUser, groupId, billId)
-							.then(event => {setPaidStatus(null);
-															setUser(null);
-															window.location.reload();})
-							.catch(err => {console.log(err);
-														 setPaidStatus(null);
-														 setUser(null);
-														 alert('Error: please try again.');
-														 window.location.reaload();
-						});
+			//Update billMembers status
+			let paymentAmount = 0;
+			for(let item in billMembers) {
+				if(billMembers[item].uid === currentUser)
+					billMembers[item].paid_status = true;
+					paymentAmount = billMembers[item].amount_owed;
+					break;
+			}
+
+			console.log(currentUser, groupId, billId, billMembers, groupName, paymentAmount)
+
+			firebase.verifyPayment(currentUser, groupId, billId, billMembers, groupName, paymentAmount)
+				.then(() => {
+					window.location.reload();
+				}).catch(err => {
+					console.error(err);
+				})
 		}
 	}
 	// const [value, setValue] = useState([1, 2]);
@@ -401,7 +408,7 @@ const CurrentBillsTableOwner = ({ isGroupOwner, groupId, billId, billMembers, fi
 						{(billMembers && billMembers.length > 0) && 
 							<>
 								{billMembers.map((item, key) => (
-									<tr>
+									<tr key={key}>
 										<td>{item.username}</td>
 										<td>{item.amount_owed}</td>
 										<td>{item.paid_status ? <Paid /> : <NotPaid />}</td>
@@ -554,13 +561,13 @@ const CurrentBillsAccordion = () => {
 	);
 };
 
-const CurrentBillsAccordionOwner = ({ isGroupOwner, billArray, groupId, firebase }) => {
+const CurrentBillsAccordionOwner = ({ isGroupOwner, billArray, groupId, firebase, groupName, billId  }) => {
 	return (
 		<Accordion defaultActiveKey="0">
 			{(billArray && billArray.length > 0) && 
 				<>
 					{billArray.map((item, key) => (
-						<Card>
+						<Card key={key}>
 							<Card.Header>
 								<Accordion.Toggle as={Button} variant="link" eventKey={item.doc_id}>
 									<h1>Bill due: {item.due_date.toDate().toLocaleDateString()}</h1> {/*fix underline issue later */}
@@ -568,7 +575,7 @@ const CurrentBillsAccordionOwner = ({ isGroupOwner, billArray, groupId, firebase
 							</Card.Header>
 							<Accordion.Collapse eventKey={item.doc_id}>
 								<Card.Body>
-									<CurrentBillsTableOwner as={Button} isGroupOwner={isGroupOwner} billMembers={item.group_members} groupId={groupId} firebase={firebase}/>
+									<CurrentBillsTableOwner as={Button} isGroupOwner={isGroupOwner} billMembers={item.group_members} billId={item.doc_id} groupName={groupName} groupId={groupId} firebase={firebase}/>
 								</Card.Body>
 							</Accordion.Collapse>
 						</Card>
@@ -645,7 +652,7 @@ const TransferOwnership = ({ groupMembers, currentOwnerID, firebase, groupId }) 
 	);
 }
 
-const RightInfoOwner = ({ onChangeGroupMembers, onChangeCurrentBill, isGroupOwner, billArray, groupId, firebase }) => {
+const RightInfoOwner = ({ onChangeGroupMembers, onChangeCurrentBill, isGroupOwner, billArray, groupId, firebase, groupName }) => {
 	return (
 		<>
 			<Accordion defaultActiveKey="0">
@@ -671,7 +678,7 @@ const RightInfoOwner = ({ onChangeGroupMembers, onChangeCurrentBill, isGroupOwne
 					<Accordion.Collapse eventKey="1">
 						<Card.Body>
 							<div className="curBills">
-								<CurrentBillsAccordionOwner as={Button} isGroupOwner={isGroupOwner} billArray={billArray} groupId={groupId} firebase={firebase}/>
+								<CurrentBillsAccordionOwner as={Button} isGroupOwner={isGroupOwner} billArray={billArray} groupId={groupId} firebase={firebase} groupName={groupName} />
 							</div>
 						</Card.Body>
 					</Accordion.Collapse>
@@ -880,8 +887,9 @@ class MyGroupBase extends React.Component {
 													onChangeCurrentBill={this.state.currentBill}
 													isGroupOwner={this.state.isGroupOwner}
 													billArray={this.props.groupState.bills}
-													groupId={this.props.group_id}
-													firebase={this.props.firebase}/>}
+													groupId={this.state.groupId}
+													firebase={this.props.firebase}
+													groupName={this.state.groupName}/>}
 						{/* <RightInfo 
 							onChangeGroupMembers={this.state.groupMembers}
 							onChangeCurrentBill={this.state.currentBill} /> */}
