@@ -85,6 +85,8 @@ const UpdatePhoto = () => {
 
 const PaymentsTable = ({onChangePaymentHistory}) => {
 	if(!onChangePaymentHistory) return <></>;
+	
+	console.log(onChangePaymentHistory);
 
 	return (
 		<>
@@ -96,7 +98,7 @@ const PaymentsTable = ({onChangePaymentHistory}) => {
 						<th>Payment Amount</th>
 					</tr>
 				</thead>
-				{onChangePaymentHistory && <tbody>
+				{onChangePaymentHistory.length > 0 && <tbody>
 					<tr>
 						<td>{onChangePaymentHistory[0].group_name}</td>
 						<td>{onChangePaymentHistory[0].payment_time.toLocaleString()}</td>
