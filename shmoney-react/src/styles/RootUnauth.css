@@ -54,24 +54,28 @@
     padding-top: 225px;
     font-size: 40px;
     font-weight: bold;
+    font-family: 'Righteous', cursive;
 }
 
 .description-text-right {
     margin-left: 60%;
     font-size: 22px;
+    font-family: 'Righteous', cursive;
 }
 
 .subject-text {
     margin-left: 15%;
-    padding-top: 125px; 
+    padding-top: 5%; 
     font-size: 40px;
+    font-family: 'Righteous', cursive;
     font-weight: bold;
 }
 
 .description-text { 
     margin-left: 15%;
+    font-family: 'Righteous', cursive;
     font-size: 22px;
-    padding-bottom: 20px;
+    padding-bottom: 2%;
 }
 
 .image {
@@ -83,12 +87,13 @@
 .insert-image-2{
     float: right;
     padding-top: 50px;
-    margin-right: 15%;
+    margin-right: 10%;
 }
 
 .insert-image-3{
     float: left;
     padding-top: 50px;
-    margin-left: 15%;
+    margin-left: 14%;
+    margin-right: 3%;
     padding-bottom: 50px;
 }
