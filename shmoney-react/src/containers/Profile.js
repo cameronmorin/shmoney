@@ -1,13 +1,12 @@
-import React, { useState, useInput } from 'react';
+import React, { useState } from 'react';
 import NavBar from '../components/NavBar';
-import { Card, Table, Accordion, Figure, Button, Modal, InputGroup, FormControl } from 'react-bootstrap';
+import { Card, Table, Accordion, Figure, Button, Modal, InputGroup } from 'react-bootstrap';
 import avatar from '../images/avatar.png';
 import '../styles/Profile.css';
 import { withAuthorization, withAuthUserContext } from '../components/session';
 import { withFirebase } from '../components/firebase';
 
 import UploadImage from '../components/UploadImage';
-import CreateBill from '../components/CreateBill';
 
 const EditName = ({ firebase, onChangeGroupId, onChangeGroupMembers, onChangeIsGroupOwner }) => {
 	const [show, setShow] = useState(false);
@@ -123,19 +122,6 @@ const RightAccordion = ({ onChangeGroupMembers, onChangePaymentHistory, onChange
 						<Card.Body>
 							{' '}
 							<h1>${onChangeTotalSpent}</h1>{' '}
-						</Card.Body>
-					</Accordion.Collapse>
-				</Card>
-				<Card>
-					<Card.Header>
-						<Accordion.Toggle as={Button} variant="link" eventKey="1">
-							<h1>Current House Members</h1>
-						</Accordion.Toggle>
-					</Card.Header>
-					<Accordion.Collapse eventKey="1">
-						<Card.Body>
-							{onChangeGroupMembers &&
-								onChangeGroupMembers.map((item, key) => <p key={key}>{item.username}</p>)}
 						</Card.Body>
 					</Accordion.Collapse>
 				</Card>
