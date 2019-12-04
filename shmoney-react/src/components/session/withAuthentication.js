@@ -66,6 +66,11 @@ const withAuthentication = Component => {
                               paymentHistory[item].payment_time = paymentTime.toDate();
                            }
 
+                           //Order list by date
+                           paymentHistory.sort((x, y) => {
+                              return y.payment_time - x.payment_time;
+                           })
+
                            console.log(paymentHistory);
 
                            this.setState({paymentHistory});
