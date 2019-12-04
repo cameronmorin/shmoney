@@ -66,6 +66,10 @@
     align-items: center;
 }
 
+.button-spacing {
+    padding-right: 10px;
+}
+
 #button-styling:hover {
     background-color: rgb(41, 136, 98);
 }
