@@ -298,7 +298,7 @@ class Firebase {
 	};
 
 	/**
-	 * Create a new bill
+	 * Mark a payment as paid
 	 * @param uid user id of user that paid
 	 * @param groupName name of group
 	 * @param groupId document id for group
@@ -324,10 +324,19 @@ class Firebase {
 		})
 	}
 
-	verifyPayment = async (uid, groupId, billId, billMembers, groupName, paymentAmount) => {
+	verifyPayment = async (uid, groupId, billId, groupName, paymentAmount) => {
+		const currentBill = this.house_groups().doc(groupId).collection('bills').doc(billId);
+		let houseMembers = currentBill.data().group_members;
+		for (let member in houseMembers) {
+			if (member.uid === uid) {
+				member.paid_status = true;
+				break;
+			}
+		}
+		
 		//Update Bill
-		return this.group_bills(groupId).doc(billId).set({
-			group_members: billMembers
+		return this.group_bills(groupId).doc(billId).update({
+			group_members: houseMembers
 		},{merge:true}).then(() => {
 			const paymentDoc = this.user(uid).collection('payment_history').doc();
 
