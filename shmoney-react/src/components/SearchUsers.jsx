@@ -39,16 +39,13 @@ class SearchUsersBase extends React.Component {
 			for(let i = 0; i < length; i++) {
 				if(queryResults[i].group_id === null) {
 					userResults.push(queryResults[i]);
+					userResults[i].added = false;
 				}
 			}
 
-			for(let i = 0; i < userResults.length; i++) {
-				userResults[i].added = false;
-			}
-			
 			return this.setState({userResults});
 		}).catch(error => {
-			console.error(error);
+			console.log(error);
 		})
 	}
 	addUser = (uid) => {
@@ -70,7 +67,7 @@ class SearchUsersBase extends React.Component {
 				}
 			}
 		}).catch(error => {
-			console.error(error);
+			console.log(error);
 		});
 	}
 	componentDidMount() {

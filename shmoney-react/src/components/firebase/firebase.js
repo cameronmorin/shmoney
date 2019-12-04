@@ -99,7 +99,6 @@ class Firebase {
 			group_members: [{
 				uid: this.auth.currentUser.uid,
 				username: this.auth.currentUser.displayName,
-				photo_url: this.auth.currentUser.photoURL
 			}],
 			group_members_uids: [this.auth.currentUser.uid]
 		},{merge:true});
@@ -119,18 +118,11 @@ class Firebase {
 			let groupMembers = doc.data().group_members;
 
 			//Remove group_id from all member's document's
-			groupMembers.map(item => {
-				if(item.uid !== doc.data().owner_uid) {
-					this.user(item.uid).set({
-						group_id: null,
-					},{merge:true})
-				}
-			});
-
-			//Remove owner's group id
-			this.user(this.auth.currentUser.uid).set({
-				group_id: null
-			},{merge:true});
+			groupMembers.map(item =>
+				this.user(item.uid).set({
+					group_id: null,
+				},{merge:true})
+			);
 
 			return groupDoc.delete();
 		});
@@ -157,15 +149,13 @@ class Firebase {
 			.then(doc => {
 				const userGroupId = doc.data().group_id;
 				const username = doc.data().username;
-				const photo_url = doc.data().photoURL;
 
 				if (!userGroupId) {
 					//Add user to house members list
 					return this.house_groups().doc(groupId).set({
 						group_members: this.fieldValue.arrayUnion({
-							uid,
-							username,
-							photo_url 
+							uid: uid,
+							username: username,
 						}),
 						group_members_uids: this.fieldValue.arrayUnion(uid)
 					},{merge:true}).then(() => {
@@ -332,18 +322,6 @@ class Firebase {
 				group_members: groupMembers
 			},{merge:true})
 		})
-	}
-
-	/* Payment History Functions */
-
-	/**
-	 * Get current user's payment history
-	 * @return collection snapshot of payment documents or error that can be caught
-	 */
-	getPaymentHistory = async () => {
-		const userDoc = this.user(this.auth.currentUser.uid);
-		
-		return userDoc.collection('payment_history').get();
 	}
 
 	/* MERGE AUTH AND FIRESTORE API */
