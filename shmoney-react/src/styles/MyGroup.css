@@ -18,5 +18,16 @@
 
 .curBills .btn{
     font-family: 'Righteous', cursive;
-    background-color:grey;
+    background-color: rgb(189, 185, 185);
+}
+
+.curBills .btn:hover{
+    background:#35B27F;
+    text-decoration: none;
+}
+
+.curBills h1{
+    font-family: 'Righteous', cursive;
+    color: white;
+    text-decoration: none;
 }

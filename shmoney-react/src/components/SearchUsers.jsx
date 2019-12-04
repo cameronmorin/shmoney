@@ -3,7 +3,7 @@ import { compose } from 'recompose';
 
 import Media from 'react-bootstrap/Media';
 import Button from 'react-bootstrap/Button';
-import avatar from '../images/avatar.svg';
+import avatar from '../images/avatar.png';
 
 import { withFirebase } from './firebase';
 import { withAuthorization, withAuthUserContext } from './session'
@@ -39,13 +39,16 @@ class SearchUsersBase extends React.Component {
 			for(let i = 0; i < length; i++) {
 				if(queryResults[i].group_id === null) {
 					userResults.push(queryResults[i]);
-					userResults[i].added = false;
 				}
 			}
 
+			for(let i = 0; i < userResults.length; i++) {
+				userResults[i].added = false;
+			}
+			
 			return this.setState({userResults});
 		}).catch(error => {
-			console.log(error);
+			console.error(error);
 		})
 	}
 	addUser = (uid) => {
@@ -67,7 +70,7 @@ class SearchUsersBase extends React.Component {
 				}
 			}
 		}).catch(error => {
-			console.log(error);
+			console.error(error);
 		});
 	}
 	componentDidMount() {
@@ -94,12 +97,11 @@ class SearchUsersBase extends React.Component {
 						placeholder=""
 						id="rounded-corner-input"
 					/>
-
-					<button type="submit" disabled={isInvalid}>Search</button>
+					<Button variant="secondary" type="submit" disabled={isInvalid}>Search</Button>
 				</form>
 				<div className="search-results">
-					{userResults && <ul>{userResults.map((item, key) => (
-						<li key={key}>
+					{userResults && <ul className="list-group">{userResults.map((item, key) => (
+						<li className="list-group-item" key={key}>
 						<Media>
 							<img 
 								width={64}

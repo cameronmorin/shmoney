@@ -27,7 +27,7 @@ service cloud.firestore {
       
       match /payment_history/{document=**} {
       	//Allow user to read and write to new/existing payment history sub-collection
-      	allow read, write: if isOwner(existingData().owner_uid) || isOwner(incomingData().owner_uid);
+      	allow read, write: if getUserData().uid == authUser().uid || isGroupOwner();
       }
     }
     

@@ -40,7 +40,7 @@ class Firebase {
 		});
 		return this.user(this.auth.currentUser.uid).set({
 				username: newUsername,
-			},{merge: true}).then(() => {
+			},{merge:true}).then(() => {
 				if (groupId) {
 					//Update group username
 					for (let item in groupMembers) {
@@ -54,17 +54,13 @@ class Firebase {
 							.set({
 								group_members: groupMembers,
 								owner_username: newUsername,
-							}, {
-								merge: true
-							});
+							},{merge: true});
 					} else {
 						return this.house_groups()
 							.doc(groupId)
 							.set({
 								group_members: groupMembers,
-							}, {
-								merge: true
-							});
+							},{merge:true});
 					}
 				}
 			})
@@ -103,6 +99,7 @@ class Firebase {
 			group_members: [{
 				uid: this.auth.currentUser.uid,
 				username: this.auth.currentUser.displayName,
+				photo_url: this.auth.currentUser.photoURL
 			}],
 			group_members_uids: [this.auth.currentUser.uid]
 		},{merge:true});
@@ -122,11 +119,18 @@ class Firebase {
 			let groupMembers = doc.data().group_members;
 
 			//Remove group_id from all member's document's
-			groupMembers.map(item =>
-				this.user(item.uid).set({
-					group_id: null,
-				},{merge:true})
-			);
+			groupMembers.map(item => {
+				if(item.uid !== doc.data().owner_uid) {
+					this.user(item.uid).set({
+						group_id: null,
+					},{merge:true})
+				}
+			});
+
+			//Remove owner's group id
+			this.user(this.auth.currentUser.uid).set({
+				group_id: null
+			},{merge:true});
 
 			return groupDoc.delete();
 		});
@@ -148,27 +152,27 @@ class Firebase {
 	 *	@return empty callback or error that can be caught
 	 */
 	addUserToHouseGroup = async (uid, groupId) => {
-		//Two Reads and Two Writes per call
-		//Check if user is already in group so they are not added to multiple
 		return this.user(uid)
 			.get()
 			.then(doc => {
 				const userGroupId = doc.data().group_id;
 				const username = doc.data().username;
+				const photo_url = doc.data().photoURL;
 
 				if (!userGroupId) {
 					//Add user to house members list
 					return this.house_groups().doc(groupId).set({
 						group_members: this.fieldValue.arrayUnion({
-							uid: uid,
-							username: username,
+							uid,
+							username,
+							photo_url 
 						}),
 						group_members_uids: this.fieldValue.arrayUnion(uid)
 					},{merge:true}).then(() => {
 						//Add group id to user's document
 						return this.user(uid).set({
 							group_id: groupId,
-						}, {merge:true});
+						},{merge:true});
 					});
 				}
 			});
@@ -238,6 +242,20 @@ class Firebase {
 	};
 
 	/**
+	 *	Change the owner_uid and owner_username to a different user
+	 *	@param uid uid of the new owner of the group
+	 *	@param username username of the new owner of the group
+	 *	@param groupId groupId of the group whose owner is being updated
+	 *	@return true or false boolean or error that can be caught
+	 */
+	updateGroupOwner = async (uid, username, groupId) => {
+		return this.house_groups().doc(groupId).update({
+			owner_uid: uid,
+			owner_username: username
+		});
+	};
+
+	/**
 	 *	Get the house group data from the current user's group
 	 *	@return returns data snapshot that can be used to access the document's data or error that can be caught
 	 */
@@ -278,10 +296,69 @@ class Firebase {
 		})
 	}
 
-	getAllBills = async (groupId) => {
+	/**
+	 * Gets all the bills within a group
+	 * @param groupId group id for document where bills are
+	 * @return snapshot of all documents in bills collection or error that can be caught
+	 */
+	getAllBills = async groupId => {
 		const groupDoc = this.house_groups().doc(groupId);
 
 		return groupDoc.collection('bills').get();
+	};
+
+	/**
+	 * Mark a payment as paid
+	 * @param uid user id of user that paid
+	 * @param groupName name of group
+	 * @param groupId document id for group
+	 * @param groupMembers array of group members
+	 * @param paymentAmount amount that was paid by the user
+	 * @param billId id for the bill
+	 * @return empty callback or error that can be caught
+	 */
+	markPaid = async (uid, groupName, groupId, groupMembers, paymentAmount, billId) => {
+		const newPaymentDoc = this.user(uid).collection('payment_history').doc();
+		const groupDoc = this.house_groups().doc(groupId);
+
+		return newPaymentDoc.set({
+			group_name: groupName,
+			owner_uid: uid,
+			payment_time: new Date(),
+			payment_amount: paymentAmount,
+			doc_id: newPaymentDoc.id
+		},{merge:true}).then(() => {
+			groupDoc.collection('bills').doc(billId).set({
+				group_members: groupMembers
+			},{merge:true})
+		})
+	}
+
+	verifyPayment = async (uid, groupId, billId, billMembers, groupName, paymentAmount) => {
+		//Update Bill
+		return this.group_bills(groupId).doc(billId).set({
+			group_members: billMembers
+		},{merge:true}).then(() => {
+			const paymentDoc = this.user(uid).collection('payment_history').doc();
+
+			return paymentDoc.set({
+				doc_id: paymentDoc.id,
+				group_name: groupName,
+				payment_amount: paymentAmount,
+				payment_time: new Date()
+			},{merge:true});
+		})
+	}
+	/* Payment History Functions */
+
+	/**
+	 * Get current user's payment history
+	 * @return collection snapshot of payment documents or error that can be caught
+	 */
+	getPaymentHistory = async () => {
+		const userDoc = this.user(this.auth.currentUser.uid);
+		
+		return userDoc.collection('payment_history').get();
 	}
 
 	/* MERGE AUTH AND FIRESTORE API */
@@ -307,6 +384,7 @@ class Firebase {
 			}
 		});
 	};
+
 }
 
 export default Firebase;

@@ -9,7 +9,10 @@
     text-align: center;
 }
 
-.Card.Header:hover {background:#35B27F;}
+.groupButton .Button:hover {
+    background:#35B27F;
+    text-decoration: none;
+}
 
 .main-grid{
     display:grid;
@@ -28,6 +31,7 @@
 
 .left-grid .p{
     font-size:15px;
+    font-family: 'Righteous', cursive;
 }
 
 .right-grid{
@@ -40,6 +44,10 @@
 .right-grid p{
     color: black;
 }
+.right-grid h1{
+    color: black;
+    margin-bottom: 4%;
+}
 
 .btn:hover {background:#35B27F;}
 
@@ -51,6 +59,9 @@
     border-radius: 50%;
     height: 30px;
     float: right;
+}
+p{
+    font-family: 'Righteous', cursive;
 }
 
 /* .right-grid .btn{
