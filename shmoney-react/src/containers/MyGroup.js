@@ -427,8 +427,8 @@ const CurrentBillsTableOwner = ({ isGroupOwner, groupId, billId, billMembers, gr
 						<ToggleButton value={2}>No</ToggleButton>
 					</ToggleButtonGroup> */}
 					<ButtonGroup>
-						<Button variant="primary" id="button-styling" className="mx-2" onClick={() => setPaidStatus('yes')}>Yes</Button>
-						<Button variant="primary" id="button-styling" onClick={() => setPaidStatus('no')}>No</Button>
+						<Button variant="primary" id="button-styling" className="mx-1" onClick={() => setPaidStatus('yes')}>Yes</Button>
+						<Button variant="primary" id="button-styling" className="mx-1" onClick={() => setPaidStatus('no')}>No</Button>
 					</ButtonGroup>
 				</Modal.Body>
 				<Modal.Footer>
