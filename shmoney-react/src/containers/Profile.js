@@ -1,12 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useInput } from 'react';
 import NavBar from '../components/NavBar';
-import { Card, Table, Accordion, Figure, Button, Modal, InputGroup } from 'react-bootstrap';
+import { Card, Table, Accordion, Figure, Button, Modal, InputGroup, FormControl } from 'react-bootstrap';
 import avatar from '../images/avatar.png';
 import '../styles/Profile.css';
 import { withAuthorization, withAuthUserContext } from '../components/session';
 import { withFirebase } from '../components/firebase';
 
 import UploadImage from '../components/UploadImage';
+import CreateBill from '../components/CreateBill';
 
 const EditName = ({ firebase, onChangeGroupId, onChangeGroupMembers, onChangeIsGroupOwner }) => {
 	const [show, setShow] = useState(false);
@@ -85,8 +86,6 @@ const UpdatePhoto = () => {
 
 const PaymentsTable = ({onChangePaymentHistory}) => {
 	if(!onChangePaymentHistory) return <></>;
-	
-	console.log(onChangePaymentHistory);
 
 	return (
 		<>
@@ -110,20 +109,33 @@ const PaymentsTable = ({onChangePaymentHistory}) => {
 	);
 };
 
-const RightAccordion = ({ onChangeGroupMembers, onChangePaymentHistory, onChangeTotalSpent }) => {
+const RightAccordion = ({ onChangeGroupMembers }) => {
 	return (
 		<>
 			<Accordion defaultActiveKey="0">
 				<Card>
 					<Card.Header>
 						<Accordion.Toggle as={Button} variant="link" eventKey="0">
-							<h1>Total Spent</h1>
+							<h1>Total spent in 2019</h1>
 						</Accordion.Toggle>
 					</Card.Header>
 					<Accordion.Collapse eventKey="0">
 						<Card.Body>
 							{' '}
-							<h1>${onChangeTotalSpent}</h1>{' '}
+							<h1>$12000</h1>{' '}
+						</Card.Body>
+					</Accordion.Collapse>
+				</Card>
+				<Card>
+					<Card.Header>
+						<Accordion.Toggle as={Button} variant="link" eventKey="1">
+							<h1>Current House Members</h1>
+						</Accordion.Toggle>
+					</Card.Header>
+					<Accordion.Collapse eventKey="1">
+						<Card.Body>
+							{onChangeGroupMembers &&
+								onChangeGroupMembers.map((item, key) => <p key={key}>{item.username}</p>)}
 						</Card.Body>
 					</Accordion.Collapse>
 				</Card>
@@ -135,7 +147,7 @@ const RightAccordion = ({ onChangeGroupMembers, onChangePaymentHistory, onChange
 					</Card.Header>
 					<Accordion.Collapse eventKey="2">
 						<Card.Body>
-							<PaymentsTable onChangePaymentHistory={onChangePaymentHistory} />
+							<PaymentsTable />
 						</Card.Body>
 					</Accordion.Collapse>
 				</Card>
@@ -152,11 +164,9 @@ class Profile extends React.Component {
 			groupMembers: null,
 			groupName: null,
 			groupId: null,
-			paymentHistory: null,
 			isNotGroupMember: false,
 			isGroupMember: false,
 			isGroupOwner: false,
-			totalSpent: null,
 		};
 	}
 	componentDidMount() {
@@ -170,12 +180,6 @@ class Profile extends React.Component {
 				const authUser = this.props.authUser;
 				const groupState = this.props.groupState;
 				const isGroupOwner = authUser.uid === groupState.ownerUid;
-				const paymentHistory = groupState.paymentHistory;
-
-				let totalSpent = 0;
-				for(let item in paymentHistory) {
-					totalSpent += paymentHistory[item].payment_amount;
-				}
 
 				this.setState({
 					groupMembers: groupState.groupMembers,
@@ -185,18 +189,10 @@ class Profile extends React.Component {
 					isGroupOwner,
 					groupId: groupState.groupId,
 					ownerUid: groupState.ownerUid,
-					paymentHistory,
-					totalSpent
 				});
-			}, 1000);
+			}, 700);
 		} else {
 			const isGroupOwner = authUser.uid === groupState.ownerUid;
-			const paymentHistory = groupState.paymentHistory;
-
-				let totalSpent = 0;
-				for(let item in paymentHistory) {
-					totalSpent += paymentHistory[item].payment_amount;
-				}
 
 			this.setState({
 				groupMembers: groupState.groupMembers,
@@ -205,19 +201,8 @@ class Profile extends React.Component {
 				isNotGroupMember: groupState.isNotGroupMember,
 				isGroupMember: groupState.isGroupMember,
 				isGroupOwner,
-				paymentHistory,
-				totalSpent
 			});
 		}
-	}
-	updateTotalSpent = () => {
-		const {paymentHistory} = this.state;
-		let totalSpent = 0;
-		for(let item in paymentHistory) {
-			totalSpent += paymentHistory[item].payment_amount;
-		}
-
-		this.setState({totalSpent})
 	}
 	render() {
 		const authUser = this.props.authUser;
@@ -253,10 +238,7 @@ class Profile extends React.Component {
 					</div>
 
 					<div className="right-grid">
-						<RightAccordion 
-							onChangeGroupMembers={this.state.groupMembers}
-						 	onChangePaymentHistory={this.state.paymentHistory}
-							onChangeTotalSpent={this.state.totalSpent} />
+						<RightAccordion onChangeGroupMembers={this.state.groupMembers} />
 					</div>
 				</div>
 			</div>

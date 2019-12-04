@@ -23,6 +23,7 @@ class DashboardBase extends React.Component {
       isGroupOwner: false,
       groupId: null,
       ownerUid: null,
+      currentBillId: null,
       bills: null,
       currentBill: null
 	  };
@@ -37,6 +38,8 @@ class DashboardBase extends React.Component {
         const authUser = this.props.authUser;
         const groupState = this.props.groupState;
         const isGroupOwner = authUser.uid === groupState.ownerUid;
+        
+        this.updateCurrentBill(groupState.currentBillId, groupState.bills);
 
         this.setState({
           authUser,
@@ -47,12 +50,14 @@ class DashboardBase extends React.Component {
           isGroupOwner,
           groupId: groupState.groupId,
           ownerUid: groupState.ownerUid,
-          bills: groupState.bills,
-          currentBill: groupState.currentBill
+          currentBillId: groupState.currentBillId,
+          bills: groupState.bills
         });
       }, 700);
     } else {
       const isGroupOwner = authUser.uid === groupState.ownerUid;
+
+      this.updateCurrentBill(groupState.currentBillId, groupState.bills);
 
       this.setState({
         authUser,
@@ -63,9 +68,16 @@ class DashboardBase extends React.Component {
         isGroupOwner,
         groupId: groupState.groupId,
         ownerUid: groupState.ownerUid,
-        bills: groupState.bills,
-        currentBill: groupState.currentBill
+        currentBillId: groupState.currentBillId,
+        bills: groupState.bills
       });
+    }
+  }
+  updateCurrentBill = (currentBillId, bills) => {
+    for(let item in bills) {
+      if(bills[item].doc_id === currentBillId) {
+        this.setState({currentBill: bills[item]});
+      }
     }
   }
   render() {

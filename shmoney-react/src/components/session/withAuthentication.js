@@ -19,10 +19,8 @@ const withAuthentication = Component => {
 				ownerUid: null,
             onGroupListUpdate: null,
             previousRentTotal: null,
-            currentBill: null,
             currentBillId: null,
             bills: null,
-            paymentHistory: null,
             loaded: false
 			};
       }
@@ -31,9 +29,7 @@ const withAuthentication = Component => {
             if(authUser) {
                this.setState({authUser});
 					this.props.firebase.getHouseGroupData().then(result => {
-                     const groupOwnerUid = result.owner_uid;
-                     const currentBillId = result.current_bill_id;
-
+							let groupOwnerUid = result.owner_uid;
 							this.setState({
 								groupMembers: result.group_members,
 								groupName: result.group_name,
@@ -42,10 +38,8 @@ const withAuthentication = Component => {
 								ownerUid: groupOwnerUid,
                         onGroupListUpdate: this.updateGroupMembers,
                         previousRentTotal: result.previous_rent_total,
-                        currentBillId
+                        currentBillId: result.current_bill_id
                      });
-
-                     //this.updatePaymentHistory();
                      
                      return this.props.firebase.getAllBills(this.state.groupId).then(snapshot => {
                      	let bills = [];
@@ -53,31 +47,10 @@ const withAuthentication = Component => {
                      		bills.push(doc.data());
                         });
 
-                        this.updateCurrentBill(currentBillId, bills);
-
                         this.setState({bills, loaded: true});
-                     }).then(() => {
-                        this.props.firebase.getPaymentHistory().then(snapshot => {
-                           let paymentHistory = [];
-                           snapshot.forEach(doc => {
-                              paymentHistory.push(doc.data());
-                           });
-
-                           for(let item in paymentHistory) {
-                              let paymentTime = paymentHistory[item].payment_time;
-                              paymentHistory[item].payment_time = paymentTime.toDate();
-                           }
-
-                           //Order list by date
-                           paymentHistory.sort((x, y) => {
-                              return y.payment_time - x.payment_time;
-                           });
-
-                           this.setState({paymentHistory});
-                        });
-                     })
+                     });
 						}).catch(error => {
-							console.error(error);
+							console.log(error.message);
 							//If there is an error then they aren't part of a group
 							//So they should see the Create Group button.
 							this.setState({isNotGroupMember: true, loaded: true });
@@ -93,9 +66,7 @@ const withAuthentication = Component => {
                   groupId: null,
                   ownerId: null,
                   previousRentTotal: null,
-                  currentBill: null,
-                  currentBillId: null,
-                  loaded: true 
+                  loaded: true
 				   });
             }
          }) 
@@ -106,13 +77,6 @@ const withAuthentication = Component => {
       updateGroupMembers = groupMembers => {
          this.setState({groupMembers});
       }
-      updateCurrentBill = (currentBillId, bills) => {
-		for (let item in bills) {
-			if (bills[item].doc_id === currentBillId) {
-				this.setState({ currentBill: bills[item] });
-			}
-      }
-	};
       render() {
          return(
             <AuthUserContext.Provider value={{state: this.state}}>
