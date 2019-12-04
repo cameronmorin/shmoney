@@ -19,6 +19,8 @@ import {
 	FormControl,
 	ListGroup,
 	Media,
+	Alert,
+	ButtonGroup
 } from 'react-bootstrap';
 import { withAuthorization, withAuthUserContext } from '../components/session';
 
@@ -41,7 +43,7 @@ const AddMembers = ({ onGroupListUpdate, onLocalGroupListUpdate }) => {
 			</Button>
 
 			<Modal show={show} onHide={handleClose} animation={false}>
-				<Modal.Header className="header-styling" closeButton>
+				<Modal.Header className="header-styling button-spacing" closeButton>
 					<Modal.Title className="universal-font">Add Members</Modal.Title>
 				</Modal.Header>
 				<Modal.Body>
@@ -72,7 +74,7 @@ const AddBill = () => {
 				Add Bills
 			</Button>
 			<Modal show={show} onHide={handleClose} animation={false}>
-				<Modal.Header className="header-styling" closeButton>
+				<Modal.Header className="header-styling button-spacing" closeButton>
 					<Modal.Title className="universal-font">Add Bills</Modal.Title>
 				</Modal.Header>
 				<Modal.Body>
@@ -123,7 +125,7 @@ const DeleteMembers = ({
 			</Button>
 
 			<Modal show={show} onHide={handleClose} animation={false}>
-				<Modal.Header className="header-styling" closeButton>
+				<Modal.Header className="header-styling button-spacing" closeButton>
 					<Modal.Title className="universal-font">Delete Members</Modal.Title>
 				</Modal.Header>
 				<Modal.Body>
@@ -206,16 +208,16 @@ const LeaveGroup = ({ firebase, onChangeGroupId, currentUser }) => {
 			</Button>
 
 			<Modal show={show} onHide={handleClose} animation={false}>
-				<Modal.Header closeButton>
-					<Modal.Title>Are you sure?</Modal.Title>
+				<Modal.Header className="header-styling" closeButton>
+					<Modal.Title className="universal-font">Are you sure?</Modal.Title>
 				</Modal.Header>
 				<Modal.Body>
-					<Button variant="secondary" onClick={leaveGroup}>
+					<Button variant="secondary" id="button-styling" onClick={leaveGroup}>
 						Confirm
 					</Button>
 				</Modal.Body>
 				<Modal.Footer>
-					<Button variant="secondary" onClick={handleClose}>
+					<Button variant="secondary" id="button-styling" onClick={handleClose}>
 						Close
 					</Button>
 				</Modal.Footer>
@@ -321,87 +323,117 @@ const PaymentsTable = ({onChangePaymentHistory}) => {
 	);
 };
 
-const CurrentBillsTableOwner = () => {
-	const [show, setShow] = useState(false);
-	const handleShow = () => setShow(true);
-	const handleClose = () => setShow(false);
+const NotPaid = () => {
+  return(
+    <Alert variant="danger">
+      Not Paid
+    </Alert>
+  );
+};
 
-	const [value, setValue] = useState([1, 2]);
+const Paid = () => {
+  return(
+    <Alert variant="success">
+      Paid
+    </Alert>
+  );
+};
 
-	/*
-	 * The second argument that will be passed to
-	 * `handleChange` from `ToggleButtonGroup`
-	 * is the SyntheticEvent object, but we are
-	 * not using it in this example so we will omit it.
-	 */
-	const handleChange = val => setValue(val);
+const CurrentBillsTableOwner = ({ isGroupOwner, groupId, billId, billMembers, groupName, firebase }) => {
+
+	// const [show, setShow] = useState(false);
+	// const handleShow = () => setShow(true);
+	const [currentUser, setUser] = useState(null);
+	const [paidStatus, setPaidStatus] = useState(null);
+	const handleCancel = () => setUser(null);
+	const handleClose = () => {
+		// use the radios to set a value, and use that value to determine whether onTime or late
+		if (paidStatus === null) {
+			alert('Please declare payment status.');
+		}
+		else {
+			//Update billMembers status
+			let paymentAmount = 0;
+			for(let item in billMembers) {
+				if(billMembers[item].uid === currentUser) {
+					billMembers[item].paid_status = true;
+					paymentAmount = billMembers[item].amount_owed;
+					break;
+				}
+			}
+
+			console.log(currentUser, groupId, billId, billMembers, groupName, paymentAmount);
+
+			firebase.verifyPayment(currentUser, groupId, billId, billMembers, groupName, paymentAmount)
+				.then(() => {
+					window.location.reload();
+				}).catch(err => {
+					console.error(err);
+				})
+		}
+	}
 
 	return (
 		<>
-			<Table striped bordered hover>
-				<thead>
-					<tr>
-						<th>#</th>
-						<th>Member Name</th>
-						<th>Due Date</th>
-						<th>Bill Amount</th>
-						<th>Paid/Not Paid</th>
-						<th>Verify Button</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr>
-						<td>1</td>
-						<td>Chris</td>
-						<td>11/11/19</td>
-						<td>$1000</td>
-						<td>Yes/No</td>
-						<td>
-							<Button className="billsbtn" variant="warning" onClick={handleShow}>
-								Verify
-							</Button>
-						</td>
-					</tr>
-					<tr>
-						<td>2</td>
-						<td>Cameron</td>
-						<td>12/11/19</td>
-						<td>$1000</td>
-						<td>Yes/No</td>
-						<td>
-							<Button className="billsbtn" variant="warning" onClick={handleShow}>
-								Verify
-							</Button>
-						</td>
-					</tr>
-					<tr>
-						<td>3</td>
-						<td>Kelton</td>
-						<td>1/11/20</td>
-						<td>$1000</td>
-						<td>Yes/No</td>
-						<td>
-							<Button className="billsbtn" variant="warning" onClick={handleShow}>
-								Verify
-							</Button>
-						</td>
-					</tr>
-				</tbody>
-			</Table>
+			{(billMembers && billMembers.length > 0) && 
+				<Table striped bordered hover>
+					<thead>
+						<tr>
+							<th>Member Name</th>
+							<th>Bill Amount</th>
+							<th>Paid Status</th>
+							{isGroupOwner && 
+							<th>Verify Payment</th>
+							}
+							</tr>
+					</thead>
+					<tbody>
+						{(billMembers && billMembers.length > 0) && 
+							<>
+								{billMembers.map((item, key) => (
+									<tr key={key}>
+										<td>{item.username}</td>
+										<td>{item.amount_owed}</td>
+										<td>{item.paid_status ? <Paid /> : <NotPaid />}</td>
+										{isGroupOwner && 
+											<td>
+												{!item.paid_status &&
+													// <Button className="billsbtn" variant="warning" onClick={() => setUser(item.uid).then(handleShow)}>													<Button className="billsbtn" variant="warning" onClick={() => setUser(item.uid).then(handleShow)}>
+													<Button className="billsbtn" variant="warning" onClick={() => setUser(item.uid)}>
+														Verify
+													</Button>
+												}
+											</td>
+										}
+									</tr>
+								))}
+							</>
+						}
+					</tbody>
+				</Table>
+			}
+			{!billMembers || billMembers.length === 0 && 
+				<h1>No Members Attached to Bill</h1>
+			}
 
-			<Modal show={show} onHide={handleClose} animation={false}>
-				<Modal.Header closeButton>
-					<Modal.Title>Verify Payment</Modal.Title>
+			<Modal show={currentUser} onHide={handleCancel} animation={false}>
+				<Modal.Header className="header-styling" closeButton>
+					<Modal.Title className="universal-font">Verify Payment</Modal.Title>
 				</Modal.Header>
 				<Modal.Body>
 					<p>Paid on time?</p>
-					<ToggleButtonGroup type="checkbox" value={value} onChange={handleChange}>
+					{/* <ToggleButtonGroup type="radio" name="verify-radios" value={value} onChange={handleChange}>
 						<ToggleButton value={1}>Yes</ToggleButton>
 						<ToggleButton value={2}>No</ToggleButton>
-					</ToggleButtonGroup>
+					</ToggleButtonGroup> */}
+					<ButtonGroup>
+						<Button variant="primary" id="button-styling" onClick={() => setPaidStatus('yes')}>Yes</Button>
+						<div className="button-spacing"></div>
+						<Button variant="primary" id="button-styling" onClick={() => setPaidStatus('no')}>No</Button>
+					</ButtonGroup>
 				</Modal.Body>
 				<Modal.Footer>
-					<Button variant="secondary" onClick={handleClose}>
+					<Button variant="secondary" id="button-styling" onClick={handleClose}>
 						Confirm
 					</Button>
 				</Modal.Footer>
@@ -513,48 +545,28 @@ const CurrentBillsAccordion = () => {
 	);
 };
 
-const CurrentBillsAccordionOwner = () => {
+const CurrentBillsAccordionOwner = ({ isGroupOwner, billArray, groupId, firebase, groupName, billId  }) => {
 	return (
-		<>
-	<Accordion defaultActiveKey="0">
-				<Card>
-					<Card.Header>
-						<Accordion.Toggle as={Button} variant="link" eventKey="0">
-							<h1>Bills due 11/11/2019</h1>
-						</Accordion.Toggle>
-					</Card.Header>
-					<Accordion.Collapse eventKey="0">
-						<Card.Body>
-							<CurrentBillsTableOwner as={Button}/>
-						</Card.Body>
-					</Accordion.Collapse>
-				</Card>
-				<Card>
-					<Card.Header>
-						<Accordion.Toggle as={Button} variant="link" eventKey="1">
-							<h1>Bills Due 12/11/2019</h1>
-						</Accordion.Toggle>
-					</Card.Header>
-					<Accordion.Collapse eventKey="1">
-						<Card.Body>
-								<CurrentBillsTableOwner as={Button} />
-						</Card.Body>
-					</Accordion.Collapse>
-				</Card>
-				<Card>
-					<Card.Header>
-						<Accordion.Toggle as={Button} variant="link" eventKey="2">
-							<h1>Bills Due 01/11/2020</h1>
-						</Accordion.Toggle>
-					</Card.Header>
-					<Accordion.Collapse eventKey="2">
-						<Card.Body>
-								<CurrentBillsTableOwner as={Button} />
-						</Card.Body>
-					</Accordion.Collapse>
-				</Card>
-	</Accordion>
-	</>
+		<Accordion defaultActiveKey="0">
+			{(billArray && billArray.length > 0) && 
+				<>
+					{billArray.map((item, key) => (
+						<Card key={key}>
+							<Card.Header>
+								<Accordion.Toggle as={Button} variant="link" eventKey={item.doc_id}>
+									<h1>Bill due: {item.due_date.toDate().toLocaleDateString()}</h1> {/*fix underline issue later */}
+								</Accordion.Toggle>
+							</Card.Header>
+							<Accordion.Collapse eventKey={item.doc_id}>
+								<Card.Body>
+									<CurrentBillsTableOwner as={Button} isGroupOwner={isGroupOwner} billMembers={item.group_members} billId={item.doc_id} groupName={groupName} groupId={groupId} firebase={firebase}/>
+								</Card.Body>
+							</Accordion.Collapse>
+						</Card>
+					))}
+				</>
+			}
+		</Accordion>
 	);
 };
 
@@ -625,7 +637,7 @@ const TransferOwnership = ({ groupMembers, currentOwnerID, firebase, groupId }) 
 	);
 }
 
-const RightInfoOwner = ({ onChangeGroupMembers, onChangeCurrentBill, onChangePaymentHistory }) => {
+const RightInfoOwner = ({ onChangeGroupMembers, onChangeCurrentBill, onChangePaymentHistory, isGroupOwner, billArray, groupId, firebase, groupName }) => {
 	return (
 		<>
 			<Accordion defaultActiveKey="0">
@@ -661,13 +673,13 @@ const RightInfoOwner = ({ onChangeGroupMembers, onChangeCurrentBill, onChangePay
 				<Card>
 					<Card.Header>
 						<Accordion.Toggle as={Button} variant="link" eventKey="1">
-							<h1>View Current Bills</h1>
+							<h1>View Bills</h1>
 						</Accordion.Toggle>
 					</Card.Header>
 					<Accordion.Collapse eventKey="1">
 						<Card.Body>
 							<div className="curBills">
-								<CurrentBillsAccordionOwner as={Button} />
+								<CurrentBillsAccordionOwner as={Button} isGroupOwner={isGroupOwner} billArray={billArray} groupId={groupId} firebase={firebase} groupName={groupName} />
 							</div>
 						</Card.Body>
 					</Accordion.Collapse>
@@ -878,13 +890,18 @@ class MyGroupBase extends React.Component {
 						)}
 					</div>
 					<div className="right-grid">
-						{this.state.isGroupMember && !this.state.isGroupOwner && <RightInfo 
+						{/* {this.state.isGroupMember && !this.state.isGroupOwner && <RightInfo 
 													onChangeGroupMembers={this.state.groupMembers}
 													onChangeCurrentBill={this.state.currentBill}
-													onChangePaymentHistory={this.state.paymentHistory}/>}
-						{this.state.isGroupMember && this.state.isGroupOwner && <RightInfoOwner 
+													onChangePaymentHistory={this.state.paymentHistory}/>} */}
+						{this.state.isGroupMember && <RightInfoOwner 
 													onChangeGroupMembers={this.state.groupMembers}
 													onChangeCurrentBill={this.state.currentBill}
+													isGroupOwner={this.state.isGroupOwner}
+													billArray={this.props.groupState.bills}
+													groupId={this.state.groupId}
+													firebase={this.props.firebase}
+													groupName={this.state.groupName}
 													onChangePaymentHistory={this.state.paymentHistory}/>}
 						{/* <RightInfo 
 							onChangeGroupMembers={this.state.groupMembers}
