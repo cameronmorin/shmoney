@@ -1,29 +1,21 @@
-import React, { useContext, useState, Component } from 'react'
+import React, { useContext, useState } from 'react'
 
 import AuthUserContext from './session/context'
 import FirebaseContext from './firebase/context'
 
 import {
-	ToggleButton,
-	ToggleButtonGroup,
-	Figure,
-	Table,
-	Accordion,
-	Card,
 	Button,
 	Modal,
 	InputGroup,
 	Media,
 } from 'react-bootstrap';
 import '../styles/MyGroup.css';
-import avatar from '../images/avatar.png';
 
-import NavBar from './NavBar';
-import CreateGroup from './CreateGroup';
 import SearchUsers from './SearchUsers';
 import CreateBill from './CreateBill';
+import CreateGroup from './CreateGroup';
 
-const AddBill = () => {
+const AddBillModal = () => {
 	const [show, setShow] = useState(false);
 
 	const handleClose = () => setShow(false);
@@ -51,7 +43,7 @@ const AddBill = () => {
 	);
 };
 
-const AddMembers = () => {
+const AddMembersModal = () => {
 	const [show, setShow] = useState(false);
 
 	const authContext = useContext(AuthUserContext);
@@ -86,7 +78,7 @@ const AddMembers = () => {
 	);
 };
 
-const DeleteMembers = () => {
+const DeleteMembersModal = () => {
 	const [show, setShow] = useState(false);
 
 	const authContext = useContext(AuthUserContext);
@@ -147,7 +139,7 @@ const DeleteMembers = () => {
 	);
 };
 
-const TransferOwnership = () => {
+const TransferOwnershipModal = () => {
 	const [show, setShow] = useState(false);
 
 	const authContext = useContext(AuthUserContext);
@@ -218,7 +210,7 @@ const TransferOwnership = () => {
 	);
 };
 
-const DeleteGroup = () => {
+const DeleteGroupModal = () => {
 	const [show, setShow] = useState(false);
 
 	const authContext = useContext(AuthUserContext);
@@ -261,7 +253,7 @@ const DeleteGroup = () => {
 	);
 };
 
-const LeaveGroup = () => {
+const LeaveGroupModal = () => {
 	const [show, setShow] = useState(false);
 
 	const authContext = useContext(AuthUserContext);
@@ -305,11 +297,46 @@ const LeaveGroup = () => {
 	);
 };
 
+const CreateGroupModal = () => {
+	const [show, setShow] = useState(false);
+
+	const handleClose = () => setShow(false);
+	const handleShow = () => setShow(true);
+
+	return (
+		<>
+			<Button variant="secondary" onClick={handleShow}>
+				Create Group
+			</Button>
+
+			<Modal show={show} onHide={handleClose} animation={false}>
+				<Modal.Header closeButton className="header-styling">
+					<Modal.Title className="universal-font" variant="secondary">
+						Create Group
+					</Modal.Title>
+				</Modal.Header>
+				<Modal.Body>
+					<div className="universal-font">House Name:</div>
+					<InputGroup className="mb-3">
+						<CreateGroup />
+					</InputGroup>
+				</Modal.Body>
+				<Modal.Footer>
+					<Button variant="secondary" id="button-styling" onClick={handleClose}>
+						Close
+					</Button>
+				</Modal.Footer>
+			</Modal>
+		</>
+	);
+};
+
 export { 
-	AddBill, 
-	AddMembers, 
-	DeleteMembers, 
-	TransferOwnership, 
-	DeleteGroup,
-	LeaveGroup
+	AddBillModal, 
+	AddMembersModal, 
+	DeleteMembersModal, 
+	TransferOwnershipModal, 
+	DeleteGroupModal,
+	LeaveGroupModal,
+	CreateGroupModal
 };

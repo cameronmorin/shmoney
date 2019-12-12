@@ -35,7 +35,7 @@ class App extends React.Component {
         if (window.location.pathname !== '/') this.props.history.push('/');
         break;
       case 'Group':
-        if (window.location.pathname !== '/mygroup') this.props.history.push('/mygroup');
+        if (window.location.pathname !== '/group') this.props.history.push('/group');
         break;
       case 'Rent':
         if (window.location.pathname !== '/myrent') this.props.history.push('/myrent');

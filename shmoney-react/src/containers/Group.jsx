@@ -1,31 +1,21 @@
-import React, { useContext, useState, Component } from 'react'
+import React, { useContext, Component } from 'react';
 
-import AuthUserContext from '../components/session/context'
+import AuthUserContext from '../components/session/context';
 
-import {
-	ToggleButton,
-	ToggleButtonGroup,
-	Figure,
-	Table,
-	Accordion,
-	Card,
-	Button,
-	Modal,
-	InputGroup,
-	Media,
-} from 'react-bootstrap';
+import { Figure } from 'react-bootstrap';
 import '../styles/MyGroup.css';
-import avatar from '../images/avatar.png';
 
 import NavBar from '../components/NavBar';
 import { 
-	AddBill, 
-	AddMembers, 
-	DeleteMembers, 
-	TransferOwnership,
-	DeleteGroup,
-	LeaveGroup
+	AddBillModal, 
+	AddMembersModal, 
+	DeleteMembersModal, 
+	TransferOwnershipModal,
+	DeleteGroupModal,
+	LeaveGroupModal,
+	CreateGroupModal
 } from '../components/GroupModals';
+import RightInfo from '../components/RightInfo';
 
 import { withAuthorization } from '../components/session';
 
@@ -54,6 +44,7 @@ const LeftGrid = () => {
 	const authState = authContext.state;
 	const isGroupMember = authState.isGroupMember;
 	const isGroupOwner = authState.isGroupOwner;
+	const isNotGroupMember = authState.isNotGroupMember;
 
 	return (
 		<div className="left-grid">
@@ -66,12 +57,13 @@ const LeftGrid = () => {
 					src="https://img.icons8.com/bubbles/2x/home.png"
 				/>
 			</Figure>
-			{isGroupMember && <AddBill />}
-			{isGroupOwner && <AddMembers />}
-			{isGroupOwner && <DeleteMembers />}
-			{isGroupOwner && <TransferOwnership />}
-			{isGroupOwner && <DeleteGroup />}
-			{isGroupMember && !isGroupOwner && <LeaveGroup />}
+			{isGroupMember && <AddBillModal />}
+			{isGroupOwner && <AddMembersModal />}
+			{isGroupOwner && <DeleteMembersModal />}
+			{isGroupOwner && <TransferOwnershipModal />}
+			{isGroupOwner && <DeleteGroupModal />}
+			{isGroupMember && !isGroupOwner && <LeaveGroupModal />}
+			{isNotGroupMember && <CreateGroupModal />}
 		</div>
 	)
 }

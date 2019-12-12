@@ -1,31 +1,19 @@
-import React, { useContext, useState, Component } from 'react'
+import React, { useContext } from 'react';
 
-import AuthUserContext from './session/context'
-import FirebaseContext from './firebase/context'
+import AuthUserContext from './session/context';
 
-import {
-	ToggleButton,
-	ToggleButtonGroup,
-	Figure,
-	Table,
-	Accordion,
-	Card,
-	Button,
-	Modal,
-	InputGroup,
-	Media,
-} from 'react-bootstrap';
+import CurrentBillsAccordion from './CurrentBillsAccordion';
+import PaymentsTable from './PaymentsTable';
+
+import { Accordion, Card, Button, Media } from 'react-bootstrap';
 import '../styles/MyGroup.css';
 import avatar from '../images/avatar.png';
 
-const RightInfo = () => {
+const RightInfo = (props) => {
 	const authContext = useContext(AuthUserContext);
-	const firebase = useContext(FirebaseContext);
 	const authState = authContext.state;
 
 	const groupMembers = authState.groupMembers;
-	const authUser = authState.authUser;
-	const groupId = authState.groupId;
 
 	return (
 		<>
@@ -50,7 +38,8 @@ const RightInfo = () => {
 												alt="None"
 											/>
 											<Media.Body>
-												<h5>{item.username}</h5>
+												<h1>{item.username}</h1>
+												{console.log(item)}
 											</Media.Body>
 										</Media>
 									</li>
@@ -69,7 +58,7 @@ const RightInfo = () => {
 					<Accordion.Collapse eventKey="1">
 						<Card.Body>
 							<div className="curBills">
-								{/* {<CurrentBillsAccordion as={Button} />} */}
+								{<CurrentBillsAccordion as={Button} />}
 							</div>
 						</Card.Body>
 					</Accordion.Collapse>
@@ -83,7 +72,7 @@ const RightInfo = () => {
 					</Card.Header>
 					<Accordion.Collapse eventKey="2">
 						<Card.Body>
-							<PaymentsTable onChangePaymentHistory={onChangePaymentHistory} />
+							<PaymentsTable onChangePaymentHistory={props.onChangePaymentHistory} />
 						</Card.Body>
 					</Accordion.Collapse>
 				</Card>
@@ -92,3 +81,4 @@ const RightInfo = () => {
 	);
 };
 
+export default RightInfo;
