@@ -14,7 +14,8 @@ const withAuthentication = Component => {
 				groupMembers: null,
 				groupName: null,
 				isNotGroupMember: false,
-				isGroupMember: false,
+            isGroupMember: false,
+            isGroupOwner: false,
 				groupId: null,
 				ownerUid: null,
             onGroupListUpdate: null,
@@ -33,11 +34,13 @@ const withAuthentication = Component => {
 					this.props.firebase.getHouseGroupData().then(result => {
                      const groupOwnerUid = result.owner_uid;
                      const currentBillId = result.current_bill_id;
+                     const isGroupOwner = authUser.uid === groupOwnerUid;
 
 							this.setState({
 								groupMembers: result.group_members,
 								groupName: result.group_name,
-								isGroupMember: true,
+                        isGroupMember: true,
+                        isGroupOwner,
 								groupId: result.group_id,
 								ownerUid: groupOwnerUid,
                         onGroupListUpdate: this.updateGroupMembers,
