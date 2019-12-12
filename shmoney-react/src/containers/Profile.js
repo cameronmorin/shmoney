@@ -1,15 +1,23 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import NavBar from '../components/NavBar';
 import { Card, Table, Accordion, Figure, Button, Modal, InputGroup } from 'react-bootstrap';
 import avatar from '../images/avatar.png';
 import '../styles/Profile.css';
-import { withAuthorization, withAuthUserContext } from '../components/session';
-import { withFirebase } from '../components/firebase';
+import { withAuthorization, withAuthUserContext, AuthUserContext } from '../components/session';
+import { withFirebase, FirebaseContext } from '../components/firebase';
 
 import UploadImage from '../components/UploadImage';
 
-const EditName = ({ firebase, onChangeGroupId, onChangeGroupMembers, onChangeIsGroupOwner }) => {
+const EditName = () => {
 	const [show, setShow] = useState(false);
+
+	const authContext = useContext(AuthUserContext);
+	const firebase = useContext(FirebaseContext);
+	const authState = authContext.state;
+
+	const groupId = authState.groupId;
+	const groupMembers = authState.groupMembers;
+	const isGroupOwner = authState.isGroupOwner;
 
 	const handleClose = () => setShow(false);
 	const handleShow = () => setShow(true);
@@ -19,7 +27,7 @@ const EditName = ({ firebase, onChangeGroupId, onChangeGroupMembers, onChangeIsG
 	const onSubmit = event => {
 		event.preventDefault();
 
-		firebase.updateUsername(name, onChangeGroupId, onChangeGroupMembers, onChangeIsGroupOwner).then(() => {
+		firebase.updateUsername(name, groupId, groupMembers, isGroupOwner).then(() => {
 			window.location.reload();
 		});
 	};

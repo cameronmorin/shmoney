@@ -2,7 +2,7 @@ import React from 'react';
 import '../styles/RootUnauth.css'
 import './Home.jsx';
 import { AuthUserContext } from './session'
-import Dashboard from '../components/Dashboard';
+import Dashboard from '../containers/Dashboard';
 import DashboardImage from '../images/DashboardImage.png';
 import GroupPageImage from '../images/GroupPageImage.png';
 
