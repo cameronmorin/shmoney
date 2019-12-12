@@ -83,24 +83,26 @@ class CreateBillBase extends Component {
 			<div>
 				<div className="rent-total-input">
 					<div className="universal-padding-3">
-						<label>Rent Total</label>
+						<label className="universal-font">Rent Total</label>
 					</div>
 					<input 
 						type="number"
 						name="rentTotal"
 						value={rentTotal}
 						onChange={this.onChange}
+						id="modified-input-field"
 					/>
 				</div>
 				<div className="date-picker">
 					<div className="universal-padding-3">
-						<label>Due Date</label>
+						<label className="universal-font my-1">Due Date</label>
 					</div>
 					<DatePicker
 						selected={this.state.dueDate}
 						onSelect={this.updateDate}
 						onChange={this.updateDate}
 						minDate={this.state.startDate}
+						id="modified-input-field"
 						showTimeSelect
   					dateFormat="Pp"
 					/>
@@ -117,7 +119,8 @@ class CreateBillBase extends Component {
 					<Button 
 						variant="secondary" 
 						onClick={this.onClick} 
-						disabled={this.state.created}>
+						disabled={this.state.created}
+						id="button-styling">
 						{this.state.created ? <>Created</> : <>Create</>}
 					</Button>
 				</div>

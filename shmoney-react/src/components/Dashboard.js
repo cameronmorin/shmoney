@@ -74,7 +74,7 @@ class DashboardBase extends React.Component {
     return (
         <div className = "main-grid" >
           <div className = "left-grid" >
-              {isGroupOwner && <BillCard 
+              {this.state.isGroupOwner && <BillCard 
               onChangeCurrentBill={this.state.currentBill} 
               onChangeAuthUser={this.state.authUser}
               onChangeIsGroupOwner={this.state.isGroupOwner} />}

@@ -3,6 +3,7 @@ import { compose } from 'recompose'
 
 import { withFirebase } from './firebase'
 import { withAuthorization, withAuthUserContext } from './session'
+import '../styles/MyGroup.css'
 
 class CreateGroupBase extends Component {
    constructor(props) {
@@ -37,10 +38,9 @@ class CreateGroupBase extends Component {
                   name="houseName"
                   value={houseName}
                   onChange={this.onChange}
-                  placeholder="House Name"
+                  id = "modified-input-field"
                />
-               <button type="submit">Create</button>
-
+               <button type="submit" id="button-styling">Create</button>
                <div className="error-message">
                   {error && <p>{error.message}</p>}
                </div>
