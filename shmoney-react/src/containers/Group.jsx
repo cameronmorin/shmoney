@@ -15,7 +15,7 @@ import {
 	LeaveGroupModal,
 	CreateGroupModal
 } from '../components/GroupModals';
-import RightInfo from '../components/RightInfo';
+import GroupAccordion from '../components/GroupAccordion';
 
 import { withAuthorization } from '../components/session';
 
@@ -72,11 +72,10 @@ const RightGrid = (props) => {
 	const authContext = useContext(AuthUserContext);
 	const authState = authContext.state;
 	const isGroupMember = authState.isGroupMember;
-	const isGroupOwner = authState.isGroupOwner;
 
 	return (
 		<div className="right-grid">
-			{isGroupMember && <RightInfo 
+			{isGroupMember && <GroupAccordion
 				onChangePaymentHistory={props.onChangePaymentHistory}
 			/>}
 		</div>

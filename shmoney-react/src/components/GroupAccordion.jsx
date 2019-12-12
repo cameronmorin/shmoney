@@ -9,7 +9,7 @@ import { Accordion, Card, Button, Media } from 'react-bootstrap';
 import '../styles/MyGroup.css';
 import avatar from '../images/avatar.png';
 
-const RightInfo = (props) => {
+const GroupAccordion = (props) => {
 	const authContext = useContext(AuthUserContext);
 	const authState = authContext.state;
 
@@ -39,7 +39,6 @@ const RightInfo = (props) => {
 											/>
 											<Media.Body>
 												<h1>{item.username}</h1>
-												{console.log(item)}
 											</Media.Body>
 										</Media>
 									</li>
@@ -81,4 +80,4 @@ const RightInfo = (props) => {
 	);
 };
 
-export default RightInfo;
+export default GroupAccordion;
