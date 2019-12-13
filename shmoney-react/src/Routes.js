@@ -4,7 +4,7 @@ import { Switch } from 'react-router-dom';
 import AppliedRoute from './components/util/AppliedRoute';
 import Home from './containers/Home';
 import NotFound from './containers/NotFound';
-import Profile from './containers/Profile';
+import Profile from './containers/Profile.jsx';
 import SignIn from './components/auth/SignIn';
 import SignUp from './components/auth/SignUp';
 import Group from './containers/Group';

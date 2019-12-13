@@ -1,11 +1,11 @@
-import React from 'react';
+import React, { Component } from 'react';
 import './styles/App.css';
 import { withRouter } from 'react-router-dom';
 import { withAuthentication } from './components/session';
 import { compose } from 'recompose';
 import Routes from './Routes';
 
-class App extends React.Component {
+class App extends Component {
   onClickHome = event => {
     event.preventDefault();
     
