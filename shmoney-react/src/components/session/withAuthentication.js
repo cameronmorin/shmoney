@@ -19,6 +19,7 @@ const withAuthentication = Component => {
 				groupId: null,
 				ownerUid: null,
             onGroupListUpdate: null,
+            onAuthUserUpdate: null,
             previousRentTotal: null,
             currentBill: null,
             currentBillId: null,
@@ -44,6 +45,7 @@ const withAuthentication = Component => {
 								groupId: result.group_id,
 								ownerUid: groupOwnerUid,
                         onGroupListUpdate: this.updateGroupMembers,
+                        onAuthUserUpdate: this.updateAuthUser,
                         previousRentTotal: result.previous_rent_total,
                         currentBillId
                      });
@@ -106,14 +108,17 @@ const withAuthentication = Component => {
       componentWillUnmount() {
          this.listener();
       }
+      updateAuthUser = authUser => {
+         this.setState({authUser});
+      }
       updateGroupMembers = groupMembers => {
          this.setState({groupMembers});
       }
       updateCurrentBill = (currentBillId, bills) => {
-		for (let item in bills) {
-			if (bills[item].doc_id === currentBillId) {
-				this.setState({ currentBill: bills[item] });
-			}
+         for (let item in bills) {
+            if (bills[item].doc_id === currentBillId) {
+               this.setState({ currentBill: bills[item] });
+            }
       }
 	};
       render() {

@@ -1,14 +1,15 @@
-import React, { Component } from 'react';
+import React, { Component, useContext } from 'react';
 import { withRouter } from 'react-router-dom'
 import { withFirebase } from './firebase'
 import { compose } from 'recompose';
-import { withAuthorization, withAuthUserContext } from './session';
+import { withAuthorization, withAuthUserContext, AuthUserContext } from './session';
 
 class UploadImageBase extends Component {
 	constructor(props) {
 		super(props);
 
 		this.state = {
+			authUser: null,
 			image: null,
 			imageSelectFailure: false,
 			errorMessage: '',
@@ -17,8 +18,8 @@ class UploadImageBase extends Component {
 		}
 	}
 	componentDidUpdate() {
-		const {url} = this.state;
-		if(url) window.location.reload();
+		const {url, authUser} = this.state;
+		if(url) updateAuthUser(authUser);
 	}
 	handleChange = event => {
 		const maxAllowedSize = 1 * 1024 * 1024;
@@ -33,18 +34,19 @@ class UploadImageBase extends Component {
 		}
 	}
 	handleUpload = () => {
-		let authUser = this.props.authUser;
+		const authUser = this.props.authUser;
 		const {image} = this.state;
 
 		this.props.firebase.storageRef.child(`profilePictures/${authUser.uid}`).put(image).then(() => {
 			this.props.firebase.storageRef.child(`profilePictures/${authUser.uid}`).getDownloadURL().then(url => {
 				//Update the authUser's photo url
 				authUser.updateProfile({photoURL: url});
+				authUser.photoURL = url;
 				//Update photoURL in user's firestore document
 				return this.props.firebase.user(authUser.uid).set({
 					photoURL: url
 				},{merge:true}).then(() => {
-					this.setState({url: url});
+					this.setState({url: url, authUser});
 				});
 			}).catch(error => {
 				this.setState({error});
@@ -71,6 +73,14 @@ class UploadImageBase extends Component {
 			</div>
 		);
 	}
+}
+
+const updateAuthUser = (authUser) => {
+	const authContext = useContext(AuthUserContext);
+	const authState = authContext.state;
+	const onAuthUserUpdate = authState.onAuthUserUpdate;
+
+	onAuthUserUpdate(authUser);
 }
 
 const UploadImage = compose(
