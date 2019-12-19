@@ -69,6 +69,24 @@ class Firebase {
 			});
 	};
 
+	updatePhoto = async (url, groupId, groupMembers) => {
+		return this.user(this.auth.currentUser.uid).set({
+			photoUrl: url
+		},{merge:true}).then(() => {
+			if(groupId === null) return;
+
+			for(let item in groupMembers) {
+				if(groupMembers[item].uid === this.auth.currentUser.uid) {
+					groupMembers[item].photo_url = url;
+				}
+			}
+
+			return this.house_groups().doc(groupId).set({
+				group_members: groupMembers
+			},{merge:true});
+		});
+	}
+
 	signInWithGoogle = () => this.auth.signInWithPopup(this.googleProvider);
 
 	signOut = () => this.auth.signOut();

@@ -19,7 +19,7 @@ const withAuthentication = Component => {
 				groupId: null,
 				ownerUid: null,
             onGroupListUpdate: null,
-            onAuthUserUpdate: null,
+            onAuthUserUpdate: this.updateAuthUser,
             previousRentTotal: null,
             currentBill: null,
             currentBillId: null,
@@ -45,7 +45,6 @@ const withAuthentication = Component => {
 								groupId: result.group_id,
 								ownerUid: groupOwnerUid,
                         onGroupListUpdate: this.updateGroupMembers,
-                        onAuthUserUpdate: this.updateAuthUser,
                         previousRentTotal: result.previous_rent_total,
                         currentBillId
                      });
@@ -100,7 +99,7 @@ const withAuthentication = Component => {
                   previousRentTotal: null,
                   currentBill: null,
                   currentBillId: null,
-                  loaded: true 
+                  loaded: true
 				   });
             }
          }) 

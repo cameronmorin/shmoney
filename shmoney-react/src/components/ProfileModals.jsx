@@ -26,7 +26,7 @@ const UpdatePhotoModal = () => {
 				</Modal.Header>
 				<Modal.Body>
 					<InputGroup className="mb-3">
-						<UploadImage />
+						<UploadImage closeModal={handleClose} />
 					</InputGroup>
 				</Modal.Body>
 				<Modal.Footer>
